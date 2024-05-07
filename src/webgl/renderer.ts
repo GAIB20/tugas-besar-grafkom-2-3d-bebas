@@ -1,6 +1,6 @@
 import { SHADER_TYPE } from "./types";
 
-export class WebGL {
+export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
   private _gl: WebGLRenderingContext;
   private _glProgram!: WebGLProgram;
@@ -10,14 +10,14 @@ export class WebGL {
   private _canvasHeight: number;
 
   // WebGL constants
-  private readonly WebGL_NAMESPACE = "webgl";
+  private readonly WEB_GL_NAMESPACE = "webgl";
 
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._canvasWidth = canvas.clientWidth;
     this._canvasHeight = canvas.clientHeight;
 
-    const gl = this._canvas.getContext(this.WebGL_NAMESPACE);
+    const gl = this._canvas.getContext(this.WEB_GL_NAMESPACE);
 
     if (!gl) throw new Error("unable to initialize WebGL.");
     this._gl = gl;

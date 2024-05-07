@@ -27,3 +27,28 @@ export enum WEB_GL_DATA_TYPE {
   SAMPLER_2D = WebGLRenderingContext.SAMPLER_2D,
   SAMPLER_CUBE = WebGLRenderingContext.SAMPLER_CUBE,
 }
+
+// TODO: remove this dummy BufferAttribute class once implemented. This is just a placeholder to avoid lint error
+export class BufferAttribute {
+  public isDirty!: boolean;
+  public data!: number;
+  public size!: number;
+  public dtype!: number;
+  public normalize!: boolean;
+  public stride!: number;
+  public offset!: number;
+
+  public consume(): void {}
+}
+
+export type AttributeSingleDataType = BufferAttribute | Float32Array | number[];
+export type AttributeDataType = [AttributeSingleDataType] | number[];
+export type AttributeSetters = (...v: AttributeDataType) => void;
+export type AttributeMapSetters = { [key: string]: AttributeSetters };
+
+// TODO: check this commented attr
+export type ProgramInfo = {
+  program: WebGLProgram;
+  // uniformSetters: UniformMapSetters,
+  attributeSetters: AttributeMapSetters;
+};
