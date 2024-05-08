@@ -1,4 +1,4 @@
-import { BufferAttribute } from "src/geometry/bufferAttribute";
+import { BufferAttribute } from "src/geometries/bufferAttribute";
 
 export enum SHADER_TYPE {
   VERTEX = WebGLRenderingContext.VERTEX_SHADER,

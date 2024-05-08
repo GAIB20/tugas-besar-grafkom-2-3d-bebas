@@ -6,7 +6,7 @@ import {
   AttributeDataType,
 } from "src/webgl/types";
 
-import { BufferAttribute } from "src/geometry/bufferAttribute";
+import { BufferAttribute } from "src/geometries/bufferAttribute";
 
 export class WebGLUtils {
   public createAttributeSetters = (
