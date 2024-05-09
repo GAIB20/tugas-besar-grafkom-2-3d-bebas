@@ -1,5 +1,5 @@
-import { BufferAttribute } from "./bufferAttribute";
-import { BufferGeometry } from "./bufferGeometry";
+import { BufferAttribute } from "./buffer-attribute.ts";
+import { BufferGeometry } from "./buffer-geometry.ts";
 
 export class BoxGeometry extends BufferGeometry {
     width: number;

@@ -1,4 +1,4 @@
-import { TypedArray } from "src/webgl/types";
+import { TypedArray } from "src/types/webgl-type.ts";
 
 export class BufferAttribute {
     private _data: TypedArray;
@@ -92,7 +92,7 @@ export class BufferAttribute {
     get length() {
         return this._data.length;
     }
-    
+
     // TODO: check this function
     set(index: number, data: number[]) {
         this._isDirty = true;

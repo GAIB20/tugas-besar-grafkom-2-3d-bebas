@@ -4,9 +4,9 @@ import {
   ProgramInfo,
   AttributeSingleDataType,
   AttributeDataType,
-} from "src/webgl/types";
+} from "src/types/webgl-type.ts";
 
-import { BufferAttribute } from "src/geometries/bufferAttribute";
+import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 
 export class WebGLUtils {
   public createAttributeSetters = (

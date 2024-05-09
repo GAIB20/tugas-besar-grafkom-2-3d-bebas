@@ -48,7 +48,7 @@ export class Matrix4 {
         return new Matrix4(result);
     }
 
-    public static translate(x: number, y: number, z: number) {
+    public static translate(x: number = 0, y: number = 0, z: number = 0) {
         return new Matrix4([
             1, 0, 0, x,
             0, 1, 0, y,
@@ -57,7 +57,7 @@ export class Matrix4 {
         ]);
     }
 
-    public static scale(x: number, y: number, z: number) {
+    public static scale(x: number = 1, y: number = 1, z: number = 1) {
         return new Matrix4([
             x, 0, 0, 0,
             0, y, 0, 0,
@@ -150,11 +150,11 @@ export class Matrix4 {
     }
 
     public static orthographic(
-        left: number, 
-        right: number, 
-        bottom: number, 
-        top: number, 
-        near: number, 
+        left: number,
+        right: number,
+        bottom: number,
+        top: number,
+        near: number,
         far: number
     ) {
         const rl = right - left;
@@ -169,9 +169,9 @@ export class Matrix4 {
     }
 
     public static perspective(
-        fovy: number, 
-        aspect: number, 
-        near: number, 
+        fovy: number,
+        aspect: number,
+        near: number,
         far: number
     ) {
         const f = 1.0 / Math.tan(fovy / 2);
@@ -185,7 +185,7 @@ export class Matrix4 {
     }
 
     public static oblique(
-        theta: number, 
+        theta: number,
         phi: number
     ) {
         const t = Math.tan(theta);

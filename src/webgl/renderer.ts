@@ -1,4 +1,4 @@
-import { SHADER_TYPE } from "./types";
+import { SHADER_TYPE } from "../types/webgl-type.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
