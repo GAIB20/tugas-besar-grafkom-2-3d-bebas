@@ -1,11 +1,12 @@
 // Module related imports
-import { setupCounter } from "src/composables/counter";
 
 // Stylesheet imports
 import "src/css/global.css";
-import "src/css/dummy/dummy.css";
+import { setupLoadModel } from "src/ui-element/load-model.ts";
+// import "src/css/dummy/dummy.css";
 
 /**
  * Main Script
 */
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+const loadFile = document.querySelector<HTMLInputElement>("#load-model")!;
+setupLoadModel(loadFile);
