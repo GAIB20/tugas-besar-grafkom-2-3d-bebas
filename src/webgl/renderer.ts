@@ -131,4 +131,8 @@ export class WebGLRenderer {
   public get gl(): WebGLRenderingContext {
     return this._gl;
   }
+
+  public get glProgram(): WebGLProgram {
+    return this._glProgram;
+  }
 }
