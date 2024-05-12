@@ -29,7 +29,7 @@ export class Matrix4 {
 
   /**
    * @param reverse Set multiplication in reverse order
-  */
+   */
   public static multiply(m1: Matrix4, m2: Matrix4, reverse: boolean = false) {
     let a = m1._elements;
     let b = m2._elements;
@@ -80,6 +80,7 @@ export class Matrix4 {
     return new Matrix4([c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
   }
 
+  // TODO: to check, currently cant inverse identity
   public inverse() {
     const m = this._elements;
     const m00 = m[0],
@@ -216,5 +217,13 @@ export class Matrix4 {
       }
     }
     return new Matrix4(result);
+  }
+
+  public clone(): Matrix4 {
+    if (!this.elements) {
+      throw new Error("not initialized")
+    }
+
+    return Matrix4.fromArray(this.elements);
   }
 }
