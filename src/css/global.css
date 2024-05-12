@@ -16,7 +16,7 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  place-items: flex-start;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -39,11 +39,36 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+select,
+.label-button {
+  background-color: darkcyan;
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+select:hover,
+.label-button:hover {
+  background-color: cadetblue;
+}
+
+select:focus,
+select:focus-visible,
+.label-button:focus,
+.label-button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 

@@ -4,16 +4,157 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>WebGL 3D</title>
   </head>
   <body>
-    <div id="app">
+    <div id="app" class="flex flex-col">
       <!-- Page content -->
 
-      <div class="card">
-        <button id="counter" type="button"></button>
-        <image src="/src/assets/vite.svg"></image>
-      </div>
+      <section>
+        <label for="load-model" class="label-button">Load</label>
+        <input id="load-model" type="file" name="file" accept=".json" hidden />
+
+        <label for="save-model" class="label-button">Save</label>
+        <input id="save-model" type="button" name="save" hidden />
+
+        <select name="projection-type" id="projection-type">
+          <option value="orthographic" selected>Orthographic</option>
+          <option value="perspective">Perspective</option>
+          <option value="oblique">Oblique</option>
+        </select>
+
+        <select name="mapping-type" id="mapping-type">
+          <option value="texture" selected>Texture</option>
+          <option value="environment">Environment</option>
+          <option value="bump">Bump</option>
+        </select>
+
+        <label name="x-translation" for="x-translation" class="label-slider">
+          X Translation
+        </label>
+        <input
+          id="x-translation"
+          type="range"
+          min="-500"
+          max="500"
+          value="0"
+          class="slider"
+        />
+
+        <label name="y-translation" for="y-translation" class="label-slider">
+          Y Translation
+        </label>
+        <input
+          id="y-translation"
+          type="range"
+          min="-500"
+          max="500"
+          value="0"
+          class="slider"
+        />
+
+        <label name="z-translation" for="z-translation" class="label-slider">
+          Z Translation
+        </label>
+        <input
+          id="z-translation"
+          type="range"
+          min="-500"
+          max="500"
+          value="0"
+          class="slider"
+        />
+
+        <label name="x-rotation" for="x-rotation" class="label-slider">
+          X Rotation
+        </label>
+        <input
+          id="x-rotation"
+          type="range"
+          min="-360"
+          max="360"
+          value="0"
+          class="slider"
+        />
+
+        <label name="y-rotation" for="y-rotation" class="label-slider">
+          Y Rotation
+        </label>
+        <input
+          id="y-rotation"
+          type="range"
+          min="-360"
+          max="360"
+          value="0"
+          class="slider"
+        />
+
+        <label name="z-rotation" for="z-translation" class="label-slider">
+          Z Rotation
+        </label>
+        <input
+          id="z-rotation"
+          type="range"
+          min="-360"
+          max="360"
+          value="0"
+          class="slider"
+        />
+
+        <label name="x-scale" for="x-scale" class="label-slider">
+          X Scale
+        </label>
+        <input
+          id="x-scale"
+          type="range"
+          min="0"
+          max="5"
+          value="1"
+          class="slider"
+        />
+
+        <label name="y-scale" for="y-scale" class="label-slider">
+          Y Scale
+        </label>
+        <input
+          id="y-scale"
+          type="range"
+          min="0"
+          max="5"
+          value="1"
+          class="slider"
+        />
+
+        <label name="z-scale" for="z-translation" class="label-slider">
+          Z Scale
+        </label>
+        <input
+          id="z-scale"
+          type="range"
+          min="0"
+          max="5"
+          value="1"
+          class="slider"
+        />
+
+        <label name="animation-toggle" for="animation-toggle">
+          Animation
+        </label>
+        <input id="animation-toggle" type="checkbox" checked />
+
+        <label name="shading-toggle" for="shading-toggle"> Shading </label>
+        <input id="shading-toggle" type="checkbox" checked />
+      </section>
+
+      <section class="flex justify-center">
+        <canvas
+          id="canvas"
+          width="0"
+          height="0"
+          style="border: 2px solid #000000; margin-top: 60px"
+        ></canvas>
+      </section>
     </div>
 
     <script type="module" src="/src/main.ts"></script>
