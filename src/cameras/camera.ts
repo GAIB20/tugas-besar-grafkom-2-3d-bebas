@@ -1,6 +1,4 @@
-// TODO: Update this imports with the implemented M4
-// @ts-ignore
-import { Matrix4 } from "src/math/matrix";
+import { Matrix4 } from "src/math/matrix4";
 
 export abstract class Camera extends Node {
   protected _projectionMatrix = Matrix4.identity();
@@ -11,12 +9,17 @@ export abstract class Camera extends Node {
     // @ts-ignore
     super.computeWorldMatrix();
     // @ts-ignore
-    this._inverseWorldMatrix = Matrix4.inv(this.worldMatrix);
+    this._inverseWorldMatrix = this.worldMatrix.inverse();
   }
 
   get viewProjectionMatrix() {
     this.computeWorldMatrix();
-    return this.projectionMatrix.premul(this._inverseWorldMatrix);
+
+    return Matrix4.multiply(
+      this.projectionMatrix,
+      this._inverseWorldMatrix,
+      true
+    );
   }
 
   get projectionMatrix() {

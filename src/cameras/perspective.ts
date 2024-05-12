@@ -1,46 +1,32 @@
 import { Camera } from "./camera";
-// TODO: Update this imports with the implemented M4
-// @ts-ignore
-import { Matrix4 } from "src/math/matrix";
+import { Matrix4 } from "src/math/matrix4";
 
 export class PerspectiveCamera extends Camera {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+  fovy: number;
+  aspect: number;
   near: number;
   far: number;
 
-  constructor(
-    left: number,
-    right: number,
-    bottom: number,
-    top: number,
-    near: number,
-    far: number
-  ) {
+  constructor(fovy: number, aspect: number, near: number, far: number) {
     // TODO: check this
     super(); // Setup Node
-    this.left = left;
-    this.right = right;
-    this.top = top;
-    this.bottom = bottom;
+    this.fovy = fovy;
+    this.aspect = aspect;
     this.near = near;
     this.far = far;
+
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
-    // kali mengubah nilai left, right, top, bottom, near, atau far.
+    // kali mengubah nilai fovy, aspect, near, dan far.
     this.computeProjectionMatrix();
   }
 
   computeProjectionMatrix() {
     // TODO: check this
-    // M4.orthographic() menghasilkan proyeksi matriks perspective
-    // dengan 6 tupel left, right, bottom, top, near, dan far.
+    // M4.perspective() menghasilkan proyeksi matriks perspective
+    // dengan 4 tupel fovy, aspect, near, dan far.
     this._projectionMatrix = Matrix4.perspective(
-      this.left,
-      this.right,
-      this.bottom,
-      this.top,
+      this.fovy,
+      this.aspect,
       this.near,
       this.far
     );

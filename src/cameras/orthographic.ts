@@ -1,7 +1,5 @@
 import { Camera } from "./camera";
-// TODO: Update this imports with the implemented M4
-// @ts-ignore
-import { Matrix4 } from "src/math/matrix";
+import { Matrix4 } from "src/math/matrix4";
 
 export class OrthographicCamera extends Camera {
   top: number;

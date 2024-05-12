@@ -1,48 +1,25 @@
 import { Camera } from "./camera";
-// TODO: Update this imports with the implemented M4
-// @ts-ignore
-import { Matrix4 } from "src/math/matrix";
+import { Matrix4 } from "src/math/matrix4";
 
 export class ObliqueCamera extends Camera {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-  near: number;
-  far: number;
+  theta: number;
+  phi: number;
 
-  constructor(
-    left: number,
-    right: number,
-    bottom: number,
-    top: number,
-    near: number,
-    far: number
-  ) {
+  constructor(theta: number, phi: number) {
     // TODO: check this
     super(); // Setup Node
-    this.left = left;
-    this.right = right;
-    this.top = top;
-    this.bottom = bottom;
-    this.near = near;
-    this.far = far;
+    this.theta = theta;
+    this.phi = phi;
+
     // Jangan lupa untuk panggil computeProjectionMatrix() setiap
-    // kali mengubah nilai left, right, top, bottom, near, atau far.
+    // kali mengubah nilai theta dan phi.
     this.computeProjectionMatrix();
   }
 
   computeProjectionMatrix() {
     // TODO: check this
-    // M4.orthographic() menghasilkan proyeksi matriks oblique
-    // dengan 6 tupel left, right, bottom, top, near, dan far.
-    this._projectionMatrix = Matrix4.oblique(
-      this.left,
-      this.right,
-      this.bottom,
-      this.top,
-      this.near,
-      this.far
-    );
+    // M4.oblique() menghasilkan proyeksi matriks oblique
+    // dengan 2 tupel theta dan phi.
+    this._projectionMatrix = Matrix4.oblique(this.theta, this.phi);
   }
 }
