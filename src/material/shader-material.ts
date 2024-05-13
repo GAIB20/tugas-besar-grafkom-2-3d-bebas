@@ -1,6 +1,6 @@
 import { UniformType } from "src/types/uniform-type.ts";
 
-export class ShaderMaterial  {
+export abstract class ShaderMaterial  {
   private _id: string;
   protected _fragmentShader: string;
   protected _vertexShader: string;
