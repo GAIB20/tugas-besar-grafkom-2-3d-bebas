@@ -1,5 +1,5 @@
 import { Matrix4 } from "src/math/matrix4";
-import { Node } from "src/scripts/node";
+import { Node } from "src/core/node";
 
 export abstract class Camera extends Node {
   protected _projectionMatrix = Matrix4.identity();

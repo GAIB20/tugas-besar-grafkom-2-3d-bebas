@@ -1,6 +1,6 @@
 // Module related imports
 import { WebGLRenderer } from "./webgl/renderer";
-import { Mesh } from "./mesh/mesh";
+import { Mesh } from "./core/mesh";
 import { Color } from "./types/color";
 import { setupLoadModel } from "src/ui-element/load-model.ts";
 import { BoxGeometry } from "./geometries/box-geometry";

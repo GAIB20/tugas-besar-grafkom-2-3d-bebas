@@ -1,4 +1,4 @@
-import { Node } from "src/scripts/node-v2.ts";
+import { Node } from "src/core/node-v2";
 import { BufferGeometry } from "src/geometries/buffer-geometry.ts";
 import { ShaderMaterial } from "src/material/shader-material.ts";
 import { Matrix4 } from "src/math/matrix4";
