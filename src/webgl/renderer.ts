@@ -1,9 +1,9 @@
 import { Camera } from "src/cameras/camera.ts";
-import { SHADER_TYPE, TypedArray } from "../types/webgl-type.ts";
-import { ShaderMaterial } from "src/material/shader-material.ts";
+import { SHADER_TYPE, TypedArray, VERTEX_SHADER } from "../types/webgl-type.ts";
 import { Node } from "src/core/node-v2.ts";
 import { Mesh } from "src/core/mesh.ts";
 import { BasicMaterial } from "src/material/basic-material.ts";
+import { Scene } from "src/core/scene.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -159,9 +159,7 @@ export class WebGLRenderer {
 
     this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
     const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
-    console.log("Accessing attribute: ", attributeName);
-    console.log("Attribute location: ", attrLoc);
-    console.log("Bind buffer: ", data);
+
     this.gl.enableVertexAttribArray(attrLoc);
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
 
@@ -175,8 +173,23 @@ export class WebGLRenderer {
     );
   }
 
+  private injectToUniformMatrix4(
+    uniformName: string,
+    data: Iterable<number>,
+    transpose = false
+  ) {
+    const uniformLoc = this.gl.getUniformLocation(this.glProgram, uniformName);
+
+    this.gl.uniformMatrix4fv(uniformLoc, transpose, data);
+  }
+
   public play(node: Node, camera: Camera) {
-    this.gl.clearColor(0.9, 0.9, 0.9, 1);
+    // Clears up and set the canvas background to scene background color
+    if (node instanceof Scene) {
+      const [r, g, b, a] = node.backgroundColor.getComponents();
+      this.gl.clearColor(r, g, b, a);
+    }
+
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.enable(this.gl.DEPTH_TEST);
@@ -184,67 +197,49 @@ export class WebGLRenderer {
     this.render(node, camera);
   }
 
-  // TODO: extend this to Scene instead of Node
   public render(node: Node, camera: Camera) {
     node.computeWorldMatrix(false, true);
-    // camera.computeWorldMatrix()
+
     if (node instanceof Mesh) {
       // DRAW
       this.gl.useProgram(this.glProgram);
 
       this.injectToAttr(
         node.geometry.getAttribute("position").data,
-        "a_position",
+        VERTEX_SHADER.ATTRIBUTE_POSITION,
         node.geometry.getAttribute("position").size,
         this.gl.FLOAT
       );
 
-      // if (node.material instanceof BasicMaterial) {
+      if (node.material instanceof BasicMaterial) {
+        // Paint all vertices
+        const verticesColor: number[][] = [];
+        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
+          verticesColor.push(node.material.color.getComponents());
+        }
 
-      //   // TODO: check why this injection fails cos the color is still white
-      //   this.injectToAttr(
-      //     new Float32Array(node.material.color.getComponents()),
-      //     "a_color",
-      //     4,
-      //     this.gl.FLOAT
-      //   );
+        this.injectToAttr(
+          new Float32Array(verticesColor.flat()),
+          VERTEX_SHADER.ATTRIBUTE_COLOR,
+          4,
+          this.gl.FLOAT
+        );
+      }
 
-      //   console.log(
-      //     "GL Program Info: ",
-      //     this.gl.getProgramInfoLog(this.glProgram)
-      //   );
-      // }
-
-      const viewProjMatLoc = this.gl.getUniformLocation(
-        this.glProgram,
-        "ViewProjMat"
-      );
-      console.log("HERE - CAMERA")
-      this.gl.uniformMatrix4fv(
-        viewProjMatLoc,
-        false,
+      this.injectToUniformMatrix4(
+        VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
         camera.viewProjectionMatrix.toArray()
       );
-      console.log("HERE1 - CAMERA")
-
-      console.log("DEBUG [view proj mat]: ", camera.viewProjectionMatrix.toArray());
-      console.log("DEBUG CAMERA POSITION", camera.position)
-
-      const worldMatLoc = this.gl.getUniformLocation(
-        this.glProgram,
-        "ModelMat"
+      this.injectToUniformMatrix4(
+        VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
+        node.worldMatrix.toArray()
       );
-      this.gl.uniformMatrix4fv(worldMatLoc, false, node.worldMatrix.toArray());
-
-      console.log("DEBUG [world mat]: ", node.worldMatrix.toArray());
 
       this.gl.drawArrays(
         this.gl.TRIANGLES,
         0,
         node.geometry.getAttribute("position").count
       );
-
-      console.log("data: ", node.geometry.getAttribute("position").count);
     }
 
     node.children.forEach((child, index) => {
