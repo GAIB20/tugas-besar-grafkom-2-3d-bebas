@@ -1,4 +1,9 @@
-import { SHADER_TYPE } from "../types/webgl-type.ts";
+import { Camera } from "src/cameras/camera.ts";
+import { SHADER_TYPE, TypedArray } from "../types/webgl-type.ts";
+import { ShaderMaterial } from "src/material/shader-material.ts";
+import { Node } from "src/core/node-v2.ts";
+import { Mesh } from "src/core/mesh.ts";
+import { BasicMaterial } from "src/material/basic-material.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -23,6 +28,7 @@ export class WebGLRenderer {
     this._gl = gl;
 
     this._gl.viewport(0, 0, this._canvasWidth, this._canvasHeight);
+    this.adjustCanvas();
   }
 
   public adjustCanvas = () => {
@@ -51,6 +57,8 @@ export class WebGLRenderer {
       shader,
       this._gl.COMPILE_STATUS
     );
+
+    console.log("Shader info log: ", this.gl.getShaderInfoLog(shader));
     if (!success) throw new Error("could not compile shader");
 
     return shader;
@@ -134,5 +142,116 @@ export class WebGLRenderer {
 
   public get glProgram(): WebGLProgram {
     return this._glProgram;
+  }
+
+  private injectToAttr(
+    data: TypedArray,
+    attributeName: string,
+    bufferSize: number,
+    type: number,
+    normalized = false,
+    stride = 0,
+    offset = 0
+  ) {
+    const buffer = this.gl.createBuffer();
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+    const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
+    console.log("Accessing attribute: ", attributeName);
+    console.log("Attribute location: ", attrLoc);
+    console.log("Bind buffer: ", data);
+    this.gl.enableVertexAttribArray(attrLoc);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+
+    this.gl.vertexAttribPointer(
+      attrLoc,
+      bufferSize,
+      type,
+      normalized,
+      stride,
+      offset
+    );
+  }
+
+  public play(node: Node, camera: Camera) {
+    this.gl.clearColor(0.9, 0.9, 0.9, 1);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    this.gl.enable(this.gl.CULL_FACE);
+    this.gl.enable(this.gl.DEPTH_TEST);
+
+    this.render(node, camera);
+  }
+
+  // TODO: extend this to Scene instead of Node
+  public render(node: Node, camera: Camera) {
+    node.computeWorldMatrix(false, true);
+    // camera.computeWorldMatrix()
+    if (node instanceof Mesh) {
+      // DRAW
+      this.gl.useProgram(this.glProgram);
+
+      this.injectToAttr(
+        node.geometry.getAttribute("position").data,
+        "a_position",
+        node.geometry.getAttribute("position").size,
+        this.gl.FLOAT
+      );
+
+      // if (node.material instanceof BasicMaterial) {
+
+      //   // TODO: check why this injection fails cos the color is still white
+      //   this.injectToAttr(
+      //     new Float32Array(node.material.color.getComponents()),
+      //     "a_color",
+      //     4,
+      //     this.gl.FLOAT
+      //   );
+
+      //   console.log(
+      //     "GL Program Info: ",
+      //     this.gl.getProgramInfoLog(this.glProgram)
+      //   );
+      // }
+
+      const viewProjMatLoc = this.gl.getUniformLocation(
+        this.glProgram,
+        "ViewProjMat"
+      );
+      console.log("HERE - CAMERA")
+      this.gl.uniformMatrix4fv(
+        viewProjMatLoc,
+        false,
+        camera.viewProjectionMatrix.toArray()
+      );
+      console.log("HERE1 - CAMERA")
+
+      console.log("DEBUG [view proj mat]: ", camera.viewProjectionMatrix.toArray());
+      console.log("DEBUG CAMERA POSITION", camera.position)
+
+      const worldMatLoc = this.gl.getUniformLocation(
+        this.glProgram,
+        "ModelMat"
+      );
+      this.gl.uniformMatrix4fv(worldMatLoc, false, node.worldMatrix.toArray());
+
+      console.log("DEBUG [world mat]: ", node.worldMatrix.toArray());
+
+      this.gl.drawArrays(
+        this.gl.TRIANGLES,
+        0,
+        node.geometry.getAttribute("position").count
+      );
+
+      console.log("data: ", node.geometry.getAttribute("position").count);
+    }
+
+    node.children.forEach((child, index) => {
+      if (child instanceof Mesh) {
+        console.log("Index: ", index, " Child:", child);
+        this.render(child, camera);
+      }
+    });
   }
 }
