@@ -66,7 +66,8 @@ const main = async () => {
   );
 
   testMesh3.rotation = new Vector3(20, 0, 0);
-  testMesh3.position = new Vector3(0, -200, 0);
+  testMesh3.position = new Vector3(180, -200, 0);
+  testMesh3.scale = new Vector3(2, 2, 2);
 
   testMesh2.addChild(testMesh3);
 
