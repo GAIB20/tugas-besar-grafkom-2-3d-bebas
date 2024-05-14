@@ -1,23 +1,13 @@
-// TODO: update this
-attribute vec3 position;
-attribute vec3 normal;
+attribute vec4 a_color;
+attribute vec4 a_position;
 
-uniform mat4 ViewProjMat;
-uniform mat4 ModelMat;
-uniform mat4 NormalMat;
+uniform mat4 u_ViewProjMat;
+uniform mat4 u_WorldMat;
 
-attribute vec3 color;
-varying vec3 vLighting;
-varying vec3 vColor;
+varying vec4 v_Color;
 
 void main(void) {
-  gl_Position = ViewProjMat * ModelMat * vec4(position, 1.);
-  // vec3 ambientLight = vec3(0.3, 0.3, 0.3);
-  // vec3 directionalLightColor = vec3(1, 1, 1);
-  // vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
-  // vec4 transformedNormal = Nmatrix*vec4(normal, 1.);
+  gl_Position = u_ViewProjMat * u_WorldMat * a_position;
 
-  // float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-  // vLighting = ambientLight + (directionalLightColor * directional);
-  // vColor = color;
+  v_Color = a_color;
 }
