@@ -5,8 +5,10 @@ import { Color } from "./types/color";
 import { setupLoadModel } from "src/ui-element/load-model.ts";
 import { BoxGeometry } from "./geometries/box-geometry";
 import { BasicMaterial } from "./material/basic-material";
-import { OrthographicCamera } from "./cameras/orthographic";
-import { Matrix4 } from "./math/matrix4";
+import { Vector3 } from "./math/vector3";
+import { Scene } from "./core/scene";
+import { useCamera } from "./composables/useCamera";
+import { PlaneGeometry } from "./geometries/plane-geometry";
 
 // Stylesheet imports
 import "src/css/global.css";
@@ -19,38 +21,31 @@ const main = () => {
   setupLoadModel(loadFile);
 
   const vertexScript = `
-  attribute vec3 position;
-  attribute vec3 normal;
+  attribute vec4 a_color;
+  attribute vec4 a_position;
 
   uniform mat4 ViewProjMat;
   uniform mat4 ModelMat;
-  uniform mat4 NormalMat;
 
-  attribute vec3 color;
-  varying vec3 vLighting;
-  varying vec3 vColor;
+  varying vec4 v_Color;
 
   void main(void) {
-    gl_Position = ViewProjMat * ModelMat * vec4(position, 1.);
-    // vec3 ambientLight = vec3(0.3, 0.3, 0.3);
-    // vec3 directionalLightColor = vec3(1, 1, 1);
-    // vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
-    // vec4 transformedNormal = Nmatrix*vec4(normal, 1.);
+    gl_Position = ViewProjMat * ModelMat * a_position;
 
-    // float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-    // vLighting = ambientLight + (directionalLightColor * directional);
-    // vColor = color;
+    // v_Color = a_color;
+    v_Color = vec4(1,0,0,1);
   }
   `;
 
   const fragmentScript = `
-  precision mediump float;
-  varying vec3 vColor;
-  varying vec3 vLighting;
+  precision highp float;
+  // varying vec3 vLighting;
+  varying vec4 v_Color;
 
   void main(void) {
-    gl_FragColor = vec4(vColor, 1.);
-    gl_FragColor.rgb *= vLighting;
+    // gl_FragColor = vec4(1,0,0,1);
+    gl_FragColor = v_Color; // this dont works
+    // gl_FragColor.rgb *= vLighting;
   }
   `;
 
@@ -60,34 +55,53 @@ const main = () => {
   const renderer = new WebGLRenderer(canvas);
   renderer.init({ vertexShader: vertexScript, fragmentShader: fragmentScript });
 
-  const camera = new OrthographicCamera(
-    0,
-    renderer.width,
-    0,
-    renderer.height,
-    1000,
-    -1000
-  );
+  const mainScene = new Scene("red");
+
+  const { cameras } = useCamera(renderer);
 
   const testMesh = new Mesh(
-    new BoxGeometry(),
+    new BoxGeometry(50, 50, 50),
     new BasicMaterial(
       "test",
       fragmentScript,
       vertexScript,
-      new Color(0, 0, 0, 1)
+      new Color(1, 0, 0, 1)
     )
   );
 
-
-  testMesh.draw(
-    {
-      viewProjMat: camera.viewProjectionMatrix,
-      worldMat: Matrix4.identity(),
-    },
-    renderer.gl,
-    renderer.glProgram
+  const testMesh2 = new Mesh(
+    new BoxGeometry(70, 70, 70),
+    new BasicMaterial(
+      "test2",
+      fragmentScript,
+      vertexScript,
+      new Color(1, 0, 0, 1)
+    )
   );
+
+  const planeMesh = new Mesh(
+    new PlaneGeometry(250, 250),
+    new BasicMaterial(
+      "test3",
+      fragmentScript,
+      vertexScript,
+      new Color(1, 0, 0, 1)
+    )
+  );
+
+  testMesh.position = new Vector3(0, 0, 0);
+  testMesh2.position = new Vector3(0, 100, 0);
+
+  testMesh2.rotation = new Vector3(10, 10, 45);
+
+  planeMesh.position = new Vector3(0, -120, 0);
+  planeMesh.rotation = new Vector3(30, 0, 0);
+
+  mainScene.addChild(testMesh);
+  mainScene.addChild(testMesh2);
+  mainScene.addChild(planeMesh);
+
+  renderer.play(mainScene, cameras.PERSPECTIVE_CAM);
 
   // requestAnimationFrame(() => {
 
