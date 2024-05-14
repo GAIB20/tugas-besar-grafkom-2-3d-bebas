@@ -1,4 +1,5 @@
 import { BufferAttribute } from './buffer-attribute.ts';
+import { Vector3 } from 'src/math/vector3.ts';
 
 export class BufferGeometry {
     private _attributes: {[name: string]: BufferAttribute};
@@ -55,7 +56,24 @@ export class BufferGeometry {
         let normal = this.getAttribute('normal');
         if (forceNewAttribute || !normal)
             normal = new BufferAttribute(new Float32Array(position.length), position.size);
+
         // Lakukan kalkulasi normal disini.
+        let pos1 = new Vector3(), pos2 = new Vector3(), pos3 = new Vector3();
+        for (let i = 0; i < position.length; i += 3) {
+            pos1.toVector(position, i);
+            pos2.toVector(position, i+1);
+            pos3.toVector(position, i+2);
+
+
+            pos3 = Vector3.subtract(pos3, pos2);
+            pos2 = Vector3.subtract(pos2, pos1);
+            pos2 = Vector3.cross(pos2, pos3);
+
+            const d = pos2.normalize().toArray();
+            normal.set(i, d);
+            normal.set(i+1, d);
+            normal.set(i+2, d);
+        }
         this.setAttribute('normal', normal);
     }
 }

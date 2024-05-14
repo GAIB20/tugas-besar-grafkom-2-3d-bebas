@@ -9,6 +9,8 @@ import { Vector3 } from "./math/vector3";
 import { Scene } from "./core/scene";
 import { useCamera } from "./composables/useCamera";
 import { PlaneGeometry } from "./geometries/plane-geometry";
+import { readFile } from "./utils/file-handler";
+import { SHADER_PATH } from "./shaders";
 
 // Stylesheet imports
 import "src/css/global.css";
@@ -16,38 +18,12 @@ import "src/css/global.css";
 /**
  * Main Script
  */
-const main = () => {
+const main = async () => {
   const loadFile = document.querySelector<HTMLInputElement>("#load-model")!;
   setupLoadModel(loadFile);
 
-  const vertexScript = `
-  attribute vec4 a_color;
-  attribute vec4 a_position;
-
-  uniform mat4 ViewProjMat;
-  uniform mat4 ModelMat;
-
-  varying vec4 v_Color;
-
-  void main(void) {
-    gl_Position = ViewProjMat * ModelMat * a_position;
-
-    // v_Color = a_color;
-    v_Color = vec4(1,0,0,1);
-  }
-  `;
-
-  const fragmentScript = `
-  precision highp float;
-  // varying vec3 vLighting;
-  varying vec4 v_Color;
-
-  void main(void) {
-    // gl_FragColor = vec4(1,0,0,1);
-    gl_FragColor = v_Color; // this dont works
-    // gl_FragColor.rgb *= vLighting;
-  }
-  `;
+  const vertexScript = await readFile(SHADER_PATH.VERTEX_SHADER);
+  const fragmentScript = await readFile(SHADER_PATH.FRAGMENT_SHADER);
 
   // Get canvas
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -55,7 +31,7 @@ const main = () => {
   const renderer = new WebGLRenderer(canvas);
   renderer.init({ vertexShader: vertexScript, fragmentShader: fragmentScript });
 
-  const mainScene = new Scene("red");
+  const mainScene = new Scene(new Color(0.9, 0.9, 0.9, 1));
 
   const { cameras } = useCamera(renderer);
 
@@ -78,6 +54,21 @@ const main = () => {
       new Color(1, 0, 0, 1)
     )
   );
+
+  const testMesh3 = new Mesh(
+    new BoxGeometry(70, 70, 70),
+    new BasicMaterial(
+      "test2",
+      fragmentScript,
+      vertexScript,
+      new Color(1, 0, 0, 1)
+    )
+  );
+
+  testMesh3.rotation = new Vector3(20, 0, 0);
+  testMesh3.position = new Vector3(0, -200, 0);
+
+  testMesh2.addChild(testMesh3);
 
   const planeMesh = new Mesh(
     new PlaneGeometry(250, 250),
