@@ -1,3 +1,5 @@
+import { degreeToRad } from "./extra";
+
 export class Matrix4 {
   private _elements: number[];
 
@@ -63,22 +65,41 @@ export class Matrix4 {
   }
 
   public static rotateX(angle: number) {
-    const c = Math.cos(angle);
-    const s = Math.sin(angle);
-    return new Matrix4([1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1]);
+    const c = Math.cos(degreeToRad(angle));
+    const s = Math.sin(degreeToRad(angle));
+    return new Matrix4([1, 0, 0, 0,
+      0, c, -s, 0,
+      0, s, c, 0,
+      0, 0, 0, 1]);
   }
 
   public static rotateY(angle: number) {
-    const c = Math.cos(angle);
-    const s = Math.sin(angle);
+    const c = Math.cos(degreeToRad(angle));
+    const s = Math.sin(degreeToRad(angle));
     return new Matrix4([c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1]);
   }
 
   public static rotateZ(angle: number) {
-    const c = Math.cos(angle);
-    const s = Math.sin(angle);
+    const c = Math.cos(degreeToRad(angle));
+    const s = Math.sin(degreeToRad(angle));
     return new Matrix4([c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
   }
+
+  // Angles with format X, Y, Z
+  public static rotate3d(angles: number[]) {
+    let mat = Matrix4.identity();
+    let rotateX = Matrix4.rotateX(angles[0]);
+    let rotateY = Matrix4.rotateY(angles[1]);
+    let rotateZ = Matrix4.rotateZ(angles[2]);
+
+    let resX = Matrix4.multiply(rotateX, mat);
+    let resY = Matrix4.multiply(rotateY, resX);
+    let resZ = Matrix4.multiply(rotateZ, resY);
+
+    return resZ;
+  }
+
+  public static DEG2RAD: number = Math.PI / 180;
 
   // TODO: to check, currently cant inverse identity
   public inverse() {
@@ -156,57 +177,58 @@ export class Matrix4 {
     const tb = top - bottom;
     const fn = far - near;
     return new Matrix4([
-      2 / rl,
-      0,
-      0,
-      -(right + left) / rl,
-      0,
-      2 / tb,
-      0,
-      -(top + bottom) / tb,
-      0,
-      0,
-      -2 / fn,
-      -(far + near) / fn,
-      0,
-      0,
-      0,
-      1,
+      2 / rl,                 0,                      0,                  0,
+      0,                      2 / tb,                 0,                  0,
+      0,                      0,                      -2 / fn,            0,
+      -(right + left) / rl,   -(top + bottom) / tb,   -(far + near) / fn, 1,
     ]);
   }
 
+
+  // Looks like we only get the fov not fovy
   public static perspective(
     fovy: number,
     aspect: number,
     near: number,
     far: number
   ) {
-    const f = 1.0 / Math.tan(fovy / 2);
+    const f = 1 / Math.tan(fovy)
     const nf = 1 / (near - far);
+    console.log(f, "==", aspect, "==", near, "==", far);
+    console.log(new Matrix4([
+      f / aspect,           0,            0,                    0,
+      0,                    f,            0,                    0,
+      0,                    0,            (far + near) * nf,    2 * far * near * nf,
+      0,                    0,            -1,                   0,
+    ]).transpose())
+
     return new Matrix4([
-      f / aspect,
-      0,
-      0,
-      0,
-      0,
-      f,
-      0,
-      0,
-      0,
-      0,
-      (far + near) * nf,
-      2 * far * near * nf,
-      0,
-      0,
-      -1,
-      0,
-    ]);
+      f / aspect,           0,            0,                    0,
+      0,                    f,            0,                    0,
+      0,                    0,            (far + near) * nf,    2 * far * near * nf,
+      0,                    0,            -1,                   0,
+    ]).transpose();
   }
 
-  public static oblique(theta: number, phi: number) {
-    const t = Math.tan(theta);
-    const p = Math.tan(phi);
-    return new Matrix4([1, 0, 0, 0, 0, 1, 0, 0, -t, -p, 1, 0, 0, 0, 0, 1]);
+  public static oblique(
+    theta: number,
+    phi: number,
+    left: number,
+    right: number,
+    bottom: number,
+    top: number,
+    near: number,
+    far: number) {
+    const cotTheta = 1 / Math.tan(degreeToRad(theta));
+    const cotPhi = 1 / Math.tan(degreeToRad(phi));
+
+    const shearTransform = new Matrix4([
+      1,    0,    cotTheta,   0,
+      0,    1,    cotPhi,     0,
+      0,    0,    1,          0,
+      0,    0,    0,          1]);
+
+    return Matrix4.multiply(Matrix4.orthographic(left, right, bottom, top, near, far), shearTransform).transpose();
   }
 
   public transpose() {
@@ -221,7 +243,7 @@ export class Matrix4 {
 
   public clone(): Matrix4 {
     if (!this.elements) {
-      throw new Error("not initialized")
+      throw new Error("not initialized");
     }
 
     return Matrix4.fromArray(this.elements);

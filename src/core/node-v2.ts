@@ -61,11 +61,18 @@ export class Node {
 
   computeLocalMatrix() {
     this._localMatrix = Matrix4.multiply(
-      Matrix4.translate(this._position.x, this._position.y, this._position.z),
-      // TODO: fix error
-      // Matrix4.rotation3d(this._rotation),
-      Matrix4.scale(this._position.x, this._position.y, this._position.z)
-    );
+      Matrix4.multiply(
+        Matrix4.translate(this._position.x, this._position.y, this._position.z),
+        Matrix4.rotate3d(this._transfrom.rotation.toArray())
+      ),
+      Matrix4.scale(
+        this._transfrom.scale.x,
+        this._transfrom.scale.y,
+        this._transfrom.scale.z
+      )
+    ).transpose();
+
+    console.log("Computed local mat: ", this._localMatrix)
   }
 
   computeWorldMatrix(updateParent = true, updateChildren = true) {
