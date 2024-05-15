@@ -31,6 +31,16 @@ export class Node {
     this._transfrom.rotation = value;
   }
 
+  set rotateX(value: number) {
+    this._transfrom.rotation.x = value;
+  }
+  set rotateY(value: number) {
+    this._transfrom.rotation.y = value;
+  }
+  set rotateZ(value: number) {
+    this._transfrom.rotation.z = value;
+  }
+
   get scale(): Vector3 {
     return this._transfrom.scale;
   }
