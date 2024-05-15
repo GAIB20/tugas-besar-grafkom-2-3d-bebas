@@ -193,8 +193,10 @@ export class WebGLRenderer {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.enable(this.gl.DEPTH_TEST);
-
     this.render(node, camera);
+    requestAnimationFrame(() => {
+      // this.play(node, camera)
+    })
   }
 
   public render(node: Node, camera: Camera) {
@@ -221,7 +223,7 @@ export class WebGLRenderer {
         this.injectToAttr(
           new Float32Array(verticesColor.flat()),
           VERTEX_SHADER.ATTRIBUTE_COLOR,
-          4,
+          node.material.color.getComponents().length,
           this.gl.FLOAT
         );
       }
@@ -240,6 +242,7 @@ export class WebGLRenderer {
         0,
         node.geometry.getAttribute("position").count
       );
+      console.log("Data: ", node.geometry.getAttribute("position").count)
     }
 
     node.children.forEach((child, index) => {

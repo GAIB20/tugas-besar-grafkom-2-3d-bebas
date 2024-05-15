@@ -14,6 +14,7 @@ import { SHADER_PATH } from "./shaders";
 
 // Stylesheet imports
 import "src/css/global.css";
+import { HollowGeometry } from "./geometries/hollow-box-geometry";
 
 /**
  * Main Script
@@ -21,6 +22,10 @@ import "src/css/global.css";
 const main = async () => {
   const loadFile = document.querySelector<HTMLInputElement>("#load-model")!;
   setupLoadModel(loadFile);
+
+  let x = document.getElementById("x-rotation") as HTMLInputElement;
+  let y = document.getElementById("y-rotation") as HTMLInputElement;
+  let z = document.getElementById("z-rotation") as HTMLInputElement;
 
   const vertexScript = await readFile(SHADER_PATH.VERTEX_SHADER);
   const fragmentScript = await readFile(SHADER_PATH.FRAGMENT_SHADER);
@@ -65,9 +70,38 @@ const main = async () => {
     )
   );
 
-  testMesh3.rotation = new Vector3(20, 0, 0);
-  testMesh3.position = new Vector3(180, -200, 0);
-  testMesh3.scale = new Vector3(2, 2, 2);
+  const hollowMesh = new Mesh(
+    new HollowGeometry(),
+    new BasicMaterial(
+      "test2",
+      fragmentScript,
+      vertexScript,
+      new Color(1, 0, 0, 1)
+    )
+  );
+
+    y.oninput = () => {
+      hollowMesh.rotateY = parseInt(y.value);
+      renderer.play(mainScene, cameras.OBLIQUE_CAM);
+
+    }
+
+    x.oninput = () => {
+      hollowMesh.rotateX = parseInt(x.value)
+      renderer.play(mainScene, cameras.OBLIQUE_CAM);
+    }
+
+    z.oninput = () => {
+      hollowMesh.rotateZ = parseInt(z.value)
+      renderer.play(mainScene, cameras.OBLIQUE_CAM);
+    }
+
+
+
+
+  // testMesh3.rotation = new Vector3(20, 0, 0);
+  testMesh3.position = new Vector3(100, 0, 0);
+  // testMesh3.scale = new Vector3(2, 2, 2);
 
   testMesh2.addChild(testMesh3);
 
@@ -82,22 +116,27 @@ const main = async () => {
   );
 
   testMesh.position = new Vector3(0, 0, 0);
-  testMesh2.position = new Vector3(0, 100, 0);
+  testMesh.rotation = new Vector3(0, 0, 0);
+  // testMesh.scale = new Vector3(20, 20, 20);
 
-  testMesh2.rotation = new Vector3(10, 10, 45);
+  testMesh2.position = new Vector3(100, 0, 0);
+
+  // testMesh2.rotation = new Vector3(10, 10, 45);
 
   planeMesh.position = new Vector3(0, -120, 0);
   planeMesh.rotation = new Vector3(30, 0, 0);
 
-  mainScene.addChild(testMesh);
-  mainScene.addChild(testMesh2);
-  mainScene.addChild(planeMesh);
+  // mainScene.addChild(testMesh);
+  // mainScene.addChild(testMesh2);
+  // hollowMesh.position = new Vector3(2,2,2)
+  hollowMesh.rotation = new Vector3(90, 45, 0);
+  mainScene.addChild(hollowMesh);
+  // mainScene.addChild(planeMesh);
 
-  renderer.play(mainScene, cameras.PERSPECTIVE_CAM);
+  renderer.play(mainScene, cameras.OBLIQUE_CAM);
 
-  // requestAnimationFrame(() => {
 
-  // })
+
 };
 
 main();
