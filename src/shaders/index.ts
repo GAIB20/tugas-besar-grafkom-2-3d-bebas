@@ -1,4 +1,7 @@
 export const SHADER_PATH = {
-  VERTEX_SHADER: "/src/shaders/vertex-shader-3d.vert",
-  FRAGMENT_SHADER: "/src/shaders/fragment-shader-3d.frag",
+  BASIC_VERTEX_SHADER: "/src/shaders/basic-vertex-shader-3d.vert",
+  BASIC_FRAGMENT_SHADER: "/src/shaders/basic-fragment-shader-3d.frag",
+
+  PHONG_VERTEX_SHADER: "/src/shaders/phong-vertex-shader-3d.vert",
+  PHONG_FRAGMENT_SHADER: "/src/shaders/phong-fragment-shader-3d.frag",
 };

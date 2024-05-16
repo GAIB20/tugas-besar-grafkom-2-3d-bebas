@@ -1,9 +1,16 @@
 import { Camera } from "src/cameras/camera.ts";
-import { SHADER_TYPE, TypedArray, VERTEX_SHADER } from "../types/webgl-type.ts";
+import {
+  SHADER_TYPE,
+  TypedArray,
+  BASIC_VERTEX_SHADER,
+  PHONG_VERTEX_SHADER,
+  PHONG_FRAGMENT_SHADER
+} from "../types/webgl-type.ts";
 import { Node } from "src/core/node-v2.ts";
 import { Mesh } from "src/core/mesh.ts";
 import { BasicMaterial } from "src/material/basic-material.ts";
 import { Scene } from "src/core/scene.ts";
+import { PhongMaterial } from "src/material/phong-material.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -208,7 +215,7 @@ export class WebGLRenderer {
 
       this.injectToAttr(
         node.geometry.getAttribute("position").data,
-        VERTEX_SHADER.ATTRIBUTE_POSITION,
+        BASIC_VERTEX_SHADER.ATTRIBUTE_POSITION,
         node.geometry.getAttribute("position").size,
         this.gl.FLOAT
       );
@@ -222,18 +229,70 @@ export class WebGLRenderer {
 
         this.injectToAttr(
           new Float32Array(verticesColor.flat()),
-          VERTEX_SHADER.ATTRIBUTE_COLOR,
+          BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR,
           node.material.color.getComponents().length,
           this.gl.FLOAT
         );
       }
 
+      if (node.material instanceof PhongMaterial) {
+        // Paint all vertices
+        const verticesColor: number[][] = [];
+        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
+          verticesColor.push(node.material.ambient.getComponents());
+        }
+
+        this.injectToAttr(
+          new Float32Array(verticesColor.flat()),
+          PHONG_VERTEX_SHADER.ATTRIBUTE_COLOR,
+          node.material.ambient.getComponents().length,
+          this.gl.FLOAT
+        )
+
+        // Inject normals
+        this.injectToAttr(
+          node.geometry.getAttribute("normal").data,
+          PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL,
+          node.geometry.getAttribute("normal").size,
+          this.gl.FLOAT
+        );
+
+        // Inject light position
+        this.injectToAttr(
+          node.material.lightPosition,
+          PHONG_FRAGMENT_SHADER.UNIFORM_LIGHT_POSITION,
+          3, // !! hard coded for now
+          this.gl.FLOAT
+        );
+
+        // Inject shininess
+        const shininess = node.material.shininess;
+        const uniformLoc = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_SHININESS);
+        this.gl.uniform1f(uniformLoc, shininess);
+
+        // Inject camera position
+        const cameraPosition = camera.position.toArray();
+        const uniformCameraPosition = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_CAMERA_POSITION);
+        this.gl.uniform3fv(uniformCameraPosition, cameraPosition);
+
+        // Inject ambient color
+        const ambientColor = node.material.ambient.getComponents();
+        const uniformAmbientColor = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_AMBIENT_COLOR);
+        this.gl.uniform4fv(uniformAmbientColor, ambientColor);
+
+        // TODO: Inject specular color
+        // Inject diffuse color
+        // const diffuseColor = node.material.diffuse.getComponents();
+        // const uniformDiffuseColor = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR);
+        // this.gl.uniform4fv(uniformDiffuseColor, diffuseColor);
+      }
+
       this.injectToUniformMatrix4(
-        VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
+        BASIC_VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
         camera.viewProjectionMatrix.toArray()
       );
       this.injectToUniformMatrix4(
-        VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
+        BASIC_VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
         node.worldMatrix.toArray()
       );
 

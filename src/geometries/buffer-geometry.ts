@@ -1,7 +1,7 @@
 import { BufferAttribute } from './buffer-attribute.ts';
 import { Vector3 } from 'src/math/vector3.ts';
 
-export class BufferGeometry {
+export abstract class BufferGeometry {
     private _attributes: {[name: string]: BufferAttribute};
     private _indices?: BufferAttribute;
 

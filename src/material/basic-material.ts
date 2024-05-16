@@ -4,9 +4,13 @@ import { Color } from "src/types/color.ts";
 export class BasicMaterial extends ShaderMaterial {
   private _color: Color;
 
-  constructor(id: string, fragmentShader: string, vertexShader: string, color: Color) {
-    super(id, fragmentShader, vertexShader);
+  constructor(fragmentShader: string, vertexShader: string, color: Color) {
+    super(fragmentShader, vertexShader);
     this._color = color;
+  }
+
+  public get id(): string {
+    return "basic-material";
   }
 
   /* Getters and Setters */

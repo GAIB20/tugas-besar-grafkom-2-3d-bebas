@@ -27,8 +27,8 @@ const main = async () => {
   let y = document.getElementById("y-rotation") as HTMLInputElement;
   let z = document.getElementById("z-rotation") as HTMLInputElement;
 
-  const vertexScript = await readFile(SHADER_PATH.VERTEX_SHADER);
-  const fragmentScript = await readFile(SHADER_PATH.FRAGMENT_SHADER);
+  const vertexScript = await readFile(SHADER_PATH.BASIC_VERTEX_SHADER);
+  const fragmentScript = await readFile(SHADER_PATH.BASIC_FRAGMENT_SHADER);
 
   // Get canvas
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -43,7 +43,6 @@ const main = async () => {
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
     new BasicMaterial(
-      "test",
       fragmentScript,
       vertexScript,
       new Color(1, 0, 0, 1)
@@ -53,7 +52,6 @@ const main = async () => {
   const testMesh2 = new Mesh(
     new BoxGeometry(70, 70, 70),
     new BasicMaterial(
-      "test2",
       fragmentScript,
       vertexScript,
       new Color(1, 0, 0, 1)
@@ -63,7 +61,6 @@ const main = async () => {
   const testMesh3 = new Mesh(
     new BoxGeometry(70, 70, 70),
     new BasicMaterial(
-      "test2",
       fragmentScript,
       vertexScript,
       new Color(1, 0, 0, 1)
@@ -73,7 +70,6 @@ const main = async () => {
   const hollowMesh = new Mesh(
     new HollowGeometry(),
     new BasicMaterial(
-      "test2",
       fragmentScript,
       vertexScript,
       new Color(1, 0, 0, 1)
@@ -108,7 +104,6 @@ const main = async () => {
   const planeMesh = new Mesh(
     new PlaneGeometry(250, 250),
     new BasicMaterial(
-      "test3",
       fragmentScript,
       vertexScript,
       new Color(1, 0, 0, 1)

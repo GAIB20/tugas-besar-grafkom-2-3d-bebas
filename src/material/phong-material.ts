@@ -7,17 +7,23 @@ export class PhongMaterial extends ShaderMaterial {
   private _diffuse: Color | Texture;
   private _specular: Color | Texture;
   private _shininess: number;
+  private _lightPosition: Float32Array;
 
   /* constructor */
-  constructor(id: string, fragmentShader: string, vertexShader: string, ambient: Color, diffuse: Color | Texture, specular: Color | Texture, shininess: number) {
-    super(id, fragmentShader, vertexShader);
+  constructor(fragmentShader: string, vertexShader: string, ambient: Color, diffuse: Color | Texture, specular: Color | Texture, shininess: number, lightPosition: Float32Array) {
+    super(fragmentShader, vertexShader);
     this._ambient = ambient;
     this._diffuse = diffuse;
     this._specular = specular;
     this._shininess = shininess;
+    this._lightPosition = lightPosition;
   }
 
   /* Getters and Setters */
+  public get id(): string {
+    return "phong-material";
+  }
+
   public set ambient(ambient: Color) {
     this._ambient = ambient;
   }
@@ -48,5 +54,13 @@ export class PhongMaterial extends ShaderMaterial {
 
   public get shininess(): number {
     return this._shininess;
+  }
+
+  public set lightPosition(lightPosition: Float32Array) {
+    this._lightPosition = lightPosition;
+  }
+
+  public get lightPosition(): Float32Array {
+    return this._lightPosition;
   }
 }
