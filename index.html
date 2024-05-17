@@ -8,143 +8,176 @@
     <title>WebGL 3D</title>
   </head>
   <body>
-    <div id="app" class="flex flex-col">
+    <div id="app" class="flex justify-between">
       <!-- Page content -->
 
-      <section>
-        <label for="load-model" class="label-button">Load</label>
-        <input id="load-model" type="file" name="file" accept=".json" hidden />
+      <section class="flex flex-col items-start gap-y-24">
+        <div class="flex flex-wrap gap-3">
+          <label for="load-model" class="label-button">Load</label>
+          <input
+            id="load-model"
+            type="file"
+            name="file"
+            accept=".json"
+            hidden
+          />
 
-        <label for="save-model" class="label-button">Save</label>
-        <input id="save-model" type="button" name="save" hidden />
+          <label for="save-model" class="label-button">Save</label>
+          <input id="save-model" type="button" name="save" hidden />
 
-        <select name="projection-type" id="projection-type">
-          <option value="orthographic" selected>Orthographic</option>
-          <option value="perspective">Perspective</option>
-          <option value="oblique">Oblique</option>
-        </select>
+          <select name="projection-type" id="projection-type">
+            <option value="orthographic" selected>Orthographic</option>
+            <option value="perspective">Perspective</option>
+            <option value="oblique">Oblique</option>
+          </select>
 
-        <select name="mapping-type" id="mapping-type">
-          <option value="texture" selected>Texture</option>
-          <option value="environment">Environment</option>
-          <option value="bump">Bump</option>
-        </select>
+          <select name="mapping-type" id="mapping-type">
+            <option value="texture" selected>Texture</option>
+            <option value="environment">Environment</option>
+            <option value="bump">Bump</option>
+          </select>
 
-        <label name="x-translation" for="x-translation" class="label-slider">
-          X Translation
-        </label>
-        <input
-          id="x-translation"
-          type="range"
-          min="-500"
-          max="500"
-          value="0"
-          class="slider"
-        />
+          <label name="x-translation" for="x-translation" class="label-slider">
+            X Translation
+          </label>
+          <input
+            id="x-translation"
+            type="range"
+            min="-500"
+            max="500"
+            value="0"
+            class="slider"
+          />
 
-        <label name="y-translation" for="y-translation" class="label-slider">
-          Y Translation
-        </label>
-        <input
-          id="y-translation"
-          type="range"
-          min="-500"
-          max="500"
-          value="0"
-          class="slider"
-        />
+          <label name="y-translation" for="y-translation" class="label-slider">
+            Y Translation
+          </label>
+          <input
+            id="y-translation"
+            type="range"
+            min="-500"
+            max="500"
+            value="0"
+            class="slider"
+          />
 
-        <label name="z-translation" for="z-translation" class="label-slider">
-          Z Translation
-        </label>
-        <input
-          id="z-translation"
-          type="range"
-          min="-500"
-          max="500"
-          value="0"
-          class="slider"
-        />
+          <label name="z-translation" for="z-translation" class="label-slider">
+            Z Translation
+          </label>
+          <input
+            id="z-translation"
+            type="range"
+            min="-500"
+            max="500"
+            value="0"
+            class="slider"
+          />
+        </div>
 
-        <label name="x-rotation" for="x-rotation" class="label-slider">
-          X Rotation
-        </label>
-        <input
-          id="x-rotation"
-          type="range"
-          min="-360"
-          max="360"
-          value="0"
-          class="slider"
-        />
+        <div class="flex flex-wrap gap-3">
+          <label name="x-rotation" for="x-rotation" class="label-slider">
+            X Rotation
+          </label>
+          <input
+            id="x-rotation"
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+          />
 
-        <label name="y-rotation" for="y-rotation" class="label-slider">
-          Y Rotation
-        </label>
-        <input
-          id="y-rotation"
-          type="range"
-          min="-360"
-          max="360"
-          value="0"
-          class="slider"
-        />
+          <label name="y-rotation" for="y-rotation" class="label-slider">
+            Y Rotation
+          </label>
+          <input
+            id="y-rotation"
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+          />
 
-        <label name="z-rotation" for="z-translation" class="label-slider">
-          Z Rotation
-        </label>
-        <input
-          id="z-rotation"
-          type="range"
-          min="-360"
-          max="360"
-          value="0"
-          class="slider"
-        />
+          <label name="z-rotation" for="z-translation" class="label-slider">
+            Z Rotation
+          </label>
+          <input
+            id="z-rotation"
+            type="range"
+            min="-360"
+            max="360"
+            value="0"
+            class="slider"
+          />
 
-        <label name="x-scale" for="x-scale" class="label-slider">
-          X Scale
-        </label>
-        <input
-          id="x-scale"
-          type="range"
-          min="0"
-          max="5"
-          value="1"
-          class="slider"
-        />
+          <label name="x-scale" for="x-scale" class="label-slider">
+            X Scale
+          </label>
+          <input
+            id="x-scale"
+            type="range"
+            min="0"
+            max="5"
+            value="1"
+            class="slider"
+          />
 
-        <label name="y-scale" for="y-scale" class="label-slider">
-          Y Scale
-        </label>
-        <input
-          id="y-scale"
-          type="range"
-          min="0"
-          max="5"
-          value="1"
-          class="slider"
-        />
+          <label name="y-scale" for="y-scale" class="label-slider">
+            Y Scale
+          </label>
+          <input
+            id="y-scale"
+            type="range"
+            min="0"
+            max="5"
+            value="1"
+            class="slider"
+          />
 
-        <label name="z-scale" for="z-translation" class="label-slider">
-          Z Scale
-        </label>
-        <input
-          id="z-scale"
-          type="range"
-          min="0"
-          max="5"
-          value="1"
-          class="slider"
-        />
+          <label name="z-scale" for="z-translation" class="label-slider">
+            Z Scale
+          </label>
+          <input
+            id="z-scale"
+            type="range"
+            min="0"
+            max="5"
+            value="1"
+            class="slider"
+          />
+        </div>
 
-        <label name="animation-toggle" for="animation-toggle">
-          Animation
-        </label>
-        <input id="animation-toggle" type="checkbox" checked />
+        <div class="flex flex-wrap gap-3">
+          <div class="border border-2 p-2">
+            <p>Animation</p>
+            <label name="animation-toggle" for="animation-toggle"> Play </label>
+            <input id="animation-toggle-play" type="checkbox" checked />
+            <br />
+            <label name="animation-toggle" for="animation-toggle">
+              Reverse
+            </label>
+            <input id="animation-toggle-reverse" type="checkbox" checked />
+            <br />
+            <label name="animation-toggle" for="animation-toggle">
+              Auto Play
+            </label>
+            <input id="animation-toggle-auto-play" type="checkbox" checked />
+            <br />
 
-        <label name="shading-toggle" for="shading-toggle"> Shading </label>
-        <input id="shading-toggle" type="checkbox" checked />
+            <button id="animation-toggle-next-frame" class="label-button">
+              Next
+            </button>
+            <button id="animation-toggle-prev-frame" class="label-button">
+              Prev
+            </button>
+          </div>
+
+          <div>
+            <label name="shading-toggle" for="shading-toggle"> Shading </label>
+            <input id="shading-toggle" type="checkbox" checked />
+          </div>
+        </div>
       </section>
 
       <section class="flex justify-center">
