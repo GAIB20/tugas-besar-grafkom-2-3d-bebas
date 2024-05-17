@@ -2,18 +2,15 @@ import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
 
 export class HollowGeometry extends BufferGeometry {
-  width: number;
-  height: number;
-  depth: number;
+  size: number;
+
 
   // TODO: need to check
-  constructor(width = 1, height = 1, depth = 1) {
+  constructor(size = 1) {
     super();
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
+    this.size = size;
 
-    const vertices = new Float32Array([
+    let vertices = new Float32Array([
       20, 20, 20, 10.0, -10.0, 20, 20, -20, 20, 20, 20, 20, 10.0, 10.0, 20,
       10.0, -10.0, 20, 20, 20, 20, -10.0, 10.0, 20, 10.0, 10.0, 20, 20, 20, 20,
       -20, 20, 20, -10.0, 10.0, 20, -20, 20, 20, -20, -20, 20, -10.0, 10.0, 20,
@@ -43,6 +40,8 @@ export class HollowGeometry extends BufferGeometry {
       -20, -10.0, -10.0, 20, 10.0, -10.0, 20, -10.0, -10.0, -20, 10.0, -10.0,
       20, 10.0, -10.0, -20, -10.0, -10.0, -20,
     ]);
+
+    vertices = vertices.map(el => el * this.size);
     this.setAttribute("position", new BufferAttribute(vertices, 3));
     this.calculateNormals();
   }

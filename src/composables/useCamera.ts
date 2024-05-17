@@ -12,8 +12,8 @@ export const useCamera = (renderer: WebGLRenderer) => {
   const orthographicCam = new OrthographicCamera(
     -renderer.width / 2,
     renderer.width / 2,
-    renderer.height / 2,
     -renderer.height / 2,
+    renderer.height / 2,
     ORTHOGRAPHIC_NEAR,
     ORTHOGRAPHIC_FAR
   );
@@ -42,8 +42,8 @@ export const useCamera = (renderer: WebGLRenderer) => {
     OBLIQUE_PHI,
     -renderer.width / 2,
     renderer.width / 2,
-    renderer.height / 2,
     -renderer.height / 2,
+    renderer.height / 2,
     ORTHOGRAPHIC_NEAR,
     ORTHOGRAPHIC_FAR
   );

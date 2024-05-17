@@ -40,5 +40,11 @@ export abstract class Camera extends Node {
     return this._projectionMatrix;
   }
 
+  public updateZoom(inc: number) {
+    this.zoom += inc;
+
+    this.computeProjectionMatrix();
+  }
+
   public abstract computeProjectionMatrix(): void;
 }

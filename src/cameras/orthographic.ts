@@ -35,10 +35,10 @@ export class OrthographicCamera extends Camera {
     // M4.orthographic() menghasilkan proyeksi matriks ortografik
     // dengan 6 tupel left, right, bottom, top, near, dan far.
     this._projectionMatrix = Matrix4.orthographic(
-      this.left,
-      this.right,
-      this.bottom,
-      this.top,
+      this.left / this.zoom,
+      this.right / this.zoom,
+      this.bottom / this.zoom,
+      this.top / this.zoom,
       this.near,
       this.far
     );

@@ -45,10 +45,10 @@ export class ObliqueCamera extends Camera {
     this._projectionMatrix = Matrix4.oblique(
       this.theta,
       this.phi,
-      this.left,
-      this.right,
-      this.bottom,
-      this.top,
+      this.left / this.zoom,
+      this.right / this.zoom,
+      this.bottom / this.zoom,
+      this.top / this.zoom,
       this.near,
       this.far
     );
