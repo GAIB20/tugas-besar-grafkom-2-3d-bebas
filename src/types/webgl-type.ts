@@ -14,22 +14,29 @@ export enum BASIC_VERTEX_SHADER {
 
 export enum PHONG_VERTEX_SHADER {
   ATTRIBUTE_POSITION = "a_position",
-  ATTRIBUTE_COLOR = "a_color",
-  ATTRIBUTE_NORMAL = "a_normal",
+  ATTRIBUTE_TEX_COORD = "a_texCoord",
 
-  UNIFORM_WORLD_MATRIX = "u_WorldMat",
-  UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
-  UNIFORM_RESOLUTION = "u_resolution",
-  UNIFORM_USE_VERTEX_COLOR = "u_useVertexColor",
+
+  // TODO
+  // ATTRIBUTE_COLOR = "a_color",
+  // ATTRIBUTE_NORMAL = "a_normal",
+
+  // UNIFORM_WORLD_MATRIX = "u_WorldMat",
+  // UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
+  // UNIFORM_RESOLUTION = "u_resolution",
+  // UNIFORM_USE_VERTEX_COLOR = "u_useVertexColor",
 }
 
 export enum PHONG_FRAGMENT_SHADER {
-  UNIFORM_SHININESS = "u_shininess",
-  UNIFORM_LIGHT_POSITION = "u_lightPosition",
-  UNIFORM_CAMERA_POSITION = "u_cameraPosition",
-  UNIFORM_AMBIENT_COLOR = "u_ambientColor",
-  UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
-  UNIFORM_SPECULAR_COLOR = "u_specularColor",
+  UNIFORM_TEXTURE = "u_texture",
+
+  // TODO
+  // UNIFORM_SHININESS = "u_shininess",
+  // UNIFORM_LIGHT_POSITION = "u_lightPosition",
+  // UNIFORM_CAMERA_POSITION = "u_cameraPosition",
+  // UNIFORM_AMBIENT_COLOR = "u_ambientColor",
+  // UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
+  // UNIFORM_SPECULAR_COLOR = "u_specularColor",
 }
 
 export enum WEB_GL_DATA_TYPE {

@@ -15,6 +15,9 @@ import { SHADER_PATH } from "./shaders";
 // Stylesheet imports
 import "src/css/global.css";
 import { HollowGeometry } from "./geometries/hollow-box-geometry";
+import { FGeometry } from "src/geometries/f-geometry.ts";
+import { PhongMaterial } from "src/material/phong-material.ts";
+import { Texture } from "src/material/texture.ts";
 
 /**
  * Main Script
@@ -27,14 +30,21 @@ const main = async () => {
   let y = document.getElementById("y-rotation") as HTMLInputElement;
   let z = document.getElementById("z-rotation") as HTMLInputElement;
 
-  const vertexScript = await readFile(SHADER_PATH.BASIC_VERTEX_SHADER);
-  const fragmentScript = await readFile(SHADER_PATH.BASIC_FRAGMENT_SHADER);
+  const basicVertexScript = await readFile(SHADER_PATH.BASIC_VERTEX_SHADER);
+  const basicFragmentScript = await readFile(SHADER_PATH.BASIC_FRAGMENT_SHADER);
+
+  const phongVertexScript = await readFile(SHADER_PATH.PHONG_VERTEX_SHADER);
+  const phongFragmentScript = await readFile(SHADER_PATH.PHONG_FRAGMENT_SHADER);
 
   // Get canvas
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
   const renderer = new WebGLRenderer(canvas);
-  renderer.init({ vertexShader: vertexScript, fragmentShader: fragmentScript });
+
+
+  // TODO:
+  // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
+  renderer.init({ vertexShader: phongVertexScript, fragmentShader: phongFragmentScript });
 
   const mainScene = new Scene(new Color(0.9, 0.9, 0.9, 1));
 
@@ -43,8 +53,8 @@ const main = async () => {
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
     new BasicMaterial(
-      fragmentScript,
-      vertexScript,
+      basicFragmentScript,
+      basicVertexScript,
       new Color(1, 0, 0, 1)
     )
   );
@@ -52,8 +62,8 @@ const main = async () => {
   const testMesh2 = new Mesh(
     new BoxGeometry(70, 70, 70),
     new BasicMaterial(
-      fragmentScript,
-      vertexScript,
+      basicFragmentScript,
+      basicVertexScript,
       new Color(1, 0, 0, 1)
     )
   );
@@ -61,8 +71,8 @@ const main = async () => {
   const testMesh3 = new Mesh(
     new BoxGeometry(70, 70, 70),
     new BasicMaterial(
-      fragmentScript,
-      vertexScript,
+      basicFragmentScript,
+      basicVertexScript,
       new Color(1, 0, 0, 1)
     )
   );
@@ -70,30 +80,11 @@ const main = async () => {
   const hollowMesh = new Mesh(
     new HollowGeometry(),
     new BasicMaterial(
-      fragmentScript,
-      vertexScript,
+      basicFragmentScript,
+      basicVertexScript,
       new Color(1, 0, 0, 1)
     )
   );
-
-    y.oninput = () => {
-      hollowMesh.rotateY = parseInt(y.value);
-      renderer.play(mainScene, cameras.OBLIQUE_CAM);
-
-    }
-
-    x.oninput = () => {
-      hollowMesh.rotateX = parseInt(x.value)
-      renderer.play(mainScene, cameras.OBLIQUE_CAM);
-    }
-
-    z.oninput = () => {
-      hollowMesh.rotateZ = parseInt(z.value)
-      renderer.play(mainScene, cameras.OBLIQUE_CAM);
-    }
-
-
-
 
   // testMesh3.rotation = new Vector3(20, 0, 0);
   testMesh3.position = new Vector3(100, 0, 0);
@@ -104,8 +95,8 @@ const main = async () => {
   const planeMesh = new Mesh(
     new PlaneGeometry(250, 250),
     new BasicMaterial(
-      fragmentScript,
-      vertexScript,
+      basicFragmentScript,
+      basicVertexScript,
       new Color(1, 0, 0, 1)
     )
   );
@@ -125,12 +116,180 @@ const main = async () => {
   // mainScene.addChild(testMesh2);
   // hollowMesh.position = new Vector3(2,2,2)
   hollowMesh.rotation = new Vector3(90, 45, 0);
-  mainScene.addChild(hollowMesh);
+  // mainScene.addChild(hollowMesh);
   // mainScene.addChild(planeMesh);
+
+  const fMesh = new Mesh(
+    new FGeometry(50, 50, 50),
+    new PhongMaterial(
+      phongFragmentScript,
+      phongVertexScript,
+      new Color(1, 0, 0, 1),
+      new Texture(
+        "texture/f-texture.png",
+        new Float32Array([
+          // left column front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // top rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // middle rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // left column back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // middle rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // top rung right
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // under top rung
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // between top rung and middle
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // top of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // right of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom of middle rung.
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // right of bottom
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // left side
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0]),
+        {
+          wrapS: WebGLRenderingContext.CLAMP_TO_EDGE,
+          wrapT: WebGLRenderingContext.CLAMP_TO_EDGE,
+          magFilter: WebGLRenderingContext.LINEAR,
+          minFilter: WebGLRenderingContext.LINEAR,
+          format: WebGLRenderingContext.RGBA,
+          dtype: WebGLRenderingContext.UNSIGNED_BYTE,
+          generateMipmap: true,
+        }),
+      new Color(0, 0, 1, 1),
+      100,
+      new Float32Array([0.1, 0.1, 0.1])
+    )
+  );
+
+  mainScene.addChild(fMesh);
 
   renderer.play(mainScene, cameras.OBLIQUE_CAM);
 
 
+  y.oninput = () => {
+    fMesh.rotateY = parseInt(y.value);
+    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+
+  }
+
+  x.oninput = () => {
+    fMesh.rotateX = parseInt(x.value)
+    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+  }
+
+  z.oninput = () => {
+    fMesh.rotateZ = parseInt(z.value)
+    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+  }
 
 };
 
