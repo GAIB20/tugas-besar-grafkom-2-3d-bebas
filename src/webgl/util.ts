@@ -140,7 +140,6 @@ export class WebGLUtils {
     const textureId = gl.createTexture();
     if (!textureId) throw new Error('could not create texture');
 
-    gl.bindTexture(gl.TEXTURE_2D, textureId);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
