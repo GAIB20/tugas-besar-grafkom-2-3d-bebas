@@ -5,11 +5,48 @@ export enum SHADER_TYPE {
   FRAGMENT = WebGLRenderingContext.FRAGMENT_SHADER,
 }
 
-export enum VERTEX_SHADER {
-  ATTRIBUTE_COLOR = "a_color",
+export enum COMMON_ATTRIBUTE {
   ATTRIBUTE_POSITION = "a_position",
+  ATTRIBUTE_NORMAL = "a_normal",
+  ATTRIBUTE_COLOR = "a_color",
+  ATTRIBUTE_TEX_COORD = "a_texCoord",
+}
+
+export enum COMMON_UNIFORM {
   UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
   UNIFORM_WORLD_MATRIX = "u_WorldMat",
+}
+
+export enum BASIC_VERTEX_SHADER {
+  ATTRIBUTE_COLOR = "a_color",
+  ATTRIBUTE_POSITION = "a_position",
+}
+
+export enum PHONG_VERTEX_SHADER {
+  ATTRIBUTE_POSITION = "a_position",
+  ATTRIBUTE_TEX_COORD = "a_texCoord",
+
+
+  // TODO
+  // ATTRIBUTE_COLOR = "a_color",
+  // ATTRIBUTE_NORMAL = "a_normal",
+
+  // UNIFORM_WORLD_MATRIX = "u_WorldMat",
+  // UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
+  // UNIFORM_RESOLUTION = "u_resolution",
+  // UNIFORM_USE_VERTEX_COLOR = "u_useVertexColor",
+}
+
+export enum PHONG_FRAGMENT_SHADER {
+  UNIFORM_TEXTURE = "u_texture",
+
+  // TODO
+  // UNIFORM_SHININESS = "u_shininess",
+  // UNIFORM_LIGHT_POSITION = "u_lightPosition",
+  // UNIFORM_CAMERA_POSITION = "u_cameraPosition",
+  // UNIFORM_AMBIENT_COLOR = "u_ambientColor",
+  // UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
+  // UNIFORM_SPECULAR_COLOR = "u_specularColor",
 }
 
 export enum WEB_GL_DATA_TYPE {

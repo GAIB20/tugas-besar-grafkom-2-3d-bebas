@@ -1,9 +1,17 @@
 import { Camera } from "src/cameras/camera.ts";
-import { SHADER_TYPE, TypedArray, VERTEX_SHADER } from "../types/webgl-type.ts";
+import {
+  PHONG_VERTEX_SHADER,
+  COMMON_UNIFORM,
+  COMMON_ATTRIBUTE
+} from "../types/webgl-type.ts";
 import { Node } from "src/core/node-v2.ts";
 import { Mesh } from "src/core/mesh.ts";
 import { BasicMaterial } from "src/material/basic-material.ts";
 import { Scene } from "src/core/scene.ts";
+import { PhongMaterial } from "src/material/phong-material.ts";
+import { Color } from "src/types/color.ts";
+import { WebGLUtils } from "src/webgl/util.ts";
+import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -44,72 +52,6 @@ export class WebGLRenderer {
     this._canvasHeight = dh;
   };
 
-  private createShader = (shaderType: SHADER_TYPE, shaderScript: string) => {
-    const shader = this._gl.createShader(shaderType);
-    if (!shader) {
-      throw new Error("could not create shader");
-    }
-
-    this._gl.shaderSource(shader, shaderScript);
-    this._gl.compileShader(shader);
-
-    const success = this._gl.getShaderParameter(
-      shader,
-      this._gl.COMPILE_STATUS
-    );
-
-    console.log("Shader info log: ", this.gl.getShaderInfoLog(shader));
-    if (!success) throw new Error("could not compile shader");
-
-    return shader;
-  };
-
-  /**
-   * @brief Creates a WebGL program using the provided vertex and fragment shaders.
-   *
-   * @param scripts.vertexShader The source code for the vertex shader.
-   * @param scripts.fragmentShader The source code for the fragment shader.
-   *
-   * @return WebGL program.
-   */
-  private createProgram = (scripts: {
-    vertexShader: string;
-    fragmentShader: string;
-  }) => {
-    const vertexShader = this.createShader(
-      SHADER_TYPE.VERTEX,
-      scripts.vertexShader
-    );
-    const fragmentShader = this.createShader(
-      SHADER_TYPE.FRAGMENT,
-      scripts.fragmentShader
-    );
-
-    const program = this._gl.createProgram();
-    if (!program) throw new Error("could not create program!");
-
-    this._gl.attachShader(program, vertexShader);
-    this._gl.attachShader(program, fragmentShader);
-    this._gl.linkProgram(program);
-
-    if (!this._gl.getProgramParameter(program, this._gl.LINK_STATUS)) {
-      const errMsg = this._gl.getProgramInfoLog(program);
-      this._gl.deleteProgram(program);
-      throw new Error("err: " + errMsg);
-    }
-
-    this._gl.validateProgram(program);
-    if (!this._gl.getProgramParameter(program, this._gl.VALIDATE_STATUS)) {
-      const errMsg = this._gl.getProgramInfoLog(program);
-      this._gl.deleteProgram(program);
-      throw new Error("err: " + errMsg);
-    }
-
-    this._gl.deleteShader(vertexShader);
-    this._gl.deleteShader(fragmentShader);
-
-    return program;
-  };
 
   /**
    * @brief Init WebGL program
@@ -118,7 +60,7 @@ export class WebGLRenderer {
    * @param scripts.fragmentShader The source code for the fragment shader.
    */
   public init(scripts: { vertexShader: string; fragmentShader: string }) {
-    this._glProgram = this.createProgram(scripts);
+    this._glProgram = WebGLUtils.createProgram(this.gl, scripts);
 
     this._gl.useProgram(this._glProgram);
   }
@@ -144,45 +86,6 @@ export class WebGLRenderer {
     return this._glProgram;
   }
 
-  private injectToAttr(
-    data: TypedArray,
-    attributeName: string,
-    bufferSize: number,
-    type: number,
-    normalized = false,
-    stride = 0,
-    offset = 0
-  ) {
-    const buffer = this.gl.createBuffer();
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
-    const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
-
-    this.gl.enableVertexAttribArray(attrLoc);
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-
-    this.gl.vertexAttribPointer(
-      attrLoc,
-      bufferSize,
-      type,
-      normalized,
-      stride,
-      offset
-    );
-  }
-
-  private injectToUniformMatrix4(
-    uniformName: string,
-    data: Iterable<number>,
-    transpose = false
-  ) {
-    const uniformLoc = this.gl.getUniformLocation(this.glProgram, uniformName);
-
-    this.gl.uniformMatrix4fv(uniformLoc, transpose, data);
-  }
-
   public play(node: Node, camera: Camera) {
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
@@ -206,35 +109,58 @@ export class WebGLRenderer {
       // DRAW
       this.gl.useProgram(this.glProgram);
 
-      this.injectToAttr(
-        node.geometry.getAttribute("position").data,
-        VERTEX_SHADER.ATTRIBUTE_POSITION,
-        node.geometry.getAttribute("position").size,
-        this.gl.FLOAT
-      );
-
       if (node.material instanceof BasicMaterial) {
+        // position
+        const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, positionBufferAttribute.data,)
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, positionBufferAttribute);
+
+        // color
         // Paint all vertices
         const verticesColor: number[][] = [];
         for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
           verticesColor.push(node.material.color.getComponents());
         }
-
-        this.injectToAttr(
-          new Float32Array(verticesColor.flat()),
-          VERTEX_SHADER.ATTRIBUTE_COLOR,
-          node.material.color.getComponents().length,
-          this.gl.FLOAT
-        );
+        const colorBufferAttribute = new BufferAttribute(new Float32Array(verticesColor.flat()), Color.size(), COMMON_ATTRIBUTE.ATTRIBUTE_COLOR);
+        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, colorBufferAttribute.data);
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, colorBufferAttribute);
       }
 
-      this.injectToUniformMatrix4(
-        VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
-        camera.viewProjectionMatrix.toArray()
+      if (node.material instanceof PhongMaterial) {
+        // position
+        const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, positionBufferAttribute.data,)
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, positionBufferAttribute);
+
+        // diffuse
+        const diffuse = node.material.diffuse;
+        if (diffuse instanceof Color) {
+          // color
+          // TODO
+        } else {
+          // texture
+          // TODO: check this
+          diffuse.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, diffuse.data);
+          WebGLUtils.createTexture(this.gl, diffuse)
+
+          WebGLUtils.createAttribSetter(this.gl, this.glProgram, new BufferAttribute(new Float32Array([-1]) /* fill with dummy data*/, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD, {buffer: diffuse.buffer}));
+        }
+      }
+
+      WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        COMMON_UNIFORM.UNIFORM_VIEW_PROJ_MATRIX,
+        camera.viewProjectionMatrix.toArray(),
+        this.gl.FLOAT_MAT4
       );
-      this.injectToUniformMatrix4(
-        VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
-        node.worldMatrix.toArray()
+
+      WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        COMMON_UNIFORM.UNIFORM_WORLD_MATRIX,
+        node.worldMatrix.toArray(),
+        this.gl.FLOAT_MAT4
       );
 
       this.gl.drawArrays(
@@ -242,6 +168,7 @@ export class WebGLRenderer {
         0,
         node.geometry.getAttribute("position").count
       );
+
       console.log("Data: ", node.geometry.getAttribute("position").count)
     }
 

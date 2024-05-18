@@ -1,33 +1,40 @@
-import { TypedArray } from "src/types/webgl-type.ts";
+import { TypedArray, WEB_GL_DATA_TYPE } from "src/types/webgl-type.ts";
 
 export class BufferAttribute {
+    private _buffer?: WebGLBuffer;
     private _data: TypedArray;
     private _size: number;
-    private _dtype: number;
+    private _dtype: WEB_GL_DATA_TYPE = WEB_GL_DATA_TYPE.FLOAT;
     private _normalize = false;
     private _stride = 0;
     private _offset = 0;
+    private _attributeName: string;
     private _isDirty = true; // kita copy atribut minimal sekali di awal terlebih dahulu
 
     /**
      * Creates an instance of BufferAttribute.
      * @param {TypedArray} data Typed array data.
      * @param {number} size Size of each element in the buffer.
+     * @param attributeName
      * @param {object} options Options for attribute.
      * @memberof BufferAttribute
      */
     constructor(
         data: TypedArray,
         size: number,
+        attributeName: string,
         options: {
-            dtype?: number,
+          buffer?: WebGLBuffer,
+          dtype?: number,
             normalize?: boolean,
             stride?: number,
             offset?: number,
         } = {},
     ) {
+        this._buffer    = options.buffer;
         this._data      = data;
         this._size      = size;
+        this._attributeName = attributeName;
         this._dtype     = options.dtype     || WebGLRenderingContext.FLOAT;
         this._normalize = options.normalize || false;
         this._stride    = options.stride    || 0;
@@ -35,15 +42,21 @@ export class BufferAttribute {
     }
 
     // Public get accessor to private properties.
+    get buffer() { return this._buffer!;}
     get data() { return this._data; }
     get size() { return this._size; }
     get dtype() { return this._dtype; }
     get normalize() { return this._normalize; }
     get stride() { return this._stride; }
     get offset() { return this._offset; }
+    get attributeName() { return this._attributeName; }
     get isDirty() { return this._isDirty; }
     // Public set accessor to private properties.
     // Should toggle isDirty flag to true.
+    set buffer(buffer: WebGLBuffer) {
+        this._buffer = buffer;
+        this._isDirty = true;
+    }
     set data(data: TypedArray) {
         this._data = data;
         this._isDirty = true;

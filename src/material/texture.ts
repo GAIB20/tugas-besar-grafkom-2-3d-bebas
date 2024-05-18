@@ -1,18 +1,21 @@
-import { WEB_GL_DATA_TYPE } from "src/types/webgl-type.ts";
+import { TypedArray, WEB_GL_DATA_TYPE } from "src/types/webgl-type.ts";
 
 export class Texture{
-  private _image: ImageBitmap;
-  private _wrapS: number;
-  private _wrapT: number;
+  private _buffer?: WebGLBuffer;
+  private _imageStr: string;
+  private _wrapS: number; // horizontal
+  private _wrapT: number; // vertical
   private _magFilter: number;
   private _minFilter: number;
   private _format: WebGLTexture;
   private _dtype: WEB_GL_DATA_TYPE;
   private _generateMipmap: boolean;
+  private _data: TypedArray;
 
   /* constructor */
   constructor(
-    image: ImageBitmap,
+    imageSrc: string,
+    data: TypedArray,
     options: {
       wrapS: number,
       wrapT: number,
@@ -23,18 +26,22 @@ export class Texture{
       generateMipmap: boolean,
     },
   ) {
-    this._image = image;
-    this._wrapS = options.wrapS; // || WebGLRenderingContext.CLAMP_TO_EDGE;
-    this._wrapT = options.wrapT; // || WebGLRenderingContext.CLAMP_TO_EDGE;
-    this._magFilter = options.magFilter; // || WebGLRenderingContext.LINEAR;
-    this._minFilter = options.minFilter; // || WebGLRenderingContext.LINEAR;
-    this._format = options.format; // || WebGLRenderingContext.RGBA;
-    this._dtype = options.dtype; // || WebGLRenderingContext.UNSIGNED_BYTE;
-    this._generateMipmap = options.generateMipmap; // || true;
+    this._imageStr = imageSrc;
+    this._data = data;
+
+    this._wrapS = options.wrapS || WebGLRenderingContext.CLAMP_TO_EDGE;
+    this._wrapT = options.wrapT || WebGLRenderingContext.CLAMP_TO_EDGE;
+    this._magFilter = options.magFilter|| WebGLRenderingContext.LINEAR;
+    this._minFilter = options.minFilter || WebGLRenderingContext.LINEAR;
+    this._format = options.format || WebGLRenderingContext.RGBA;
+    this._dtype = options.dtype || WebGLRenderingContext.UNSIGNED_BYTE;
+    this._generateMipmap = options.generateMipmap || true;
   }
 
   /* Getters and Setters */
-  get image() { return this._image; }
+  get buffer() { return this._buffer!; }
+  get imageStr() { return this._imageStr; }
+  get data() { return this._data; }
   get wrapS() { return this._wrapS; }
   get wrapT() { return this._wrapT; }
   get magFilter() { return this._magFilter; }
@@ -43,7 +50,9 @@ export class Texture{
   get dtype() { return this._dtype; }
   get generateMipmap() { return this._generateMipmap; }
 
-  set image(image: ImageBitmap) { this._image = image; }
+  set buffer(buffer: WebGLBuffer) { this._buffer = buffer; }
+  set imageStr(_imageStr: string) { this._imageStr = _imageStr; }
+  set data(data: TypedArray) { this._data = data; }
   set wrapS(wrapS: number) { this._wrapS = wrapS; }
   set wrapT(wrapT: number) { this._wrapT = wrapT; }
   set magFilter(magFilter: number) { this._magFilter = magFilter; }

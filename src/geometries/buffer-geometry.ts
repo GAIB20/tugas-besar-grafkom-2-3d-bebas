@@ -1,7 +1,13 @@
 import { BufferAttribute } from './buffer-attribute.ts';
 import { Vector3 } from 'src/math/vector3.ts';
 
-export class BufferGeometry {
+export abstract class BufferGeometry {
+    /* TODO: Update this if you have more attributes
+    Buffer Attributes name
+      - position
+      - normal
+    */
+
     private _attributes: {[name: string]: BufferAttribute};
     private _indices?: BufferAttribute;
 
@@ -55,7 +61,10 @@ export class BufferGeometry {
         if (!position) return;
         let normal = this.getAttribute('normal');
         if (forceNewAttribute || !normal)
-            normal = new BufferAttribute(new Float32Array(position.length), position.size);
+            normal = new BufferAttribute(
+              new Float32Array(position.length),
+              position.size,
+              "a_normal",);
 
         // Lakukan kalkulasi normal disini.
         let pos1 = new Vector3(), pos2 = new Vector3(), pos3 = new Vector3();
