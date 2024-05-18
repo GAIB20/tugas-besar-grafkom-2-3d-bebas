@@ -2,86 +2,158 @@
  * @deprecated Already inside the WebGLRenderer
  */
 import {
-  AttributeMapSetters,
-  AttributeSetters,
-  ProgramInfo,
-  AttributeSingleDataType,
-  AttributeDataType,
+  SHADER_TYPE,
+  TypedArray
 } from "src/types/webgl-type.ts";
-
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
+import { Texture } from "src/material/texture.ts";
+
 
 export class WebGLUtils {
-  public createAttributeSetters = (
-    program: WebGLProgram,
-    gl: WebGLRenderingContext
-  ): AttributeMapSetters => {
-    const createAttributeSetter = (info: WebGLActiveInfo): AttributeSetters => {
-      // Initialization Time
-      const loc = gl.getAttribLocation(program, info.name);
-      const buf = gl.createBuffer();
-      return (...values) => {
-        // Render Time (saat memanggil setAttributes() pada render loop)
-        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        const v = values[0];
-        if (v instanceof BufferAttribute) {
-          if (v.isDirty) {
-            // Data Changed Time (note that buffer is already binded)
-            gl.bufferData(gl.ARRAY_BUFFER, v.data, gl.STATIC_DRAW);
-            v.consume();
-          }
-          gl.enableVertexAttribArray(loc);
-          gl.vertexAttribPointer(
-            loc,
-            v.size,
-            v.dtype,
-            v.normalize,
-            v.stride,
-            v.offset
-          );
-        } else {
-          gl.disableVertexAttribArray(loc);
-
-          // TODO: remove ignore check once resolved
-          if (v instanceof Float32Array) {
-            // @ts-ignore
-            gl[`vertexAttrib${v.length}fv`](loc, v);
-          }
-          // @ts-ignore
-          else gl[`vertexAttrib${values.length}f`](loc, ...values);
-        }
-      };
-    };
-
-    const attribSetters = {};
-    const numAttribs = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
-    for (let i = 0; i < numAttribs; i++) {
-      const info = gl.getActiveAttrib(program, i);
-      if (!info) continue;
-      // @ts-ignore
-      attribSetters[info.name] = createAttributeSetter(info);
+  public static createShader = (
+    gl: WebGLRenderingContext,
+    source: string,
+    type: number
+  ): WebGLShader => {
+    const shader = gl.createShader(type);
+    if (!shader) {
+      throw new Error("could not create shader");
     }
-    return attribSetters;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (!success) {
+      console.log(gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      throw new Error("could not compile shader");
+    }
+    return shader;
+  }
+
+  public static createProgram = (
+    gl: WebGLRenderingContext,
+    scripts: {
+    vertexShader: string;
+    fragmentShader: string;
+    }) => {
+    const vertexShader = this.createShader(
+      gl,
+      scripts.vertexShader,
+      SHADER_TYPE.VERTEX,
+    );
+    const fragmentShader = this.createShader(
+      gl,
+      scripts.fragmentShader,
+      SHADER_TYPE.FRAGMENT,
+    );
+
+
+    const program = gl.createProgram();
+    if (!program) throw new Error("could not create program!");
+
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      const errMsg = gl.getProgramInfoLog(program);
+      gl.deleteProgram(program);
+      throw new Error("err: " + errMsg);
+    }
+
+    gl.validateProgram(program);
+    if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
+      const errMsg = gl.getProgramInfoLog(program);
+      gl.deleteProgram(program);
+      throw new Error("err: " + errMsg);
+    }
+
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
+
+    return program;
   };
 
-  // TODO: check this function. Currently this doesnt do anything cos its only modify its own internal variable
-  public setAttribute(
-    programInfo: ProgramInfo,
-    attributeName: string,
-    ...data: AttributeDataType
-  ) {
-    const setters = programInfo.attributeSetters;
-    if (attributeName in setters) {
-      const shaderName = `a_${attributeName}`;
-      setters[shaderName](...data);
+  public static createBufferFromTypedArray = (
+    gl: WebGLRenderingContext,
+    array: TypedArray,
+    type: number = gl.ARRAY_BUFFER,
+    drawType: number = gl.STATIC_DRAW
+  ) => {
+    const buffer = gl.createBuffer();
+    if (!buffer) throw new Error('could not create buffer');
+    gl.bindBuffer(type, buffer);
+    gl.bufferData(type, array, drawType);
+    return buffer;
+  }
+
+  public static createAttribSetter = (
+    gl: WebGLRenderingContext,
+    program: WebGLProgram,
+    bufferAttribute: BufferAttribute,
+  ) => {
+    if (!bufferAttribute.buffer) throw new Error('buffer is required');
+    const attributeLocation = gl.getAttribLocation(program, bufferAttribute.attributeName);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufferAttribute.buffer);
+    gl.enableVertexAttribArray(attributeLocation);
+    gl.vertexAttribPointer(
+      attributeLocation,
+      bufferAttribute.size,
+      bufferAttribute.dtype,
+      bufferAttribute.normalize,
+      bufferAttribute.stride,
+      bufferAttribute.offset
+    );
+  }
+
+  public static createUniformSetter = (
+    gl: WebGLRenderingContext,
+    program: WebGLProgram,
+    uniformName: string,
+    data: Iterable<number> | number,
+    type: number,
+    transpose: boolean = false,
+  ) => {
+    const uniformLocation = gl.getUniformLocation(program, uniformName);
+    if (!uniformLocation) throw new Error('could not get uniform location');
+
+    if (type === gl.FLOAT_MAT4) {
+      gl.uniformMatrix4fv(uniformLocation, transpose, data as Iterable<number>);
+    } else if (type === gl.FLOAT_VEC3) {
+      gl.uniform3fv(uniformLocation, data as Iterable<number>);
+    } else if (type === gl.FLOAT_VEC4) {
+      gl.uniform4fv(uniformLocation, data as Iterable<number>);
+    } else if (type === gl.FLOAT) {
+      gl.uniform1f(uniformLocation, data as number);
+    } else if (type === gl.BOOL) {
+      gl.uniform1i(uniformLocation, data as number);
+    } else {
+      throw new Error('unsupported uniform type');
     }
   }
 
-  public setAttributes(
-    programInfo: ProgramInfo,
-    attributes: { [attributeName: string]: AttributeSingleDataType }
-  ) {
-    for (let attributeName in attributes)
-      this.setAttribute(programInfo, attributeName, attributes[attributeName]);
+  public static createTexture = (
+    gl: WebGLRenderingContext,
+    texture: Texture
+  ) => {
+    const textureId = gl.createTexture();
+    if (!textureId) throw new Error('could not create texture');
+
+    gl.bindTexture(gl.TEXTURE_2D, textureId);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
+
+    // only works with image
+    const image = new Image();
+    image.src = texture.imageStr;
+    image.onload = () => {
+      gl.bindTexture(gl.TEXTURE_2D, textureId);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      if (texture.generateMipmap) gl.generateMipmap(gl.TEXTURE_2D);
+    }
+
   }
 }

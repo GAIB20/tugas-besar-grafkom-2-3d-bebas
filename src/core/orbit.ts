@@ -21,7 +21,7 @@ export class Orbit {
   public setupControlOrbit = () => {
     let isDragging = false;
 
-    this._canvas.addEventListener("mousedown", (e) => {
+    this._canvas.addEventListener("mousedown", () => {
       isDragging = true;
     });
 
@@ -42,7 +42,7 @@ export class Orbit {
       );
     });
 
-    this._canvas.addEventListener("mouseup", (e) => {
+    this._canvas.addEventListener("mouseup", () => {
       isDragging = false;
     });
 

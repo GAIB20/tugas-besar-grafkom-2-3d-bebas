@@ -5,11 +5,21 @@ export enum SHADER_TYPE {
   FRAGMENT = WebGLRenderingContext.FRAGMENT_SHADER,
 }
 
+export enum COMMON_ATTRIBUTE {
+  ATTRIBUTE_POSITION = "a_position",
+  ATTRIBUTE_NORMAL = "a_normal",
+  ATTRIBUTE_COLOR = "a_color",
+  ATTRIBUTE_TEX_COORD = "a_texCoord",
+}
+
+export enum COMMON_UNIFORM {
+  UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
+  UNIFORM_WORLD_MATRIX = "u_WorldMat",
+}
+
 export enum BASIC_VERTEX_SHADER {
   ATTRIBUTE_COLOR = "a_color",
   ATTRIBUTE_POSITION = "a_position",
-  UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
-  UNIFORM_WORLD_MATRIX = "u_WorldMat",
 }
 
 export enum PHONG_VERTEX_SHADER {

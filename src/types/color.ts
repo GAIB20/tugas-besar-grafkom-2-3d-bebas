@@ -36,4 +36,8 @@ export class Color {
     let b = parseInt(hex.substring(5, 7), 16) / 255;
     return new Color(r, g, b);
   }
+
+  public static size(): number {
+    return 4;
+  }
 }

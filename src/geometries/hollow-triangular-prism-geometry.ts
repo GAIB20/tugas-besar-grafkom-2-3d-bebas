@@ -1,17 +1,10 @@
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
+import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
 
 export class HollowGeometry3 extends BufferGeometry {
-  width: number;
-  height: number;
-  depth: number;
-
-  // TODO: need to check
-  constructor(width = 1, height = 1 , depth = 1) {
+  constructor() {
     super();
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
 
     const vertices = new Float32Array([
       0, 0, 0,
@@ -112,7 +105,7 @@ export class HollowGeometry3 extends BufferGeometry {
       150, 43.3, 0,
       100, 86.6, 0]);
 
-    this.setAttribute("position", new BufferAttribute(vertices, 3));
+    this.setAttribute("position", new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
     this.calculateNormals();
   }
 }

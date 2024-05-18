@@ -1,17 +1,17 @@
 import { Camera } from "src/cameras/camera.ts";
 import {
-  SHADER_TYPE,
-  TypedArray,
-  BASIC_VERTEX_SHADER, PHONG_VERTEX_SHADER, PHONG_FRAGMENT_SHADER
-  // PHONG_VERTEX_SHADER,
-  // PHONG_FRAGMENT_SHADER
+  PHONG_VERTEX_SHADER,
+  COMMON_UNIFORM,
+  COMMON_ATTRIBUTE
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node-v2.ts";
 import { Mesh } from "src/core/mesh.ts";
 import { BasicMaterial } from "src/material/basic-material.ts";
 import { Scene } from "src/core/scene.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
-import { Texture } from "src/material/texture.ts";
+import { Color } from "src/types/color.ts";
+import { WebGLUtils } from "src/webgl/util.ts";
+import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -52,73 +52,6 @@ export class WebGLRenderer {
     this._canvasHeight = dh;
   };
 
-  private createShader = (shaderType: SHADER_TYPE, shaderScript: string) => {
-    const shader = this._gl.createShader(shaderType);
-    if (!shader) {
-      throw new Error("could not create shader");
-    }
-
-    this._gl.shaderSource(shader, shaderScript);
-    this._gl.compileShader(shader);
-
-    const success = this._gl.getShaderParameter(
-      shader,
-      this._gl.COMPILE_STATUS
-    );
-
-    console.log("Shader info log: ", this.gl.getShaderInfoLog(shader));
-    if (!success) throw new Error("could not compile shader");
-
-    return shader;
-  };
-
-  /**
-   * @brief Creates a WebGL program using the provided vertex and fragment shaders.
-   *
-   * @param scripts.vertexShader The source code for the vertex shader.
-   * @param scripts.fragmentShader The source code for the fragment shader.
-   *
-   * @return WebGL program.
-   */
-  private createProgram = (scripts: {
-    vertexShader: string;
-    fragmentShader: string;
-  }) => {
-    const vertexShader = this.createShader(
-      SHADER_TYPE.VERTEX,
-      scripts.vertexShader
-    );
-    const fragmentShader = this.createShader(
-      SHADER_TYPE.FRAGMENT,
-      scripts.fragmentShader
-    );
-
-
-    const program = this._gl.createProgram();
-    if (!program) throw new Error("could not create program!");
-
-    this._gl.attachShader(program, vertexShader);
-    this._gl.attachShader(program, fragmentShader);
-    this._gl.linkProgram(program);
-
-    if (!this._gl.getProgramParameter(program, this._gl.LINK_STATUS)) {
-      const errMsg = this._gl.getProgramInfoLog(program);
-      this._gl.deleteProgram(program);
-      throw new Error("err: " + errMsg);
-    }
-
-    this._gl.validateProgram(program);
-    if (!this._gl.getProgramParameter(program, this._gl.VALIDATE_STATUS)) {
-      const errMsg = this._gl.getProgramInfoLog(program);
-      this._gl.deleteProgram(program);
-      throw new Error("err: " + errMsg);
-    }
-
-    this._gl.deleteShader(vertexShader);
-    this._gl.deleteShader(fragmentShader);
-
-    return program;
-  };
 
   /**
    * @brief Init WebGL program
@@ -127,7 +60,7 @@ export class WebGLRenderer {
    * @param scripts.fragmentShader The source code for the fragment shader.
    */
   public init(scripts: { vertexShader: string; fragmentShader: string }) {
-    this._glProgram = this.createProgram(scripts);
+    this._glProgram = WebGLUtils.createProgram(this.gl, scripts);
 
     this._gl.useProgram(this._glProgram);
   }
@@ -153,131 +86,6 @@ export class WebGLRenderer {
     return this._glProgram;
   }
 
-  private injectToAttr(
-    data: TypedArray,
-    attributeName: string,
-    bufferSize: number,
-    type: number,
-    normalized = false,
-    stride = 0,
-    offset = 0
-  ) {
-    const buffer = this.gl.createBuffer();
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
-    const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
-
-    this.gl.enableVertexAttribArray(attrLoc);
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-
-    this.gl.vertexAttribPointer(
-      attrLoc,
-      bufferSize,
-      type,
-      normalized,
-      stride,
-      offset
-    );
-  }
-
-  private injectToUniformMatrix4(
-    uniformName: string,
-    data: Iterable<number>,
-    transpose = false
-  ) {
-    const uniformLoc = this.gl.getUniformLocation(this.glProgram, uniformName);
-
-    this.gl.uniformMatrix4fv(uniformLoc, transpose, data);
-  }
-
-  private setTexCoords(
-    attributeName: string,
-    bufferSize: number,
-    type: number,
-    texture: Texture,
-    normalized = false,
-    stride = 0,
-    offset = 0
-  ) {
-    const buffer = this.gl.createBuffer();
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-
-    const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
-    this.gl.enableVertexAttribArray(attrLoc);
-
-    this.gl.vertexAttribPointer(
-      attrLoc,
-      bufferSize,
-      type,
-      normalized,
-      stride,
-      offset
-    );
-
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, texture.data, this.gl.STATIC_DRAW);
-
-    // Set texture
-    const _texture = this.gl.createTexture();
-    this.gl.bindTexture(this.gl.TEXTURE_2D, _texture);
-
-    // Set the parameters so we can render any size image.
-    this.gl.texImage2D(
-      this.gl.TEXTURE_2D,
-      0,
-      // TODO: Hardcoded
-      this.gl.RGBA,
-      1,
-      1,
-      0,
-      this.gl.RGBA,
-
-      texture.dtype,
-
-      // TODO: Hardcoded
-      new Uint8Array([0, 0, 255, 255])
-    );
-
-
-    let image = new Image();
-    image.src = texture.imageStr;
-
-    image.addEventListener( "load", () => {
-      this.gl.bindTexture(this.gl.TEXTURE_2D, _texture);
-      this.gl.texImage2D(
-        this.gl.TEXTURE_2D,
-        0,
-        this.gl.RGBA,
-        this.gl.RGBA,
-        this.gl.UNSIGNED_BYTE,
-        image
-      );
-
-      if ((image.width & (image.width - 1)) === 0 && (image.height & (image.height - 1)) === 0) {
-        this.gl.generateMipmap(this.gl.TEXTURE_2D);
-      } else {
-        this.gl.texParameteri(
-          this.gl.TEXTURE_2D,
-          this.gl.TEXTURE_WRAP_S,
-          this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-          this.gl.TEXTURE_2D,
-          this.gl.TEXTURE_WRAP_T,
-          this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-          this.gl.TEXTURE_2D,
-          this.gl.TEXTURE_MIN_FILTER,
-          this.gl.LINEAR
-        );
-      }
-    });
-  }
-
-
   public play(node: Node, camera: Camera) {
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
@@ -302,114 +110,65 @@ export class WebGLRenderer {
       this.gl.useProgram(this.glProgram);
 
       if (node.material instanceof BasicMaterial) {
-        this.injectToAttr(
-          node.geometry.getAttribute("position").data,
-          BASIC_VERTEX_SHADER.ATTRIBUTE_POSITION,
-          node.geometry.getAttribute("position").size,
-          this.gl.FLOAT
-        );
+        // position
+        const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, positionBufferAttribute.data,)
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, positionBufferAttribute);
 
+        // color
         // Paint all vertices
         const verticesColor: number[][] = [];
         for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
           verticesColor.push(node.material.color.getComponents());
         }
-
-        this.injectToAttr(
-          new Float32Array(verticesColor.flat()),
-          BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR,
-          node.material.color.getComponents().length,
-          this.gl.FLOAT
-        );
+        const colorBufferAttribute = new BufferAttribute(new Float32Array(verticesColor.flat()), Color.size(), COMMON_ATTRIBUTE.ATTRIBUTE_COLOR);
+        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, colorBufferAttribute.data);
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, colorBufferAttribute);
       }
 
       if (node.material instanceof PhongMaterial) {
+        // position
+        const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, positionBufferAttribute.data,)
+        WebGLUtils.createAttribSetter(this.gl, this.glProgram, positionBufferAttribute);
 
-        this.injectToAttr(
-          node.geometry.getAttribute("position").data,
-          PHONG_VERTEX_SHADER.ATTRIBUTE_POSITION,
-          node.geometry.getAttribute("position").size,
-          this.gl.FLOAT
-        );
+        // diffuse
+        const diffuse = node.material.diffuse;
+        if (diffuse instanceof Color) {
+          // color
+          // TODO
+        } else {
+          // texture
+          // TODO: check this
+          diffuse.buffer = WebGLUtils.createBufferFromTypedArray(this.gl, diffuse.data);
+          WebGLUtils.createTexture(this.gl, diffuse)
 
-
-        // Paint all vertices
-        // const verticesColor: number[][] = [];
-        // for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
-        //   verticesColor.push(node.material.ambient.getComponents());
-        // }
-
-        // TOdO
-        const _diffuse = node.material.diffuse as Texture;
-
-        this.setTexCoords(
-          PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD,
-          2,
-          this.gl.FLOAT,
-          _diffuse
-        )
-
-        // this.injectToAttr(
-        //   new Float32Array(verticesColor.flat()),
-        //   PHONG_VERTEX_SHADER.ATTRIBUTE_COLOR,
-        //   node.material.ambient.getComponents().length,
-        //   this.gl.FLOAT
-        // )
-        //
-        // // Inject normals
-        // this.injectToAttr(
-        //   node.geometry.getAttribute("normal").data,
-        //   PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL,
-        //   node.geometry.getAttribute("normal").size,
-        //   this.gl.FLOAT
-        // );
-        //
-        // // Inject light position
-        // this.injectToAttr(
-        //   node.material.lightPosition,
-        //   PHONG_FRAGMENT_SHADER.UNIFORM_LIGHT_POSITION,
-        //   3, // !! hard coded for now
-        //   this.gl.FLOAT
-        // );
-        //
-        // // Inject shininess
-        // const shininess = node.material.shininess;
-        // const uniformLoc = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_SHININESS);
-        // this.gl.uniform1f(uniformLoc, shininess);
-        //
-        // // Inject camera position
-        // const cameraPosition = camera.position.toArray();
-        // const uniformCameraPosition = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_CAMERA_POSITION);
-        // this.gl.uniform3fv(uniformCameraPosition, cameraPosition);
-        //
-        // // Inject ambient color
-        // const ambientColor = node.material.ambient.getComponents();
-        // const uniformAmbientColor = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_AMBIENT_COLOR);
-        // this.gl.uniform4fv(uniformAmbientColor, ambientColor);
-
-        // TODO: Inject specular color
-        // Inject diffuse color
-        // const diffuseColor = node.material.diffuse.getComponents();
-        // const uniformDiffuseColor = this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR);
-        // this.gl.uniform4fv(uniformDiffuseColor, diffuseColor);
+          WebGLUtils.createAttribSetter(this.gl, this.glProgram, new BufferAttribute(new Float32Array([-1]) /* fill with dummy data*/, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD, {buffer: diffuse.buffer}));
+        }
       }
 
-      this.injectToUniformMatrix4(
-        BASIC_VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
-        camera.viewProjectionMatrix.toArray()
-      );
-      this.injectToUniformMatrix4(
-        BASIC_VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
-        node.worldMatrix.toArray()
+      WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        COMMON_UNIFORM.UNIFORM_VIEW_PROJ_MATRIX,
+        camera.viewProjectionMatrix.toArray(),
+        this.gl.FLOAT_MAT4
       );
 
-      this.gl.uniform1i(this.gl.getUniformLocation(this.glProgram, PHONG_FRAGMENT_SHADER.UNIFORM_TEXTURE), 0);
+      WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        COMMON_UNIFORM.UNIFORM_WORLD_MATRIX,
+        node.worldMatrix.toArray(),
+        this.gl.FLOAT_MAT4
+      );
 
       this.gl.drawArrays(
         this.gl.TRIANGLES,
         0,
         node.geometry.getAttribute("position").count
       );
+
       console.log("Data: ", node.geometry.getAttribute("position").count)
     }
 

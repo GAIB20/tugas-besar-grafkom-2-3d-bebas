@@ -1,9 +1,10 @@
 import { TypedArray, WEB_GL_DATA_TYPE } from "src/types/webgl-type.ts";
 
 export class Texture{
+  private _buffer?: WebGLBuffer;
   private _imageStr: string;
-  private _wrapS: number;
-  private _wrapT: number;
+  private _wrapS: number; // horizontal
+  private _wrapT: number; // vertical
   private _magFilter: number;
   private _minFilter: number;
   private _format: WebGLTexture;
@@ -28,16 +29,17 @@ export class Texture{
     this._imageStr = imageSrc;
     this._data = data;
 
-    this._wrapS = options.wrapS; // || WebGLRenderingContext.CLAMP_TO_EDGE;
-    this._wrapT = options.wrapT; // || WebGLRenderingContext.CLAMP_TO_EDGE;
-    this._magFilter = options.magFilter; // || WebGLRenderingContext.LINEAR;
-    this._minFilter = options.minFilter; // || WebGLRenderingContext.LINEAR;
-    this._format = options.format; // || WebGLRenderingContext.RGBA;
-    this._dtype = options.dtype; // || WebGLRenderingContext.UNSIGNED_BYTE;
-    this._generateMipmap = options.generateMipmap; // || true;
+    this._wrapS = options.wrapS || WebGLRenderingContext.CLAMP_TO_EDGE;
+    this._wrapT = options.wrapT || WebGLRenderingContext.CLAMP_TO_EDGE;
+    this._magFilter = options.magFilter|| WebGLRenderingContext.LINEAR;
+    this._minFilter = options.minFilter || WebGLRenderingContext.LINEAR;
+    this._format = options.format || WebGLRenderingContext.RGBA;
+    this._dtype = options.dtype || WebGLRenderingContext.UNSIGNED_BYTE;
+    this._generateMipmap = options.generateMipmap || true;
   }
 
   /* Getters and Setters */
+  get buffer() { return this._buffer!; }
   get imageStr() { return this._imageStr; }
   get data() { return this._data; }
   get wrapS() { return this._wrapS; }
@@ -48,6 +50,7 @@ export class Texture{
   get dtype() { return this._dtype; }
   get generateMipmap() { return this._generateMipmap; }
 
+  set buffer(buffer: WebGLBuffer) { this._buffer = buffer; }
   set imageStr(_imageStr: string) { this._imageStr = _imageStr; }
   set data(data: TypedArray) { this._data = data; }
   set wrapS(wrapS: number) { this._wrapS = wrapS; }
