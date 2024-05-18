@@ -56,7 +56,6 @@ export class Mesh extends Node {
         DeserializeGeometry(json.geometry),
         // TODO: from json instead
         new BasicMaterial(
-          "test2",
           "fragmentScript",
           "vertexScript",
           new Color(0, 1, 0, 1)

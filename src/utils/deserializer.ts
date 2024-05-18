@@ -9,7 +9,7 @@ import {
 import { GEOMETRY_TYPE, NODE_TYPE } from "src/types/serializer";
 import { Scene } from "src/core/scene";
 import { Mesh } from "src/core/mesh";
-import { Node } from "src/core/node-v2";
+import { Node } from "src/core/node";
 import { BoxGeometry } from "src/geometries/box-geometry";
 import { HollowBoxGeometry } from "src/geometries/hollow-box-geometry";
 import { BufferGeometry } from "src/geometries/buffer-geometry";

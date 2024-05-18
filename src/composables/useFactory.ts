@@ -1,4 +1,4 @@
-import { Node } from "src/core/node-v2";
+import { Node } from "src/core/node";
 import { INode } from "src/types/deserializer";
 import { DeserializeNode } from "src/utils/deserializer";
 

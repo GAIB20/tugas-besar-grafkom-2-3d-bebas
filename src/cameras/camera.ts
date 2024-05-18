@@ -1,5 +1,5 @@
 import { Matrix4 } from "src/math/matrix4";
-import { Node } from "src/core/node-v2";
+import { Node } from "src/core/node";
 import { NODE_TYPE } from "src/types/serializer";
 
 export abstract class Camera extends Node {
