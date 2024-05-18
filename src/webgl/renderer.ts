@@ -25,10 +25,6 @@ export class WebGLRenderer {
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
 
-  // Rendering
-  private lastTime = 0;
-  private FPS = 60;
-  private interval = 1000 / this.FPS;
 
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
@@ -91,12 +87,6 @@ export class WebGLRenderer {
   }
 
   public play(node: Node, camera: Camera) {
-    let now = Date.now();
-    let elapsed = now - this.lastTime;
-
-    // if (elapsed > this.interval) {
-    //   this.lastTime = now - (elapsed % this.interval);
-
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
       const [r, g, b, a] = node.backgroundColor.getComponents();
@@ -105,13 +95,7 @@ export class WebGLRenderer {
 
     // Setup buffer
     this.setup(node, camera);
-
-    // this.render(node, camera);
-    // }
-
-    requestAnimationFrame(() => {
-      this.render(node, camera);
-    });
+    this.render(node, camera);
   }
 
   public render(node: Node, camera: Camera) {
@@ -197,19 +181,14 @@ export class WebGLRenderer {
         0,
         node.geometry.getAttribute("position").count
       );
-      console.log("Data: ", node.geometry.getAttribute("position").count);
     }
 
-    node.children.forEach((child, index) => {
+    node.children.forEach((child) => {
       if (child instanceof Mesh) {
-        console.log("Index: ", index, " Child:", child);
         this.render(child, camera);
       }
     });
 
-    requestAnimationFrame(() => {
-      this.render(node, camera);
-    });
   }
 
   public setup(node: Node, camera: Camera) {
@@ -274,9 +253,8 @@ export class WebGLRenderer {
       }
     }
 
-    node.children.forEach((child, index) => {
+    node.children.forEach((child) => {
       if (child instanceof Mesh) {
-        console.log("Index: ", index, " Child:", child);
         this.setup(child, camera);
       }
     });

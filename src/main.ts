@@ -213,7 +213,12 @@ const main = async () => {
 
   mainScene.addChild(fMesh);
 
-  renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
+  const render = () => {
+    renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
+    requestAnimationFrame(render);
+  }
+
+  render();
 
 
   y.oninput = () => {
