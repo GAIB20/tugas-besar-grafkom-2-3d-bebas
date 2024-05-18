@@ -25,7 +25,6 @@ export class WebGLRenderer {
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
 
-
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._canvasWidth = canvas.clientWidth;
@@ -92,9 +91,10 @@ export class WebGLRenderer {
       const [r, g, b, a] = node.backgroundColor.getComponents();
       this.gl.clearColor(r, g, b, a);
     }
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    this.gl.enable(this.gl.CULL_FACE);
+    this.gl.enable(this.gl.DEPTH_TEST);
 
-    // Setup buffer
-    this.setup(node, camera);
     this.render(node, camera);
   }
 
@@ -105,13 +105,13 @@ export class WebGLRenderer {
       // DRAW
       this.gl.useProgram(this.glProgram);
 
-      this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-      this.gl.enable(this.gl.CULL_FACE);
-      this.gl.enable(this.gl.DEPTH_TEST);
-
       if (node.material instanceof BasicMaterial) {
         // position
         const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          positionBufferAttribute.data
+        );
         WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
@@ -120,7 +120,19 @@ export class WebGLRenderer {
 
         // color
         // Paint all vertices
-        const colorBufferAttribute = node.geometry.getAttribute("color");
+        const verticesColor: number[][] = [];
+        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
+          verticesColor.push(node.material.color.getComponents());
+        }
+        const colorBufferAttribute = new BufferAttribute(
+          new Float32Array(verticesColor.flat()),
+          Color.size(),
+          COMMON_ATTRIBUTE.ATTRIBUTE_COLOR
+        );
+        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          colorBufferAttribute.data
+        );
         WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
@@ -131,6 +143,10 @@ export class WebGLRenderer {
       if (node.material instanceof PhongMaterial) {
         // position
         const positionBufferAttribute = node.geometry.getAttribute("position");
+        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          positionBufferAttribute.data
+        );
         WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
@@ -145,6 +161,10 @@ export class WebGLRenderer {
         } else {
           // texture
           // TODO: check this
+          diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
+            this.gl,
+            diffuse.data
+          );
           WebGLUtils.createTexture(this.gl, diffuse);
 
           WebGLUtils.createAttribSetter(
@@ -186,76 +206,6 @@ export class WebGLRenderer {
     node.children.forEach((child) => {
       if (child instanceof Mesh) {
         this.render(child, camera);
-      }
-    });
-
-  }
-
-  public setup(node: Node, camera: Camera) {
-    node.computeWorldMatrix(false, true);
-
-    if (node instanceof Mesh) {
-      // DRAW
-      this.gl.useProgram(this.glProgram);
-
-      if (node.material instanceof BasicMaterial) {
-        // position
-        const positionBufferAttribute = node.geometry.getAttribute("position");
-        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          positionBufferAttribute.data
-        );
-
-        // color
-        // Paint all vertices
-        const verticesColor: number[][] = [];
-        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
-          verticesColor.push(node.material.color.getComponents());
-        }
-
-        node.geometry.setAttribute(
-          "color",
-          new BufferAttribute(
-            new Float32Array(verticesColor.flat()),
-            4,
-            COMMON_ATTRIBUTE.ATTRIBUTE_COLOR
-          )
-        );
-        const colorBufferAttribute = node.geometry.getAttribute("color");
-        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          colorBufferAttribute.data
-        );
-      }
-
-      if (node.material instanceof PhongMaterial) {
-        // position
-        const positionBufferAttribute = node.geometry.getAttribute("position");
-        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          positionBufferAttribute.data
-        );
-
-        // diffuse
-        const diffuse = node.material.diffuse;
-        if (diffuse instanceof Color) {
-          // color
-          // TODO
-        } else {
-          // texture
-          // TODO: check this
-          diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
-            this.gl,
-            diffuse.data
-          );
-          WebGLUtils.createTexture(this.gl, diffuse);
-        }
-      }
-    }
-
-    node.children.forEach((child) => {
-      if (child instanceof Mesh) {
-        this.setup(child, camera);
       }
     });
   }
