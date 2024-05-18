@@ -4,7 +4,7 @@ import {
   COMMON_UNIFORM,
   COMMON_ATTRIBUTE
 } from "../types/webgl-type.ts";
-import { Node } from "src/core/node-v2.ts";
+import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
 import { BasicMaterial } from "src/material/basic-material.ts";
 import { Scene } from "src/core/scene.ts";

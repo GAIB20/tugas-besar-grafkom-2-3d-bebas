@@ -1,5 +1,5 @@
 import { Color } from 'src/types/color';
-import { Node } from './node-v2';
+import { Node } from './node.ts';
 
 export class Scene extends Node {
     private _backgroundColor: Color;

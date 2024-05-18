@@ -1,14 +1,19 @@
 import { Matrix4 } from "src/math/matrix4";
 import { Vector3 } from "src/math/vector3";
+import { Transform } from "src/math/transform";
 
 export class Node {
-  private _position: Vector3 = new Vector3();
-  private _rotation: Vector3 = new Vector3();
-  private _scale: Vector3 = new Vector3(1, 1, 1);
-  private _localMatrix: Matrix4 = Matrix4.identity();
-  private _worldMatrix: Matrix4 = Matrix4.identity();
-  private _parent?: Node;
-  private _children: Node[] = [];
+  protected _position: Vector3 = new Vector3();
+  protected _transfrom: Transform = new Transform({
+    translation: new Vector3(0, 0, 0),
+    rotation: new Vector3(0, 0, 0),
+    scale: new Vector3(1, 1, 1),
+  });
+
+  protected _localMatrix: Matrix4 = Matrix4.identity();
+  protected _worldMatrix: Matrix4 = Matrix4.identity();
+  protected _parent?: Node;
+  protected _children: Node[] = [];
 
   get position(): Vector3 {
     return this._position;
@@ -19,19 +24,29 @@ export class Node {
   }
 
   get rotation(): Vector3 {
-    return this._rotation;
+    return this._transfrom.rotation;
   }
 
   set rotation(value: Vector3) {
-    this._rotation = value;
+    this._transfrom.rotation = value;
+  }
+
+  set rotateX(value: number) {
+    this._transfrom.rotation.x = value;
+  }
+  set rotateY(value: number) {
+    this._transfrom.rotation.y = value;
+  }
+  set rotateZ(value: number) {
+    this._transfrom.rotation.z = value;
   }
 
   get scale(): Vector3 {
-    return this._scale;
+    return this._transfrom.scale;
   }
 
   set scale(value: Vector3) {
-    this._scale = value;
+    this._transfrom.scale = value;
   }
 
   get localMatrix(): Matrix4 {
@@ -56,11 +71,18 @@ export class Node {
 
   computeLocalMatrix() {
     this._localMatrix = Matrix4.multiply(
-      Matrix4.translate(this._position.x, this._position.y, this._position.z),
-      // TODO: fix error
-      // Matrix4.rotation3d(this._rotation),
-      Matrix4.scale(this._position.x, this._position.y, this._position.z)
-    );
+      Matrix4.multiply(
+        Matrix4.translate(this._position.x, this._position.y, this._position.z),
+        Matrix4.rotate3d(this._transfrom.rotation.toArray())
+      ),
+      Matrix4.scale(
+        this._transfrom.scale.x,
+        this._transfrom.scale.y,
+        this._transfrom.scale.z
+      )
+    ).transpose();
+
+    console.log("Computed local mat: ", this._localMatrix)
   }
 
   computeWorldMatrix(updateParent = true, updateChildren = true) {

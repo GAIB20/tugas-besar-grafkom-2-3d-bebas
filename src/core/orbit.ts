@@ -1,6 +1,6 @@
 import { Camera } from "src/cameras/camera";
 import { Vector3 } from "src/math/vector3";
-import { Node } from "./node-v2";
+import { Node } from "./node.ts";
 import { PerspectiveCamera } from "src/cameras/perspective";
 
 export class Orbit {
