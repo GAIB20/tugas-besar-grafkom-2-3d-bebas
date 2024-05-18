@@ -34,8 +34,6 @@ export abstract class Camera extends Node {
   get viewProjectionMatrix() {
     this.computeWorldMatrix();
 
-    console.log("INV: ", this._inverseWorldMatrix);
-    console.log("PROJ: ", this.projectionMatrix);
     return Matrix4.multiply(
       this.projectionMatrix,
       this._inverseWorldMatrix,

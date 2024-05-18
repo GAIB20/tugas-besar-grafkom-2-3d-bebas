@@ -89,8 +89,6 @@ export class Node {
         this._transfrom.scale.z
       )
     ).transpose();
-
-    console.log("Computed local mat: ", this._localMatrix);
   }
 
   computeWorldMatrix(updateParent = true, updateChildren = true) {

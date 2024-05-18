@@ -199,14 +199,6 @@ export class Matrix4 {
     // const f = 1 / Math.tan(fovy)
     const f = 1 / Math.tan(degreeToRad(fovy) * 0.5);
     const nf = 1 / (near - far);
-    console.log(f, "==", aspect, "==", near, "==", far);
-    // prettier-ignore
-    console.log(new Matrix4([
-      f / aspect,           0,            0,                    0,
-      0,                    f,            0,                    0,
-      0,                    0,            (far + near) * nf,    2 * far * near * nf,
-      0,                    0,            -1,                   0,
-    ]).transpose())
 
     // prettier-ignore
     return new Matrix4([
