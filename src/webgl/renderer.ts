@@ -25,6 +25,11 @@ export class WebGLRenderer {
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
 
+  // Rendering
+  private lastTime = 0;
+  private FPS = 60;
+  private interval = 1000 / this.FPS;
+
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._canvasWidth = canvas.clientWidth;
@@ -87,19 +92,27 @@ export class WebGLRenderer {
   }
 
   public play(node: Node, camera: Camera) {
+    let now = Date.now();
+    let elapsed = now - this.lastTime;
+
+    // if (elapsed > this.interval) {
+    //   this.lastTime = now - (elapsed % this.interval);
+
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
       const [r, g, b, a] = node.backgroundColor.getComponents();
       this.gl.clearColor(r, g, b, a);
     }
-
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.enable(this.gl.DEPTH_TEST);
+
     this.render(node, camera);
+    // }
+
     requestAnimationFrame(() => {
-      // this.play(node, camera)
-    })
+      this.play(node, camera);
+    });
   }
 
   public render(node: Node, camera: Camera) {
@@ -168,8 +181,7 @@ export class WebGLRenderer {
         0,
         node.geometry.getAttribute("position").count
       );
-
-      console.log("Data: ", node.geometry.getAttribute("position").count)
+      console.log("Data: ", node.geometry.getAttribute("position").count);
     }
 
     node.children.forEach((child, index) => {

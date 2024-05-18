@@ -8,7 +8,7 @@ export class Orbit {
   private _camera: Camera;
   private _pivot: Node;
 
-  private PIXEL_TO_DEGREE_RATIO = 0.1;
+  private PIXEL_TO_DEGREE_RATIO = 1;
   private ZOOM_SPEED = 0.1;
 
   constructor(canvas: HTMLCanvasElement, cam: Camera) {
@@ -40,6 +40,8 @@ export class Orbit {
         (this._pivot.rotation.y - y) % 360,
         0
       );
+
+      this._pivot.computeLocalMatrix();
     });
 
     this._canvas.addEventListener("mouseup", () => {
@@ -54,10 +56,19 @@ export class Orbit {
 
       if (this._camera instanceof PerspectiveCamera) {
         this._camera.position.z +=
-          ((this.ZOOM_SPEED * multiplier * -1) / 4) * 100;
+          ((this.ZOOM_SPEED * multiplier * -1) / 4) * 400;
       } else {
         this._camera.updateZoom(this.ZOOM_SPEED * multiplier);
       }
     });
   };
+
+  public resetOrbit() {
+    this._pivot.rotation = new Vector3();
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.position.z = 700;
+    } else {
+      this._camera.updateZoom(0);
+    }
+  }
 }

@@ -1,10 +1,17 @@
 import { Matrix4 } from "src/math/matrix4";
-import { Node } from "src/core/node.ts";
+import { Node } from "src/core/node-v2";
+import { NODE_TYPE } from "src/types/serializer";
 
 export abstract class Camera extends Node {
   protected _projectionMatrix = Matrix4.identity();
   private _inverseWorldMatrix = Matrix4.identity();
   public zoom = 1;
+
+  constructor() {
+    super();
+
+    this._type = NODE_TYPE.CAMERA;
+  }
 
   public computeWorldMatrix() {
     super.computeWorldMatrix();
@@ -42,6 +49,12 @@ export abstract class Camera extends Node {
 
   public updateZoom(inc: number) {
     this.zoom += inc;
+
+    this.computeProjectionMatrix();
+  }
+
+  public resetZoom() {
+    this.zoom = 1;
 
     this.computeProjectionMatrix();
   }

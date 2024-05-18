@@ -1,8 +1,11 @@
 import { Matrix4 } from "src/math/matrix4";
 import { Vector3 } from "src/math/vector3";
 import { Transform } from "src/math/transform";
+import { NODE_TYPE } from "src/types/serializer";
+import { INode } from "src/types/deserializer";
 
 export class Node {
+  protected _name: string = "";
   protected _position: Vector3 = new Vector3();
   protected _transfrom: Transform = new Transform({
     translation: new Vector3(0, 0, 0),
@@ -14,6 +17,7 @@ export class Node {
   protected _worldMatrix: Matrix4 = Matrix4.identity();
   protected _parent?: Node;
   protected _children: Node[] = [];
+  protected _type!: NODE_TYPE;
 
   get position(): Vector3 {
     return this._position;
@@ -29,16 +33,20 @@ export class Node {
 
   set rotation(value: Vector3) {
     this._transfrom.rotation = value;
+    this.computeWorldMatrix();
   }
 
   set rotateX(value: number) {
     this._transfrom.rotation.x = value;
+    this.computeWorldMatrix();
   }
   set rotateY(value: number) {
     this._transfrom.rotation.y = value;
+    this.computeWorldMatrix();
   }
   set rotateZ(value: number) {
     this._transfrom.rotation.z = value;
+    this.computeWorldMatrix();
   }
 
   get scale(): Vector3 {
@@ -82,7 +90,7 @@ export class Node {
       )
     ).transpose();
 
-    console.log("Computed local mat: ", this._localMatrix)
+    console.log("Computed local mat: ", this._localMatrix);
   }
 
   computeWorldMatrix(updateParent = true, updateChildren = true) {
@@ -94,8 +102,8 @@ export class Node {
 
     if (this.parent) {
       this._worldMatrix = Matrix4.multiply(
-        this.parent.worldMatrix,
-        this._localMatrix
+        this._localMatrix,
+        this.parent.worldMatrix
       );
     } else {
       this._worldMatrix = this._localMatrix.clone();
@@ -130,21 +138,22 @@ export class Node {
     }
   }
 
-  // computeLocalMatrix() {
-  //     this._localMatrix = Matrix4.compose(this._position, this._rotation, this._scale);
-  // }
+  public toJSON(): {} {
+    return {
+      name: this._name,
+      object_type: this._type,
+      position: this.position.toJSON(),
+      transform: this._transfrom.toJSON(),
+      children: this.children.map((child) => child.toJSON()),
+    };
+  }
 
-  // computeWorldMatrix() {
-  //     if (this._dirty) {
-  //         if (this._parent) {
-  //             this._worldMatrix = Matrix4.multiply(this._parent.worldMatrix, this._localMatrix);
-  //         } else {
-  //             this._worldMatrix = this._localMatrix.clone();
-  //         }
-  //         this._dirty = false;
-  //     }
-  //     for (const child of this._children) {
-  //         child.computeWorldMatrix();
-  //     }
-  // }
+  public static fromJSON(json: INode, node?: Node): Node {
+    if (!node) node = new Node();
+
+    node.position = Vector3.fromArray(json.position);
+    node._transfrom = Transform.fromJSON(json.transform);
+
+    return node;
+  }
 }

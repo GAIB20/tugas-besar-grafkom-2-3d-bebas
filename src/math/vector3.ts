@@ -97,4 +97,8 @@ export class Vector3 {
 
     return this;
   }
+
+  public toJSON() {
+    return this.toArray();
+  }
 }
