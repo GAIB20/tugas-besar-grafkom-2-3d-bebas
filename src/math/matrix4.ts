@@ -67,6 +67,7 @@ export class Matrix4 {
   public static rotateX(angle: number) {
     const c = Math.cos(degreeToRad(angle));
     const s = Math.sin(degreeToRad(angle));
+    // prettier-ignore
     return new Matrix4([1, 0, 0, 0,
       0, c, -s, 0,
       0, s, c, 0,
@@ -104,18 +105,22 @@ export class Matrix4 {
   // TODO: to check, currently cant inverse identity
   public inverse() {
     const m = this._elements;
+    // prettier-ignore
     const m00 = m[0],
       m01 = m[1],
       m02 = m[2],
       m03 = m[3];
+    // prettier-ignore
     const m10 = m[4],
       m11 = m[5],
       m12 = m[6],
       m13 = m[7];
+    // prettier-ignore
     const m20 = m[8],
       m21 = m[9],
       m22 = m[10],
       m23 = m[11];
+    // prettier-ignore
     const m30 = m[12],
       m31 = m[13],
       m32 = m[14],
@@ -142,7 +147,7 @@ export class Matrix4 {
     }
 
     const invDet = 1 / det;
-
+    // prettier-ignore
     const result = [
       (m11 * b11 - m12 * b10 + m13 * b09) * invDet,
       (m02 * b10 - m01 * b11 - m03 * b09) * invDet,
@@ -176,6 +181,7 @@ export class Matrix4 {
     const rl = right - left;
     const tb = top - bottom;
     const fn = far - near;
+    // prettier-ignore
     return new Matrix4([
       2 / rl,                 0,                      0,                  0,
       0,                      2 / tb,                 0,                  0,
@@ -184,17 +190,17 @@ export class Matrix4 {
     ]);
   }
 
-
-  // Looks like we only get the fov not fovy
   public static perspective(
     fovy: number,
     aspect: number,
     near: number,
     far: number
   ) {
-    const f = 1 / Math.tan(fovy)
+    // const f = 1 / Math.tan(fovy)
+    const f = 1 / Math.tan(degreeToRad(fovy) * 0.5);
     const nf = 1 / (near - far);
     console.log(f, "==", aspect, "==", near, "==", far);
+    // prettier-ignore
     console.log(new Matrix4([
       f / aspect,           0,            0,                    0,
       0,                    f,            0,                    0,
@@ -202,6 +208,7 @@ export class Matrix4 {
       0,                    0,            -1,                   0,
     ]).transpose())
 
+    // prettier-ignore
     return new Matrix4([
       f / aspect,           0,            0,                    0,
       0,                    f,            0,                    0,
@@ -218,17 +225,21 @@ export class Matrix4 {
     bottom: number,
     top: number,
     near: number,
-    far: number) {
+    far: number
+  ) {
     const cotTheta = 1 / Math.tan(degreeToRad(theta));
     const cotPhi = 1 / Math.tan(degreeToRad(phi));
-
+    // prettier-ignore
     const shearTransform = new Matrix4([
       1,    0,    cotTheta,   0,
       0,    1,    cotPhi,     0,
       0,    0,    1,          0,
       0,    0,    0,          1]);
 
-    return Matrix4.multiply(Matrix4.orthographic(left, right, bottom, top, near, far), shearTransform).transpose();
+    return Matrix4.multiply(
+      Matrix4.orthographic(left, right, bottom, top, near, far),
+      shearTransform
+    ).transpose();
   }
 
   public transpose() {
@@ -247,5 +258,9 @@ export class Matrix4 {
     }
 
     return Matrix4.fromArray(this.elements);
+  }
+
+  public toJSON() {
+    return this.toArray();
   }
 }

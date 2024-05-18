@@ -1,3 +1,4 @@
+import { IBufferAttribute } from "src/types/deserializer";
 import { TypedArray } from "src/types/webgl-type.ts";
 
 export class BufferAttribute {
@@ -117,4 +118,29 @@ export class BufferAttribute {
         }
         return data;
     }
+
+    toJSON(): IBufferAttribute {
+      const opts: {
+        dtype: number;
+        normalize: boolean;
+        stride: number;
+        offset: number;
+      } = {
+        dtype: this.dtype,
+        normalize: this.normalize,
+        stride: this.stride,
+        offset: this.offset,
+      };
+
+      return {
+          data: Array.from(this.data),
+          size: this.size,
+          options: opts,
+      };
+  }
+
+  static fromJSON(json: IBufferAttribute, bufAttr?: BufferAttribute) {
+      if(!bufAttr) bufAttr = new BufferAttribute(new Float32Array(json.data), json.size, json.options);
+      return bufAttr;
+  }
 }

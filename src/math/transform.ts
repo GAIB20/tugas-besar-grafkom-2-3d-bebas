@@ -1,3 +1,4 @@
+import { ITransform } from "src/types/deserializer";
 import { Vector3 } from "./vector3";
 
 export class Transform {
@@ -45,5 +46,22 @@ export class Transform {
 
   public set scale(s: Vector3) {
     this._scale = s;
+  }
+
+  public toJSON() {
+    return {
+      translation: this._translation.toArray(),
+      rotation: this._rotation.toArray(),
+      scale: this._scale.toArray(),
+    };
+  }
+
+  public static fromJSON(json: ITransform): Transform {
+    console.log(json);
+    return new Transform({
+      translation: Vector3.fromArray(json.translation),
+      rotation: Vector3.fromArray(json.rotation),
+      scale: Vector3.fromArray(json.scale),
+    });
   }
 }
