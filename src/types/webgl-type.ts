@@ -5,6 +5,13 @@ export enum SHADER_TYPE {
   FRAGMENT = WebGLRenderingContext.FRAGMENT_SHADER,
 }
 
+export enum VERTEX_SHADER {
+  ATTRIBUTE_COLOR = "a_color",
+  ATTRIBUTE_POSITION = "a_position",
+  UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
+  UNIFORM_WORLD_MATRIX = "u_WorldMat",
+}
+
 export enum WEB_GL_DATA_TYPE {
   UNSIGNED_BYTE = WebGLRenderingContext.UNSIGNED_BYTE,
   UNSIGNED_SHORT = WebGLRenderingContext.UNSIGNED_SHORT,
@@ -30,7 +37,14 @@ export enum WEB_GL_DATA_TYPE {
   SAMPLER_CUBE = WebGLRenderingContext.SAMPLER_CUBE,
 }
 
-export type TypedArray = Float32Array | Uint8Array | Uint16Array | Uint32Array | Int8Array | Int16Array | Int32Array;
+export type TypedArray =
+  | Float32Array
+  | Uint8Array
+  | Uint16Array
+  | Uint32Array
+  | Int8Array
+  | Int16Array
+  | Int32Array;
 export type AttributeSingleDataType = BufferAttribute | Float32Array | number[];
 export type AttributeDataType = [AttributeSingleDataType] | number[];
 export type AttributeSetters = (...v: AttributeDataType) => void;

@@ -1,3 +1,6 @@
+/**
+ * @deprecated Already inside the WebGLRenderer
+ */
 import {
   AttributeMapSetters,
   AttributeSetters,

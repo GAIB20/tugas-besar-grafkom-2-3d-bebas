@@ -22,15 +22,49 @@ export class BoxGeometry extends BufferGeometry {
             4, 5, 1, 4, 1, 0,
         ]);
         const vertices = new Float32Array([
-            -hw, -hh, -hd,
-            hw,  -hh, -hd,
-            hw,  hh, -hd,
-            -hw, hh, -hd,
-            -hw, -hh, hd,
-            hw,  -hh, hd,
-            hw,  hh, hd,
-            -hw, hh, hd,
-        ]);
+          // Front face
+          -hw, hh,  hd,
+          -hw, -hh, hd,
+          hw,  -hh, hd,
+          hw,  hh,  hd,
+          -hw, hh, hd,
+          hw,  -hh, hd,
+          // Back face
+          -hw, hh,  -hd,
+          hw,  -hh, -hd,
+          -hw, -hh, -hd,
+          hw,  hh,  -hd,
+          hw,  -hh, -hd,
+          -hw, hh, -hd,
+          // Top face
+          -hw, hh,  -hd,
+          -hw, hh,  hd,
+          hw,  hh,  hd,
+          hw,  hh,  -hd,
+          -hw, hh, -hd,
+          hw,  hh,  hd,
+          // Bottom face
+          -hw, -hh, -hd,
+          hw,  -hh, -hd,
+          hw,  -hh, hd,
+          -hw, -hh, hd,
+          -hw, -hh, -hd,
+          hw,  -hh, hd,
+          // Right face
+          hw,  -hh, -hd,
+          hw,  hh,   hd,
+          hw,  -hh,  hd,
+          hw,  -hh, -hd,
+          hw,  hh,   -hd,
+          hw,  hh,   hd,
+          // Left face
+          -hw, -hh, -hd,
+          -hw, hh,  hd,
+          -hw, hh,  -hd,
+          -hw, -hh, -hd,
+          -hw, -hh, hd,
+          -hw, hh,  hd
+      ]);
         this.setIndices(new BufferAttribute(indices, 1));
         this.setAttribute('position', new BufferAttribute(vertices, 3));
         this.calculateNormals();

@@ -1,18 +1,19 @@
-import { Node } from './node';
+import { Color } from 'src/types/color';
+import { Node } from './node-v2';
 
 export class Scene extends Node {
-    private _backgroundColor: string;
+    private _backgroundColor: Color;
 
-    constructor(backgroundColor: string) {
+    constructor(backgroundColor: Color) {
         super();
         this._backgroundColor = backgroundColor;
     }
 
-    get backgroundColor(): string {
+    get backgroundColor(): Color {
         return this._backgroundColor;
     }
 
-    set backgroundColor(value: string) {
+    set backgroundColor(value: Color) {
         this._backgroundColor = value;
     }
 }

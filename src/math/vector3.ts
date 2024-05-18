@@ -1,3 +1,5 @@
+import { BufferAttribute } from "src/geometries/buffer-attribute";
+
 export class Vector3 {
   private _x: number;
   private _y: number;
@@ -77,6 +79,21 @@ export class Vector3 {
     this._x /= length;
     this._y /= length;
     this._z /= length;
+
+    return this;
+  }
+
+  public toVector(attribute: BufferAttribute, index: number) {
+    // Get the values from the BufferAttribute
+    const attributeValues = attribute.get(index, attribute.size);
+    const missingDimensions = [0, 0, 0].slice(attribute.size);
+
+    // Combine the attributeValues and the missingDimensions to get the full set of vector values.
+    const fullValues = [...attributeValues, ...missingDimensions];
+
+    this.x = fullValues[0];
+    this.y = fullValues[1];
+    this.z = fullValues[2];
 
     return this;
   }

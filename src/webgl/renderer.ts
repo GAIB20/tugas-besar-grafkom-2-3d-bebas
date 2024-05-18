@@ -1,4 +1,9 @@
-import { SHADER_TYPE } from "../types/webgl-type.ts";
+import { Camera } from "src/cameras/camera.ts";
+import { SHADER_TYPE, TypedArray, VERTEX_SHADER } from "../types/webgl-type.ts";
+import { Node } from "src/core/node-v2.ts";
+import { Mesh } from "src/core/mesh.ts";
+import { BasicMaterial } from "src/material/basic-material.ts";
+import { Scene } from "src/core/scene.ts";
 
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
@@ -23,6 +28,7 @@ export class WebGLRenderer {
     this._gl = gl;
 
     this._gl.viewport(0, 0, this._canvasWidth, this._canvasHeight);
+    this.adjustCanvas();
   }
 
   public adjustCanvas = () => {
@@ -51,6 +57,8 @@ export class WebGLRenderer {
       shader,
       this._gl.COMPILE_STATUS
     );
+
+    console.log("Shader info log: ", this.gl.getShaderInfoLog(shader));
     if (!success) throw new Error("could not compile shader");
 
     return shader;
@@ -134,5 +142,114 @@ export class WebGLRenderer {
 
   public get glProgram(): WebGLProgram {
     return this._glProgram;
+  }
+
+  private injectToAttr(
+    data: TypedArray,
+    attributeName: string,
+    bufferSize: number,
+    type: number,
+    normalized = false,
+    stride = 0,
+    offset = 0
+  ) {
+    const buffer = this.gl.createBuffer();
+
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+    const attrLoc = this.gl.getAttribLocation(this.glProgram, attributeName);
+
+    this.gl.enableVertexAttribArray(attrLoc);
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+
+    this.gl.vertexAttribPointer(
+      attrLoc,
+      bufferSize,
+      type,
+      normalized,
+      stride,
+      offset
+    );
+  }
+
+  private injectToUniformMatrix4(
+    uniformName: string,
+    data: Iterable<number>,
+    transpose = false
+  ) {
+    const uniformLoc = this.gl.getUniformLocation(this.glProgram, uniformName);
+
+    this.gl.uniformMatrix4fv(uniformLoc, transpose, data);
+  }
+
+  public play(node: Node, camera: Camera) {
+    // Clears up and set the canvas background to scene background color
+    if (node instanceof Scene) {
+      const [r, g, b, a] = node.backgroundColor.getComponents();
+      this.gl.clearColor(r, g, b, a);
+    }
+
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    this.gl.enable(this.gl.CULL_FACE);
+    this.gl.enable(this.gl.DEPTH_TEST);
+    this.render(node, camera);
+    requestAnimationFrame(() => {
+      // this.play(node, camera)
+    })
+  }
+
+  public render(node: Node, camera: Camera) {
+    node.computeWorldMatrix(false, true);
+
+    if (node instanceof Mesh) {
+      // DRAW
+      this.gl.useProgram(this.glProgram);
+
+      this.injectToAttr(
+        node.geometry.getAttribute("position").data,
+        VERTEX_SHADER.ATTRIBUTE_POSITION,
+        node.geometry.getAttribute("position").size,
+        this.gl.FLOAT
+      );
+
+      if (node.material instanceof BasicMaterial) {
+        // Paint all vertices
+        const verticesColor: number[][] = [];
+        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
+          verticesColor.push(node.material.color.getComponents());
+        }
+
+        this.injectToAttr(
+          new Float32Array(verticesColor.flat()),
+          VERTEX_SHADER.ATTRIBUTE_COLOR,
+          node.material.color.getComponents().length,
+          this.gl.FLOAT
+        );
+      }
+
+      this.injectToUniformMatrix4(
+        VERTEX_SHADER.UNIFORM_VIEW_PROJ_MATRIX,
+        camera.viewProjectionMatrix.toArray()
+      );
+      this.injectToUniformMatrix4(
+        VERTEX_SHADER.UNIFORM_WORLD_MATRIX,
+        node.worldMatrix.toArray()
+      );
+
+      this.gl.drawArrays(
+        this.gl.TRIANGLES,
+        0,
+        node.geometry.getAttribute("position").count
+      );
+      console.log("Data: ", node.geometry.getAttribute("position").count)
+    }
+
+    node.children.forEach((child, index) => {
+      if (child instanceof Mesh) {
+        console.log("Index: ", index, " Child:", child);
+        this.render(child, camera);
+      }
+    });
   }
 }
