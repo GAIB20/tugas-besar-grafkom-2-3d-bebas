@@ -11,10 +11,11 @@ import { SHADER_PATH } from "./shaders";
 
 // Stylesheet imports
 import "src/css/global.css";
-import { HollowGeometry } from "./geometries/hollow-box-geometry";
+// import { HollowGeometry } from "./geometries/hollow-box-geometry";
 import { FGeometry } from "src/geometries/f-geometry.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
 import { Texture } from "src/material/texture.ts";
+import { Orbit } from "./core/orbit";
 
 /**
  * Main Script
@@ -46,6 +47,9 @@ const main = async () => {
   const mainScene = new Scene(new Color(0.9, 0.9, 0.9, 1));
 
   const { cameras } = useCamera(renderer);
+
+  const orbit = new Orbit(canvas, cameras.ORTHOGRAPHIC_CAM);
+  orbit.setupControlOrbit();
 
   // const hollowMesh = new Mesh(
   //   new HollowGeometry(),
@@ -209,26 +213,26 @@ const main = async () => {
 
   mainScene.addChild(fMesh);
 
-  renderer.play(mainScene, cameras.OBLIQUE_CAM);
+  renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
 
 
   y.oninput = () => {
     // hollowMesh.rotateY = parseInt(y.value);
     fMesh.rotateY = parseInt(y.value);
-    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+    renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
 
   }
 
   x.oninput = () => {
     // hollowMesh.rotateX = parseInt(x.value)
     fMesh.rotateX = parseInt(x.value)
-    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+    renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
   }
 
   z.oninput = () => {
     // hollowMesh.rotateZ = parseInt(z.value)
     fMesh.rotateZ = parseInt(z.value)
-    renderer.play(mainScene, cameras.OBLIQUE_CAM);
+    renderer.play(mainScene, cameras.ORTHOGRAPHIC_CAM);
   }
 
 };
