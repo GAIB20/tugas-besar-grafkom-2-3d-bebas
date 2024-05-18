@@ -8,7 +8,7 @@ export class Orbit {
   private _camera: Camera;
   private _pivot: Node;
 
-  private PIXEL_TO_DEGREE_RATIO = 1;
+  private PIXEL_TO_DEGREE_RATIO = 50;
   private ZOOM_SPEED = 0.1;
 
   constructor(canvas: HTMLCanvasElement, cam: Camera) {
@@ -36,12 +36,12 @@ export class Orbit {
       let y = dx * this.PIXEL_TO_DEGREE_RATIO;
 
       this._pivot.rotation = new Vector3(
-        (this._pivot.rotation.x - x) % 360,
-        (this._pivot.rotation.y - y) % 360,
+        (this._pivot.rotation.x - x * Math.PI / 180),
+        (this._pivot.rotation.y - y * Math.PI / 180),
         0
       );
 
-      this._pivot.computeLocalMatrix();
+      this._camera.computeLocalMatrix();
     });
 
     this._canvas.addEventListener("mouseup", () => {
