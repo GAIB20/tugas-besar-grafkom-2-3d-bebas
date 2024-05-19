@@ -3,11 +3,12 @@ import { Vector3 } from "src/math/vector3";
 import { Transform } from "src/math/transform";
 import { NODE_TYPE } from "src/types/serializer";
 import { INode } from "src/types/deserializer";
+import { AnimationClip, AnimationPath } from "src/types/animation";
 
 export class Node {
   protected _name: string = "";
   protected _position: Vector3 = new Vector3();
-  protected _transfrom: Transform = new Transform({
+  protected _transform: Transform = new Transform({
     translation: new Vector3(0, 0, 0),
     rotation: new Vector3(0, 0, 0),
     scale: new Vector3(1, 1, 1),
@@ -18,6 +19,7 @@ export class Node {
   protected _parent?: Node;
   protected _children: Node[] = [];
   protected _type!: NODE_TYPE;
+  private _animation!: AnimationClip;
 
   get position(): Vector3 {
     return this._position;
@@ -28,33 +30,33 @@ export class Node {
   }
 
   get rotation(): Vector3 {
-    return this._transfrom.rotation;
+    return this._transform.rotation;
   }
 
   set rotation(value: Vector3) {
-    this._transfrom.rotation = value;
+    this._transform.rotation = value;
     this.computeWorldMatrix();
   }
 
   set rotateX(value: number) {
-    this._transfrom.rotation.x = value;
+    this._transform.rotation.x = value;
     this.computeWorldMatrix();
   }
   set rotateY(value: number) {
-    this._transfrom.rotation.y = value;
+    this._transform.rotation.y = value;
     this.computeWorldMatrix();
   }
   set rotateZ(value: number) {
-    this._transfrom.rotation.z = value;
+    this._transform.rotation.z = value;
     this.computeWorldMatrix();
   }
 
   get scale(): Vector3 {
-    return this._transfrom.scale;
+    return this._transform.scale;
   }
 
   set scale(value: Vector3) {
-    this._transfrom.scale = value;
+    this._transform.scale = value;
   }
 
   get localMatrix(): Matrix4 {
@@ -81,12 +83,12 @@ export class Node {
     this._localMatrix = Matrix4.multiply(
       Matrix4.multiply(
         Matrix4.translate(this._position.x, this._position.y, this._position.z),
-        Matrix4.rotate3d(this._transfrom.rotation.toArray())
+        Matrix4.rotate3d(this._transform.rotation.toArray())
       ),
       Matrix4.scale(
-        this._transfrom.scale.x,
-        this._transfrom.scale.y,
-        this._transfrom.scale.z
+        this._transform.scale.x,
+        this._transform.scale.y,
+        this._transform.scale.z
       )
     ).transpose();
   }
@@ -141,7 +143,7 @@ export class Node {
       name: this._name,
       object_type: this._type,
       position: this.position.toJSON(),
-      transform: this._transfrom.toJSON(),
+      transform: this._transform.toJSON(),
       children: this.children.map((child) => child.toJSON()),
     };
   }
@@ -150,8 +152,74 @@ export class Node {
     if (!node) node = new Node();
 
     node.position = Vector3.fromArray(json.position);
-    node._transfrom = Transform.fromJSON(json.transform);
+    node._transform = Transform.fromJSON(json.transform);
 
     return node;
+  }
+
+  public insertFrameToAnimClip(index?: number): AnimationPath {
+    let currentFrame: AnimationPath = {
+      keyframe: {
+        translation: this._transform.translation.toArray(),
+        rotation: this._transform.rotation.toArray(),
+        scale: this._transform.scale.toArray(),
+      },
+      children: {},
+    };
+
+    // Traverse child nodes
+    for (let child of this.children) {
+      // Insert each child's frame into the current frame's children object
+      if (currentFrame.children)
+        currentFrame.children[child._name] = child.insertFrameToAnimClip();
+    }
+
+    if (!this._animation) {
+      this._animation = {
+        name: this._name,
+        frames: [currentFrame],
+      };
+    } else {
+      if (index && index >= 0 && index < this._animation.frames.length)
+        this._animation.frames.splice(index, 0, currentFrame);
+      else this._animation.frames.push(currentFrame);
+    }
+
+    return currentFrame;
+  }
+
+  public applyFrameAnimation(frameIndex: number) {
+    // Check if the frame index is valid and animation is exist
+    if (!this.animation || frameIndex < 0 || frameIndex >= this.animation.frames.length) {
+      return;
+    }
+
+    const frame = this.animation.frames[frameIndex];
+    if (frame.keyframe) {
+      if (frame.keyframe.translation) {
+        this._transform.translation = Vector3.fromArray(frame.keyframe.translation);
+      }
+      if (frame.keyframe.rotation) {
+        this._transform.rotation = Vector3.fromArray(frame.keyframe.rotation);
+      }
+      if (frame.keyframe.scale) {
+        this._transform.scale = Vector3.fromArray(frame.keyframe.scale);
+      }
+    }
+
+    // Apply to the child nodes
+    for (let childName in frame.children) {
+      const childFrame = frame.children[childName];
+      const childNode = this.children.find(child => child._name === childName);
+
+      if (childNode && childFrame) {
+        childNode.applyFrameAnimation(0);
+      }
+    }
+  }
+
+
+  get animation() {
+    return this._animation;
   }
 }
