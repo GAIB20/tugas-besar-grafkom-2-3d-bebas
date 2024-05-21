@@ -1,0 +1,5 @@
+export enum CAM_TYPE {
+  ORTHOGRAPHIC = 1,
+  PERSPECTIVE,
+  OBLIQUE,
+}

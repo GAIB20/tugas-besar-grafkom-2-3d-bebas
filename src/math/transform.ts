@@ -57,7 +57,6 @@ export class Transform {
   }
 
   public static fromJSON(json: ITransform): Transform {
-    console.log(json);
     return new Transform({
       translation: Vector3.fromArray(json.translation),
       rotation: Vector3.fromArray(json.rotation),
