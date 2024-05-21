@@ -64,6 +64,21 @@ export class Node {
     this.computeWorldMatrix();
   }
 
+  set scaleX(value: number) {
+    this._transform.scale.x = value;
+    this.computeWorldMatrix();
+  }
+
+  set scaleY(value: number) {
+    this._transform.scale.y = value;
+    this.computeWorldMatrix();
+  }
+
+  set scaleZ(value: number) {
+    this._transform.scale.z = value;
+    this.computeWorldMatrix();
+  }
+
   set translate(value: Vector3) {
     this._transform.translation = value;
     this.position.x += value.x;
@@ -219,13 +234,46 @@ export class Node {
     return currentFrame;
   }
 
+  public deleteFrameFromAnimClip(index: number): void {
+    if (
+      !this._animation ||
+      !this._animation.frames.length ||
+      index < 0 ||
+      index >= this.animation.frames.length
+    ) {
+      return;
+    }
+
+    if (index >= 0 && index < this._animation.frames.length) {
+      this._animation.frames.splice(index, 1);
+    }
+  }
+
+  public swapFrameWithPrevious(index: number) {
+    if (!this._animation) return;
+
+    const frames = this._animation.frames;
+    if (frames.length < 2) {
+      return;
+    }
+    if (index <= 0 || index >= frames.length) {
+      return;
+    }
+
+    [frames[index - 1], frames[index]] = [frames[index], frames[index - 1]];
+  }
+
   /**
    * If both this.animation and keyframe is undefined then this node is not animateable
    * If this.animation is not undefined, then this must be the animation owner
    * Keyframe is only for child animation
-  */
+   */
   public applyFrameAnimation(frameIndex: number, keyframe?: AnimationTRS) {
-    if (frameIndex < 0) return;
+    if (
+      frameIndex < 0 ||
+      (this.animation && frameIndex >= this.animation.frames.length)
+    )
+      return;
 
     const currentKeyframe = this.animation
       ? this.animation.frames[frameIndex].keyframe
