@@ -8,11 +8,13 @@
     <title>WebGL 3D</title>
   </head>
   <body>
-    <div id="app" class="flex justify-between">
+    <div id="app" class="flex justify-between max-h-screen gap-x-4">
       <!-- Page content -->
 
-      <section class="flex flex-col items-start gap-y-24">
-        <div class="flex flex-wrap gap-3">
+      <section
+        class="flex flex-col items-start gap-y-4 overflow-y-scroll max-w-[350px] border-4 border-black p-2"
+      >
+        <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4">
           <label for="load-model" class="label-button">Load</label>
           <input
             id="load-model"
@@ -37,122 +39,170 @@
             <option value="bump">Bump</option>
           </select>
 
-          <label name="x-translation" for="x-translation" class="label-slider">
-            X Translation
-          </label>
-          <input
-            id="x-translation"
-            type="range"
-            min="-500"
-            max="500"
-            value="0"
-            class="slider"
-          />
+          <button id="reset-cam" class="label-button">Reset Cam</button>
 
-          <label name="y-translation" for="y-translation" class="label-slider">
-            Y Translation
-          </label>
-          <input
-            id="y-translation"
-            type="range"
-            min="-500"
-            max="500"
-            value="0"
-            class="slider"
-          />
-
-          <label name="z-translation" for="z-translation" class="label-slider">
-            Z Translation
-          </label>
-          <input
-            id="z-translation"
-            type="range"
-            min="-500"
-            max="500"
-            value="0"
-            class="slider"
-          />
+          <div class="slider-container">
+            <label name="cam-distance" for="cam-distance" class="label-slider">
+              Cam Distance
+            </label>
+            <input
+              id="cam-distance"
+              type="range"
+              min="-1"
+              max="1"
+              value="0"
+              class="slider"
+            />
+          </div>
         </div>
 
-        <div class="flex flex-wrap gap-3">
-          <label name="x-rotation" for="x-rotation" class="label-slider">
-            X Rotation
-          </label>
-          <input
-            id="x-rotation"
-            type="range"
-            min="-360"
-            max="360"
-            value="0"
-            class="slider"
-          />
+        <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4">
+          <div class="slider-container">
+            <label
+              name="x-translation"
+              for="x-translation"
+              class="label-slider"
+            >
+              X Translation
+            </label>
+            <input
+              id="x-translation"
+              type="range"
+              min="-500"
+              max="500"
+              value="0"
+              class="slider"
+            />
+          </div>
 
-          <label name="y-rotation" for="y-rotation" class="label-slider">
-            Y Rotation
-          </label>
-          <input
-            id="y-rotation"
-            type="range"
-            min="-360"
-            max="360"
-            value="0"
-            class="slider"
-          />
+          <div class="slider-container">
+            <label
+              name="y-translation"
+              for="y-translation"
+              class="label-slider"
+            >
+              Y Translation
+            </label>
+            <input
+              id="y-translation"
+              type="range"
+              min="-500"
+              max="500"
+              value="0"
+              class="slider"
+            />
+          </div>
 
-          <label name="z-rotation" for="z-translation" class="label-slider">
-            Z Rotation
-          </label>
-          <input
-            id="z-rotation"
-            type="range"
-            min="-360"
-            max="360"
-            value="0"
-            class="slider"
-          />
+          <div class="slider-container">
+            <label
+              name="z-translation"
+              for="z-translation"
+              class="label-slider"
+            >
+              Z Translation
+            </label>
+            <input
+              id="z-translation"
+              type="range"
+              min="-500"
+              max="500"
+              value="0"
+              class="slider"
+            />
+          </div>
+        </div>
 
-          <label name="x-scale" for="x-scale" class="label-slider">
-            X Scale
-          </label>
-          <input
-            id="x-scale"
-            type="range"
-            min="0"
-            max="5"
-            value="1"
-            class="slider"
-          />
+        <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4">
+          <div class="slider-container">
+            <label name="x-rotation" for="x-rotation" class="label-slider">
+              X Rotation
+            </label>
+            <input
+              id="x-rotation"
+              type="range"
+              min="-360"
+              max="360"
+              value="0"
+              class="slider"
+            />
+          </div>
 
-          <label name="y-scale" for="y-scale" class="label-slider">
-            Y Scale
-          </label>
-          <input
-            id="y-scale"
-            type="range"
-            min="0"
-            max="5"
-            value="1"
-            class="slider"
-          />
+          <div class="slider-container">
+            <label name="y-rotation" for="y-rotation" class="label-slider">
+              Y Rotation
+            </label>
+            <input
+              id="y-rotation"
+              type="range"
+              min="-360"
+              max="360"
+              value="0"
+              class="slider"
+            />
+          </div>
 
-          <label name="z-scale" for="z-translation" class="label-slider">
-            Z Scale
-          </label>
-          <input
-            id="z-scale"
-            type="range"
-            min="0"
-            max="5"
-            value="1"
-            class="slider"
-          />
+          <div class="slider-container">
+            <label name="z-rotation" for="z-translation" class="label-slider">
+              Z Rotation
+            </label>
+            <input
+              id="z-rotation"
+              type="range"
+              min="-360"
+              max="360"
+              value="0"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="x-scale" for="x-scale" class="label-slider">
+              X Scale
+            </label>
+            <input
+              id="x-scale"
+              type="range"
+              min="0"
+              max="5"
+              value="1"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="y-scale" for="y-scale" class="label-slider">
+              Y Scale
+            </label>
+            <input
+              id="y-scale"
+              type="range"
+              min="0"
+              max="5"
+              value="1"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="z-scale" for="z-translation" class="label-slider">
+              Z Scale
+            </label>
+            <input
+              id="z-scale"
+              type="range"
+              min="0"
+              max="5"
+              value="1"
+              class="slider"
+            />
+          </div>
         </div>
 
         <div class="flex flex-wrap gap-3">
           <div class="border border-2 p-2">
             <p>Animation</p>
             <label name="animation-toggle" for="animation-toggle"> Play </label>
-            <input id="animation-toggle-play" type="checkbox" checked />
+            <input id="animation-toggle-play" type="checkbox" />
             <br />
             <label name="animation-toggle" for="animation-toggle">
               Reverse
@@ -180,12 +230,19 @@
         </div>
       </section>
 
-      <section class="flex justify-center">
+      <section
+        class="flex justify-center border-4 border-black p-2 w-full max-w-[350px] overflow-scroll"
+      >
+        <h1>Scene Graph</h1>
+        <!-- Scene graph goes here -->
+      </section>
+
+      <section class="flex justify-center min-w-[600px] w-full">
         <canvas
           id="canvas"
           width="600"
           height="600"
-          style="border: 2px solid #000000; margin-top: 60px"
+          style="border: 2px solid #000000"
         ></canvas>
       </section>
     </div>
