@@ -1,6 +1,7 @@
 import { ObliqueCamera } from "src/cameras/oblique";
 import { OrthographicCamera } from "src/cameras/orthographic";
 import { PerspectiveCamera } from "src/cameras/perspective";
+import { CAM_TYPE } from "src/types/camera";
 import { WebGLRenderer } from "src/webgl/renderer";
 
 export const useCamera = (renderer: WebGLRenderer) => {
@@ -48,6 +49,19 @@ export const useCamera = (renderer: WebGLRenderer) => {
     ORTHOGRAPHIC_FAR
   );
 
+  const getSelectedCam = (camType: CAM_TYPE) => {
+    switch (camType) {
+      case CAM_TYPE.ORTHOGRAPHIC:
+        return orthographicCam;
+      case CAM_TYPE.PERSPECTIVE:
+        return perspectiveCam;
+      case CAM_TYPE.OBLIQUE:
+        return obliqueCam;
+      default:
+        return orthographicCam;
+    }
+  };
+
   const cameras = {
     ORTHOGRAPHIC_CAM: orthographicCam,
     PERSPECTIVE_CAM: perspectiveCam,
@@ -56,5 +70,6 @@ export const useCamera = (renderer: WebGLRenderer) => {
 
   return {
     cameras,
+    getSelectedCam,
   };
 };
