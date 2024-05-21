@@ -233,7 +233,6 @@ export class Node {
     if (currentKeyframe) {
       if (currentKeyframe.translation) {
         this.position = Vector3.fromArray(currentKeyframe.translation);
-        console.log(this._name, ": ", this._transform.translation);
       }
       if (currentKeyframe.rotation) {
         this._transform.rotation = Vector3.fromArray(currentKeyframe.rotation);
