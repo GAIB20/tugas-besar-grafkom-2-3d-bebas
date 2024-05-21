@@ -7,6 +7,7 @@ export class Orbit {
   private _canvas: HTMLCanvasElement;
   private _camera: Camera;
   private _pivot: Node;
+  private _isDisabled: boolean = false;
 
   private PIXEL_TO_DEGREE_RATIO = 50;
   private ZOOM_SPEED = 0.1;
@@ -26,7 +27,7 @@ export class Orbit {
     });
 
     this._canvas.addEventListener("mousemove", (e) => {
-      if (!isDragging) {
+      if (!isDragging || this._isDisabled) {
         return;
       }
       let dx = e.movementX;
@@ -36,8 +37,8 @@ export class Orbit {
       let y = dx * this.PIXEL_TO_DEGREE_RATIO;
 
       this._pivot.rotation = new Vector3(
-        (this._pivot.rotation.x - x * Math.PI / 180),
-        (this._pivot.rotation.y - y * Math.PI / 180),
+        this._pivot.rotation.x - (x * Math.PI) / 180,
+        this._pivot.rotation.y - (y * Math.PI) / 180,
         0
       );
 
@@ -49,6 +50,7 @@ export class Orbit {
     });
 
     this._canvas.addEventListener("wheel", (e) => {
+      if (this._isDisabled) return;
       e.preventDefault();
 
       let delta = Math.sign(e.deltaY);
@@ -60,6 +62,7 @@ export class Orbit {
       } else {
         this._camera.updateZoom(this.ZOOM_SPEED * multiplier);
       }
+      this._camera.computeProjectionMatrix();
     });
   };
 
@@ -68,7 +71,32 @@ export class Orbit {
     if (this._camera instanceof PerspectiveCamera) {
       this._camera.position.z = 700;
     } else {
-      this._camera.updateZoom(0);
+      this._camera.resetZoom();
     }
+
+    this._camera.computeProjectionMatrix();
+  }
+
+  public updateDistance(multiplier: number) {
+    if (this._isDisabled) return;
+
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.position.z = 700 - this.ZOOM_SPEED * multiplier * 200;
+    } else {
+      this._camera.zoom = this.ZOOM_SPEED * multiplier;
+    }
+    this._camera.computeProjectionMatrix();
+  }
+
+  public updateCam(cam: Camera) {
+    this._camera = cam;
+  }
+
+  public disableOrbit() {
+    this._isDisabled = true;
+  }
+
+  public enableOrbit() {
+    this._isDisabled = false;
   }
 }
