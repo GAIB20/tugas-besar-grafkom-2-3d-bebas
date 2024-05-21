@@ -1,12 +1,14 @@
 import { UniformType } from "src/types/uniform-type.ts";
+import { MATERIAL_TYPE } from "src/types/serializer";
 
-export abstract class ShaderMaterial  {
+export abstract class ShaderMaterial {
   static #idCounter = 0;
 
   private readonly _id: string = "M" + ShaderMaterial.#idCounter++;
   private readonly _fragmentShader: string;
   private readonly _vertexShader: string;
-  protected _uniforms: {[key: string]: UniformType};
+  protected _uniforms: { [key: string]: UniformType };
+  protected _type = MATERIAL_TYPE.BASE;
 
   /* constructor */
   constructor(fragmentShader: string, vertexShader: string) {
@@ -28,7 +30,7 @@ export abstract class ShaderMaterial  {
     return this._vertexShader;
   }
 
-  public get uniforms(): {[key: string]: UniformType} {
+  public get uniforms(): { [key: string]: UniformType } {
     return this._uniforms;
   }
 
@@ -43,5 +45,21 @@ export abstract class ShaderMaterial  {
   /* Methods */
   public equals(material: ShaderMaterial): boolean {
     return this._id === material.id;
+  }
+
+  public toJSON() {
+    const uniformsData: { [name: string]: [string, any] | UniformType } = {};
+    for (const key in this.uniforms) {
+      const uniform = this.uniforms[key];
+      // TODO: test with other material
+      uniformsData[key] = uniform;
+    }
+
+    return {
+      id: this._id,
+      vertex_shader: this.vertexShader,
+      fragment_shader: this.fragmentShader,
+      uniforms: uniformsData,
+    };
   }
 }

@@ -3,7 +3,11 @@ import { Vector3 } from "src/math/vector3";
 import { Transform } from "src/math/transform";
 import { NODE_TYPE } from "src/types/serializer";
 import { INode } from "src/types/deserializer";
-import { AnimationClip, AnimationPath } from "src/types/animation";
+import {
+  AnimationClip,
+  AnimationPath,
+  AnimationTRS,
+} from "src/types/animation";
 
 export class Node {
   protected _name: string = "";
@@ -57,6 +61,31 @@ export class Node {
 
   set scale(value: Vector3) {
     this._transform.scale = value;
+    this.computeWorldMatrix();
+  }
+
+  set translate(value: Vector3) {
+    this._transform.translation = value;
+    this.position.x += value.x;
+    this.position.y += value.y;
+    this.position.z += value.z;
+    this.computeWorldMatrix();
+  }
+
+  set translateX(value: number) {
+    this._transform.translation.x = value;
+    this.position.x += value;
+    this.computeWorldMatrix();
+  }
+  set translateY(value: number) {
+    this._transform.translation.y = value;
+    this.position.y += value;
+    this.computeWorldMatrix();
+  }
+  set translateZ(value: number) {
+    this._transform.translation.z = value;
+    this.position.z += value;
+    this.computeWorldMatrix();
   }
 
   get localMatrix(): Matrix4 {
@@ -145,6 +174,7 @@ export class Node {
       position: this.position.toJSON(),
       transform: this._transform.toJSON(),
       children: this.children.map((child) => child.toJSON()),
+      animation: this.animation,
     };
   }
 
@@ -153,6 +183,7 @@ export class Node {
 
     node.position = Vector3.fromArray(json.position);
     node._transform = Transform.fromJSON(json.transform);
+    if (json.animation) node._animation = json.animation;
 
     return node;
   }
@@ -160,7 +191,7 @@ export class Node {
   public insertFrameToAnimClip(index?: number): AnimationPath {
     let currentFrame: AnimationPath = {
       keyframe: {
-        translation: this._transform.translation.toArray(),
+        translation: this.position.toArray(),
         rotation: this._transform.rotation.toArray(),
         scale: this._transform.scale.toArray(),
       },
@@ -188,38 +219,53 @@ export class Node {
     return currentFrame;
   }
 
-  public applyFrameAnimation(frameIndex: number) {
-    // Check if the frame index is valid and animation is exist
-    if (!this.animation || frameIndex < 0 || frameIndex >= this.animation.frames.length) {
-      return;
+  /**
+   * If both this.animation and keyframe is undefined then this node is not animateable
+   * If this.animation is not undefined, then this must be the animation owner
+   * Keyframe is only for child animation
+  */
+  public applyFrameAnimation(frameIndex: number, keyframe?: AnimationTRS) {
+    if (frameIndex < 0) return;
+
+    const currentKeyframe = this.animation
+      ? this.animation.frames[frameIndex].keyframe
+      : keyframe;
+    if (currentKeyframe) {
+      if (currentKeyframe.translation) {
+        this.position = Vector3.fromArray(currentKeyframe.translation);
+        console.log(this._name, ": ", this._transform.translation);
+      }
+      if (currentKeyframe.rotation) {
+        this._transform.rotation = Vector3.fromArray(currentKeyframe.rotation);
+      }
+      if (currentKeyframe.scale) {
+        this._transform.scale = Vector3.fromArray(currentKeyframe.scale);
+      }
     }
 
-    const frame = this.animation.frames[frameIndex];
-    if (frame.keyframe) {
-      if (frame.keyframe.translation) {
-        this._transform.translation = Vector3.fromArray(frame.keyframe.translation);
-      }
-      if (frame.keyframe.rotation) {
-        this._transform.rotation = Vector3.fromArray(frame.keyframe.rotation);
-      }
-      if (frame.keyframe.scale) {
-        this._transform.scale = Vector3.fromArray(frame.keyframe.scale);
-      }
-    }
+    this.computeLocalMatrix();
 
     // Apply to the child nodes
-    for (let childName in frame.children) {
-      const childFrame = frame.children[childName];
-      const childNode = this.children.find(child => child._name === childName);
+    if (this.animation?.frames[frameIndex]?.children) {
+      const frameChildren = this.animation.frames[frameIndex].children;
+      for (let childName in frameChildren) {
+        const childFrame = frameChildren[childName];
+        const childNode = this.children.find(
+          (child) => child._name === childName
+        );
 
-      if (childNode && childFrame) {
-        childNode.applyFrameAnimation(0);
+        if (childNode && childFrame) {
+          childNode.applyFrameAnimation(0, childFrame.keyframe);
+        }
       }
     }
   }
 
-
   get animation() {
     return this._animation;
+  }
+
+  set animation(anim: AnimationClip) {
+    this._animation = anim;
   }
 }

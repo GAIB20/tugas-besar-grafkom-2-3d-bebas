@@ -1,5 +1,24 @@
-import { GEOMETRY_TYPE, NODE_TYPE } from "./serializer";
+import { GEOMETRY_TYPE, MATERIAL_TYPE, NODE_TYPE } from "./serializer";
+import { UniformType } from "./uniform-type";
 import { TypedArray } from "./webgl-type";
+
+export interface AnimationTRS {
+  translation?: number[];
+  rotation?: number[];
+  scale?: number[];
+}
+
+export interface AnimationPath {
+  keyframe?: AnimationTRS;
+  children?: {
+    [childName: string]: AnimationPath;
+  };
+}
+
+export interface AnimationClip {
+  name: string;
+  frames: AnimationPath[];
+}
 
 export interface INode {
   name: string;
@@ -8,6 +27,7 @@ export interface INode {
   object_type: NODE_TYPE;
   parent?: INode;
   children: INode[];
+  animation?: AnimationClip;
 }
 
 export interface ITransform {
@@ -22,6 +42,19 @@ export interface IScene extends INode {
 
 export interface IMesh extends INode {
   geometry: IBufferGeometry;
+  material: IShaderMaterial;
+}
+
+export interface IShaderMaterial {
+  id: string;
+  vertex_shader: string;
+  fragment_shader: string;
+  uniform: { [key: string]: UniformType };
+  type: MATERIAL_TYPE;
+}
+
+export interface IBasicMaterial extends IShaderMaterial {
+  color: number[];
 }
 
 export interface IBufferGeometry {

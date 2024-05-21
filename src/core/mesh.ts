@@ -3,8 +3,8 @@ import { BufferGeometry } from "src/geometries/buffer-geometry.ts";
 import { BasicMaterial } from "src/material/basic-material";
 import { ShaderMaterial } from "src/material/shader-material.ts";
 import { Color } from "src/types/color";
-import { IMesh } from "src/types/deserializer";
-import { NODE_TYPE } from "src/types/serializer";
+import { IBasicMaterial, IMesh } from "src/types/deserializer";
+import { MATERIAL_TYPE, NODE_TYPE } from "src/types/serializer";
 import { DeserializeGeometry } from "src/utils/deserializer";
 
 export class Mesh extends Node {
@@ -45,21 +45,37 @@ export class Mesh extends Node {
   public toJSON() {
     return {
       ...super.toJSON(),
-      // TODO: export material
       geometry: this.geometry.toJSON(),
+      material: this.material.toJSON(),
     };
   }
 
   public static fromJSON(json: IMesh, node?: Node) {
     if (!node) {
+      let material;
+      switch (json.material.type) {
+        case MATERIAL_TYPE.BASIC:
+          const materialJSON = json.material as IBasicMaterial;
+          const color = materialJSON.color;
+          material = new BasicMaterial(
+            json.material.fragment_shader,
+            json.material.vertex_shader,
+            new Color(color[0], color[1], color[2], color[3])
+          );
+          break;
+        // TODO: other material
+        default:
+          material = new BasicMaterial(
+            json.material.fragment_shader,
+            json.material.vertex_shader,
+            new Color(1, 0, 0, 1)
+          );
+          break;
+      }
+
       node = new Mesh(
         DeserializeGeometry(json.geometry),
-        // TODO: from json instead
-        new BasicMaterial(
-          "fragmentScript",
-          "vertexScript",
-          new Color(0, 1, 0, 1)
-        ),
+        material,
         json.name
       );
     }
