@@ -82,6 +82,10 @@ select:focus-visible,
   margin-bottom: 8px;
 }
 
+.hidden-element {
+  visibility: hidden;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
