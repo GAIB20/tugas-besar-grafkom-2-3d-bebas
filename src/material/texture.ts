@@ -1,6 +1,8 @@
 import { TypedArray, WEB_GL_DATA_TYPE } from "src/types/webgl-type.ts";
+import { Color } from "src/types/color.ts";
 
 export class Texture{
+  private _color: Color;
   private _buffer?: WebGLBuffer;
   private _imageStr: string;
   private _wrapS: number; // horizontal
@@ -14,21 +16,22 @@ export class Texture{
 
   /* constructor */
   constructor(
-    imageSrc: string,
     data: TypedArray,
+    imageSrc: string,
     options: {
-      wrapS: number,
-      wrapT: number,
-      magFilter: number,
-      minFilter: number,
-      format: WebGLTexture,
-      dtype: WEB_GL_DATA_TYPE,
-      generateMipmap: boolean,
-    },
+      color?: Color,
+      wrapS?: number,
+      wrapT?: number,
+      magFilter?: number,
+      minFilter?: number,
+      format?: WebGLTexture,
+      dtype?: WEB_GL_DATA_TYPE,
+      generateMipmap?: boolean,
+    } = {},
   ) {
     this._imageStr = imageSrc;
     this._data = data;
-
+    this._color = options.color || new Color(255, 255, 255, );
     this._wrapS = options.wrapS || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._wrapT = options.wrapT || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._magFilter = options.magFilter|| WebGLRenderingContext.LINEAR;
@@ -39,6 +42,7 @@ export class Texture{
   }
 
   /* Getters and Setters */
+  get color() { return this._color; }
   get buffer() { return this._buffer!; }
   get imageStr() { return this._imageStr; }
   get data() { return this._data; }
@@ -50,6 +54,7 @@ export class Texture{
   get dtype() { return this._dtype; }
   get generateMipmap() { return this._generateMipmap; }
 
+  set color(color: Color) { this._color = color; }
   set buffer(buffer: WebGLBuffer) { this._buffer = buffer; }
   set imageStr(_imageStr: string) { this._imageStr = _imageStr; }
   set data(data: TypedArray) { this._data = data; }

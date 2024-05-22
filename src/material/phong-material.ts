@@ -4,19 +4,32 @@ import { Texture } from "src/material/texture.ts";
 
 export class PhongMaterial extends ShaderMaterial {
   private _ambient: Color;
-  private _diffuse: Color | Texture;
-  private _specular: Color | Texture;
+  private _diffuse: Texture;
+  private _specular: Texture;
+  private _normal: Texture;
+  private _displacement: Texture;
   private _shininess: number;
-  private _lightPosition: Float32Array;
+  // private _lightPosition: Float32Array;
 
   /* constructor */
-  constructor(fragmentShader: string, vertexShader: string, ambient: Color, diffuse: Color | Texture, specular: Color | Texture, shininess: number, lightPosition: Float32Array) {
+  constructor(
+    fragmentShader: string,
+    vertexShader: string,
+    ambient: Color,
+    diffuse: Texture,
+    specular: Texture,
+    normal: Texture,
+    displacement: Texture,
+    shininess?: number,
+    /* lightPosition: Float32Array, */) {
     super(fragmentShader, vertexShader);
     this._ambient = ambient;
     this._diffuse = diffuse;
     this._specular = specular;
-    this._shininess = shininess;
-    this._lightPosition = lightPosition;
+    this._normal = normal;
+    this._displacement = displacement;
+    this._shininess = shininess || 128;
+    // this._lightPosition = lightPosition;
   }
 
   /* Getters and Setters */
@@ -32,20 +45,36 @@ export class PhongMaterial extends ShaderMaterial {
     return this._ambient;
   }
 
-  public set diffuse(diffuse: Color | Texture) {
+  public set diffuse(diffuse: Texture) {
     this._diffuse = diffuse;
   }
 
-  public get diffuse(): Color | Texture {
+  public get diffuse():Texture {
     return this._diffuse;
   }
 
-  public set specular(specular: Color | Texture) {
+  public set specular(specular: Texture) {
     this._specular = specular;
   }
 
-  public get specular(): Color | Texture {
+  public get specular():Texture {
     return this._specular;
+  }
+
+  public set normal(normal: Texture) {
+    this._normal = normal;
+  }
+
+  public get normal():Texture {
+    return this._normal;
+  }
+
+  public set displacement(displacement: Texture) {
+    this._displacement = displacement;
+  }
+
+  public get displacement():Texture {
+    return this._displacement;
   }
 
   public set shininess(shininess: number) {
@@ -56,11 +85,11 @@ export class PhongMaterial extends ShaderMaterial {
     return this._shininess;
   }
 
-  public set lightPosition(lightPosition: Float32Array) {
-    this._lightPosition = lightPosition;
-  }
-
-  public get lightPosition(): Float32Array {
-    return this._lightPosition;
-  }
+  // public set lightPosition(lightPosition: Float32Array) {
+  //   this._lightPosition = lightPosition;
+  // }
+  //
+  // public get lightPosition(): Float32Array {
+  //   return this._lightPosition;
+  // }
 }
