@@ -8,6 +8,7 @@ import {
   AnimationPath,
   AnimationTRS,
 } from "src/types/animation";
+import { EasingFunctions, interpolateArray } from "src/math/extra";
 
 export class Node {
   protected _name: string = "";
@@ -279,27 +280,66 @@ export class Node {
    * If this.animation is not undefined, then this must be the animation owner
    * Keyframe is only for child animation
    */
-  public applyFrameAnimation(frameIndex: number, keyframe?: AnimationTRS) {
+  public applyFrameAnimation(
+    frameIndex: number,
+    keyframe?: AnimationTRS,
+    easingType: string = "linear",
+    tweenProgress: number = 0,
+    isChildren?: boolean
+  ) {
     if (
       frameIndex < 0 ||
       (this.animation && frameIndex >= this.animation.frames.length)
     )
       return;
 
-    const currentKeyframe = this.animation
-      ? this.animation.frames[frameIndex].keyframe
-      : keyframe;
-    if (currentKeyframe) {
-      if (currentKeyframe.translation) {
-        this.position = Vector3.fromArray(currentKeyframe.translation);
+    const easingFunction =
+      EasingFunctions[easingType] || EasingFunctions.linear;
+
+    const hasNextFrame = !isChildren
+      ? this.animation && frameIndex < this.animation.frames.length
+      : true;
+
+    const nextKeyframe = hasNextFrame
+      ? !isChildren
+        ? this.animation.frames[frameIndex].keyframe
+        : keyframe
+      : null;
+
+    let translation = this.position.toArray();
+    let rotation = this._transform.rotation.toArray();
+    let scale = this._transform.scale.toArray();
+
+    if (nextKeyframe) {
+      if (nextKeyframe.translation) {
+        translation = interpolateArray(
+          translation,
+          nextKeyframe.translation,
+          tweenProgress,
+          easingFunction
+        );
       }
-      if (currentKeyframe.rotation) {
-        this._transform.rotation = Vector3.fromArray(currentKeyframe.rotation);
+      if (nextKeyframe.rotation) {
+        rotation = interpolateArray(
+          rotation,
+          nextKeyframe.rotation,
+          tweenProgress,
+          easingFunction
+        );
       }
-      if (currentKeyframe.scale) {
-        this._transform.scale = Vector3.fromArray(currentKeyframe.scale);
+      if (nextKeyframe.scale) {
+        scale = interpolateArray(
+          scale,
+          nextKeyframe.scale,
+          tweenProgress,
+          easingFunction
+        );
       }
     }
+
+    this.position = Vector3.fromArray(translation);
+    this._transform.rotation = Vector3.fromArray(rotation);
+    this._transform.scale = Vector3.fromArray(scale);
 
     this.computeLocalMatrix();
 
@@ -313,7 +353,13 @@ export class Node {
         );
 
         if (childNode && childFrame) {
-          childNode.applyFrameAnimation(0, childFrame.keyframe);
+          childNode.applyFrameAnimation(
+            0,
+            childFrame.keyframe,
+            easingType,
+            tweenProgress,
+            true
+          );
         }
       }
     }
