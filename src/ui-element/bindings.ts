@@ -70,6 +70,7 @@ const animControllerEditFrame = getElement(
 const animControllerSwapFrame = getElement(
   "animation-controller-swap-frame"
 ) as HTMLButtonElement;
+const animEasingSelect = getElement("animation-easing") as HTMLSelectElement;
 
 export {
   // Load n save
@@ -111,4 +112,5 @@ export {
   animControllerDeleteFrame,
   animControllerEditFrame,
   animControllerSwapFrame,
+  animEasingSelect,
 };

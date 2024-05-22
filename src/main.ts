@@ -42,6 +42,7 @@ import {
   animControllerSwapFrame,
   animToggleStartFrame,
   animToggleEndFrame,
+  animEasingSelect,
 } from "./ui-element/bindings";
 import { Camera } from "./cameras/camera";
 import { CAM_TYPE } from "./types/camera";
@@ -51,6 +52,7 @@ import { BoxGeometry } from "./geometries/box-geometry";
 
 // Stylesheet imports
 import "src/css/global.css";
+import { EASING_FUNCTION } from "./math/extra";
 
 /**
  * Main Script
@@ -263,34 +265,58 @@ const main = async () => {
   let onlyPlayOnce = false;
 
   let deltaT = 0,
-    lastTime = 0;
+    deltaFrame = 0,
+    lastTime: number;
   let frameIndex = 0;
-  let fps = 30;
+  let currentFrame = 0;
+  let fps = 5;
+  let easingType = EASING_FUNCTION.LINEAR;
   const render = (currentTime?: number, scene?: Node) => {
-    let timeframe = 1000 / fps;
     if (!currentTime) currentTime = 0;
-    deltaT += (currentTime - lastTime) / timeframe;
+    if (lastTime === undefined) lastTime = currentTime;
+
+    deltaT = (currentTime - lastTime) / 1000;
+
     if (scene) {
       renderer.play(scene, mainCamera);
     } else {
       renderer.play(mainScene, mainCamera);
     }
 
-    if (deltaT > 0.95) {
-      if (frameIndex > 10 && (autoPlay || onlyPlayOnce)) {
-        frameIndex = 0;
+    if (mainScene.children[0].animation && (autoPlay || onlyPlayOnce)) {
+      if (
+        currentFrame + 1 >= mainScene.children[0].animation.frames.length &&
+        (autoPlay || onlyPlayOnce) &&
+        !reverseAnim
+      ) {
         if (onlyPlayOnce) onlyPlayOnce = false;
       }
-      if (frameIndex < 0 && (autoPlay || onlyPlayOnce)) {
-        frameIndex = 10;
+      if (currentFrame <= 0 && (autoPlay || onlyPlayOnce) && reverseAnim) {
         if (onlyPlayOnce) onlyPlayOnce = false;
-      }
-      if (animTogglePlay.checked) {
-        mainScene.children[0].applyFrameAnimation(frameIndex);
-        frameIndex += reverseAnim ? -1 : 1;
       }
 
-      deltaT = 0;
+      if (animTogglePlay.checked) {
+        deltaFrame += deltaT * fps;
+        const tweenProgress = deltaFrame < 1 ? deltaFrame : 1;
+
+        mainScene.children[0].applyFrameAnimation(
+          currentFrame,
+          undefined,
+          easingType,
+          tweenProgress
+        );
+
+        if (deltaFrame >= 1) {
+          currentFrame =
+            (currentFrame + Math.floor(deltaFrame) * (reverseAnim ? -1 : 1)) %
+            mainScene.children[0].animation.frames.length;
+          currentFrame =
+            currentFrame < 0
+              ? mainScene.children[0].animation.frames.length
+              : currentFrame;
+          deltaFrame %= 1;
+        }
+      }
     }
 
     lastTime = currentTime;
@@ -368,6 +394,9 @@ const main = async () => {
   });
   animToggleAutoPlay.addEventListener("change", () => {
     autoPlay = animToggleAutoPlay.checked;
+  });
+  animEasingSelect.addEventListener("change", () => {
+    easingType = animEasingSelect.value as EASING_FUNCTION;
   });
   animationToggleFrameNav.addEventListener("change", () => {
     if (animationToggleFrameNav.checked) {
