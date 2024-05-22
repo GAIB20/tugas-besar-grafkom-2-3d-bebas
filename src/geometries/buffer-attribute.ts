@@ -177,7 +177,9 @@ export class BufferAttribute {
   static fromJSON(json: IBufferAttribute, bufAttr?: BufferAttribute) {
     if (!bufAttr)
       bufAttr = new BufferAttribute(
-        new Float32Array(json.data),
+        json.size == -1 // if indices
+          ? new Uint16Array(json.data)
+          : new Float32Array(json.data),
         json.size,
         COMMON_ATTRIBUTE.ATTRIBUTE_POSITION,
         json.options

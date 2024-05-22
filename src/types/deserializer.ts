@@ -1,6 +1,5 @@
 import { GEOMETRY_TYPE, MATERIAL_TYPE, NODE_TYPE } from "./serializer";
 import { UniformType } from "./uniform-type";
-import { TypedArray } from "./webgl-type";
 
 export interface AnimationTRS {
   translation?: number[];
@@ -60,7 +59,6 @@ export interface IBasicMaterial extends IShaderMaterial {
 export interface IBufferGeometry {
   geometry_type: GEOMETRY_TYPE;
   attributes: { [name: string]: IBufferAttribute };
-  position: TypedArray;
 }
 
 export interface IBoxGeometry extends IBufferGeometry {

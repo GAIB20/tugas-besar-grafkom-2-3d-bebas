@@ -94,7 +94,6 @@ export class BufferGeometry {
     return {
       geometry_type: this._type,
       attributes: attributes,
-      position: this.getAttribute("position").data,
     };
   }
 
