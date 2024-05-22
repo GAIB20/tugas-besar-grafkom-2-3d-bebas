@@ -17,50 +17,73 @@ export class BoxGeometry extends BufferGeometry {
         this.height = height;
         this.depth = depth;
         const hw = width/2, hh = height/2, hd = depth/2;
+        const indices = new Uint16Array([
+          0, 1, 2, 3, 0, 2,
+
+          4, 5, 6, 7, 5, 4,
+
+          4, 0, 3, 7, 4, 3,
+
+          6, 5, 2, 1, 6, 2,
+
+          5, 3, 2, 5, 7, 3,
+
+          6, 0, 4, 6, 1, 0,
+        ]);
         const vertices = new Float32Array([
-          // Front face
-          -hw, hh,  hd,
-          -hw, -hh, hd,
-          hw,  -hh, hd,
-          hw,  hh,  hd,
           -hw, hh, hd,
-          hw,  -hh, hd,
-          // Back face
-          -hw, hh,  -hd,
-          hw,  -hh, -hd,
-          -hw, -hh, -hd,
-          hw,  hh,  -hd,
-          hw,  -hh, -hd,
-          -hw, hh, -hd,
-          // Top face
-          -hw, hh,  -hd,
-          -hw, hh,  hd,
-          hw,  hh,  hd,
-          hw,  hh,  -hd,
-          -hw, hh, -hd,
-          hw,  hh,  hd,
-          // Bottom face
-          -hw, -hh, -hd,
-          hw,  -hh, -hd,
-          hw,  -hh, hd,
           -hw, -hh, hd,
+          hw, -hh, hd,
+          hw, hh, hd,
+          -hw, hh, -hd,
+          hw, -hh, -hd,
           -hw, -hh, -hd,
-          hw,  -hh, hd,
-          // Right face
-          hw,  -hh, -hd,
-          hw,  hh,   hd,
-          hw,  -hh,  hd,
-          hw,  -hh, -hd,
-          hw,  hh,   -hd,
-          hw,  hh,   hd,
-          // Left face
-          -hw, -hh, -hd,
-          -hw, hh,  hd,
-          -hw, hh,  -hd,
-          -hw, -hh, -hd,
-          -hw, -hh, hd,
-          -hw, hh,  hd
+          hw, hh, -hd,
+
+          // // Front face
+          // -hw, hh,  hd, // 0
+          // -hw, -hh, hd, // 1
+          // hw,  -hh, hd, // 2
+          // hw,  hh,  hd, // 3
+          // -hw, hh, hd, // 0
+          // hw,  -hh, hd, // 2
+          // // Back face
+          // -hw, hh,  -hd, // 4
+          // hw,  -hh, -hd, //
+          // -hw, -hh, -hd,
+          // hw,  hh,  -hd,
+          // hw,  -hh, -hd,
+          // -hw, hh, -hd,
+          // // Top face
+          // -hw, hh,  -hd,
+          // -hw, hh,  hd,
+          // hw,  hh,  hd,
+          // hw,  hh,  -hd,
+          // -hw, hh, -hd,
+          // hw,  hh,  hd,
+          // // Bottom face
+          // -hw, -hh, -hd,
+          // hw,  -hh, -hd,
+          // hw,  -hh, hd,
+          // -hw, -hh, hd,
+          // -hw, -hh, -hd,
+          // hw,  -hh, hd,
+          // // Right face
+          // hw,  -hh, -hd,
+          // hw,  hh,   hd,
+          // hw,  -hh,  hd,
+          // hw,  -hh, -hd,
+          // hw,  hh,   -hd,
+          // hw,  hh,   hd,
+          // // Left face
+          // -hw, -hh, -hd,
+          // -hw, hh,  hd,
+          // -hw, hh,  -hd,
+          // -hw, -hh, -hd,
+          // -hw, -hh, hd,
+          // -hw, hh,  hd
       ]);
+        this.setAttribute("indices", new BufferAttribute(indices, -1, ""));
         this.setAttribute('position', new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
         this.calculateNormals();
     }

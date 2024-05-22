@@ -128,7 +128,10 @@ export class WebGLUtils {
       gl.uniform1f(uniformLocation, data as number);
     } else if (type === gl.BOOL) {
       gl.uniform1i(uniformLocation, data as number);
-    } else {
+    } else if (type === gl.SAMPLER_2D || type === gl.SAMPLER_CUBE) {
+      gl.uniform1i(uniformLocation, data as number);
+    }
+    else {
       throw new Error('unsupported uniform type');
     }
   }
@@ -140,10 +143,10 @@ export class WebGLUtils {
     const textureId = gl.createTexture();
     if (!textureId) throw new Error('could not create texture');
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
 
     // only works with image
     const image = new Image();
@@ -151,8 +154,20 @@ export class WebGLUtils {
     image.onload = () => {
       gl.bindTexture(gl.TEXTURE_2D, textureId);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-      if (texture.generateMipmap) gl.generateMipmap(gl.TEXTURE_2D);
-    }
 
+      if (this.isPowerOf2(image.width) && this.isPowerOf2(image.height)) {
+        // Yes, it's a power of 2. Generate mips.
+        gl.generateMipmap(gl.TEXTURE_2D);
+      } else {
+        // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+    }
+  }
+
+  private static isPowerOf2 = (value: number) => {
+    return (value & (value - 1)) == 0;
   }
 }

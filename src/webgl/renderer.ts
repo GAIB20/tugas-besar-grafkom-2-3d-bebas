@@ -118,6 +118,13 @@ export class WebGLRenderer {
           positionBufferAttribute
         );
 
+        // indices
+        WebGLUtils.createBufferFromTypedArray(
+            this.gl,
+            node.geometry.getAttribute("indices").data,
+            this.gl.ELEMENT_ARRAY_BUFFER
+          )
+
         // color
         // Paint all vertices
         const verticesColor: number[][] = [];
@@ -153,31 +160,36 @@ export class WebGLRenderer {
           positionBufferAttribute
         );
 
+        // indicess
+        WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          node.geometry.getAttribute("indices").data,
+          this.gl.ELEMENT_ARRAY_BUFFER
+        )
+
+
         // diffuse
         const diffuse = node.material.diffuse;
-        if (diffuse instanceof Color) {
-          // color
-          // TODO
-        } else {
-          // texture
-          // TODO: check this
-          diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
-            this.gl,
-            diffuse.data
-          );
-          WebGLUtils.createTexture(this.gl, diffuse);
+        const specular = node.material.specular;
+        const normal = node.material.normal;
+        const displacement = node.material.displacement;
 
-          WebGLUtils.createAttribSetter(
-            this.gl,
-            this.glProgram,
-            new BufferAttribute(
-              new Float32Array([-1]) /* fill with dummy data*/,
-              2,
-              PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD,
-              { buffer: diffuse.buffer }
-            )
-          );
-        }
+        diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          diffuse.data
+        );
+        WebGLUtils.createTexture(this.gl, diffuse);
+
+        WebGLUtils.createAttribSetter(
+          this.gl,
+          this.glProgram,
+          new BufferAttribute(
+            new Float32Array([-1]) /* fill with dummy data*/,
+            2,
+            PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD,
+            { buffer: diffuse.buffer }
+          )
+        );
       }
 
       WebGLUtils.createUniformSetter(
@@ -196,11 +208,13 @@ export class WebGLRenderer {
         this.gl.FLOAT_MAT4
       );
 
-      this.gl.drawArrays(
+      this.gl.drawElements(
         this.gl.TRIANGLES,
-        0,
-        node.geometry.getAttribute("position").count
+        node.geometry.getAttribute("indices").data.length,
+        this.gl.UNSIGNED_SHORT,
+        0
       );
+
     }
 
     node.children.forEach((child) => {
