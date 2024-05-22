@@ -46,6 +46,8 @@ import {
 import { Camera } from "./cameras/camera";
 import { CAM_TYPE } from "./types/camera";
 import { useOrbit } from "./composables/useOrbit";
+import { BasicMaterial } from "./material/basic-material";
+import { BoxGeometry } from "./geometries/box-geometry";
 
 // Stylesheet imports
 import "src/css/global.css";
@@ -67,8 +69,8 @@ const main = async () => {
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
   renderer.init({
-    vertexShader: phongVertexScript,
-    fragmentShader: phongFragmentScript,
+    vertexShader: basicVertexScript,
+    fragmentShader: basicFragmentScript,
   });
 
   // Init scene
@@ -86,159 +88,174 @@ const main = async () => {
   let mainOrbit = updateAndGetOrbit();
 
   // Init showcase model
-  const fMesh = new Mesh(
-    new FGeometry(),
-    new PhongMaterial(
-      phongFragmentScript,
-      phongVertexScript,
-      new Color(1, 0, 0, 1),
-      new Texture(
-        "texture/f-texture.png",
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0]),
-        {
-          wrapS: WebGLRenderingContext.CLAMP_TO_EDGE,
-          wrapT: WebGLRenderingContext.CLAMP_TO_EDGE,
-          magFilter: WebGLRenderingContext.LINEAR,
-          minFilter: WebGLRenderingContext.LINEAR,
-          format: WebGLRenderingContext.RGBA,
-          dtype: WebGLRenderingContext.UNSIGNED_BYTE,
-          generateMipmap: true,
-        }
-      ),
-      new Color(0, 0, 1, 1),
-      100,
-      new Float32Array([0.1, 0.1, 0.1])
-    )
+  const testMesh = new Mesh(
+    new BoxGeometry(50, 110, 50),
+    new BasicMaterial(
+      basicFragmentScript,
+      basicVertexScript,
+      new Color(1, 0, 0, 1)
+    ),
+    "Body"
   );
-  mainScene.addChild(fMesh);
+
+  // const fMesh = new Mesh(
+  //   new BoxGeometry(50,50,50),
+  //   // new PhongMaterial(
+  //   //   phongFragmentScript,
+  //   //   phongVertexScript,
+  //   //   new Color(1, 0, 0, 1),
+  //   //   new Texture(
+  //   //     "texture/f-texture.png",
+  //   //     // prettier-ignore
+  //   //     new Float32Array([
+  //   //       // left column front
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // top rung front
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // middle rung front
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // left column back
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // top rung back
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // middle rung back
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       0, 1,
+  //   //       0, 1,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // top
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+
+  //   //       // top rung right
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+
+  //   //       // under top rung
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // between top rung and middle
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // top of middle rung
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // right of middle rung
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // bottom of middle rung.
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // right of bottom
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       0, 1,
+  //   //       0, 0,
+  //   //       1, 0,
+  //   //       1, 1,
+
+  //   //       // bottom
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       1, 0,
+
+  //   //       // left side
+  //   //       0, 0,
+  //   //       0, 1,
+  //   //       1, 1,
+  //   //       0, 0,
+  //   //       1, 1,
+  //   //       1, 0]),
+  //   //     {
+  //   //       wrapS: WebGLRenderingContext.CLAMP_TO_EDGE,
+  //   //       wrapT: WebGLRenderingContext.CLAMP_TO_EDGE,
+  //   //       magFilter: WebGLRenderingContext.LINEAR,
+  //   //       minFilter: WebGLRenderingContext.LINEAR,
+  //   //       format: WebGLRenderingContext.RGBA,
+  //   //       dtype: WebGLRenderingContext.UNSIGNED_BYTE,
+  //   //       generateMipmap: true,
+  //   //     }
+  //   //   ),
+  //   //   new Color(0, 0, 1, 1),
+  //   //   100,
+  //   //   new Float32Array([0.1, 0.1, 0.1])
+  //   // )
+  //   new BasicMaterial(
+  //     basicFragmentScript,
+  //     basicVertexScript,
+  //     new Color(1, 0, 0, 1)
+  //   )
+  // );
+  mainScene.addChild(testMesh);
 
   // Rendering
   let reverseAnim = false;
@@ -358,6 +375,7 @@ const main = async () => {
       frameIndex = 0;
       animationFrameData.classList.remove("hidden-element");
       animationFrameData.innerText = "Frame Index: " + frameIndex;
+      mainScene.children[0].applyFrameAnimation(frameIndex);
     } else {
       animationFrameData.classList.add("hidden-element");
     }
@@ -401,12 +419,19 @@ const main = async () => {
   });
   animControllerInsertFrame.addEventListener("click", () => {
     if (animationToggleFrameNav.checked) {
-      mainScene.children[0].insertFrameToAnimClip();
+      mainScene.children[0].insertFrameToAnimClip(frameIndex);
+      mainScene.children[0].applyFrameAnimation(frameIndex);
+      animationFrameData.innerText = "Frame Index: " + frameIndex;
     }
   });
   animControllerDeleteFrame.addEventListener("click", () => {
     if (animationToggleFrameNav.checked) {
       mainScene.children[0].deleteFrameFromAnimClip(frameIndex);
+      frameIndex--;
+      if (frameIndex < 0)
+        frameIndex = mainScene.children[0].animation.frames.length - 1;
+      mainScene.children[0].applyFrameAnimation(frameIndex);
+      animationFrameData.innerText = "Frame Index: " + frameIndex;
     }
   });
   animControllerSwapFrame.addEventListener("click", () => {
