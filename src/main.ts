@@ -40,6 +40,8 @@ import {
   animControllerDeleteFrame,
   animControllerEditFrame,
   animControllerSwapFrame,
+  animToggleStartFrame,
+  animToggleEndFrame,
 } from "./ui-element/bindings";
 import { Camera } from "./cameras/camera";
 import { CAM_TYPE } from "./types/camera";
@@ -282,7 +284,7 @@ const main = async () => {
 
   /**
    * Listeners bindings
-  */
+   */
   // Load and save
   loadInput.addEventListener("change", async () => {
     const node = await importModelJSON(loadInput.files?.item(0) as File);
@@ -379,6 +381,20 @@ const main = async () => {
       frameIndex--;
       if (frameIndex < 0)
         frameIndex = mainScene.children[0].animation.frames.length - 1;
+      animationFrameData.innerText = "Frame Index: " + frameIndex;
+      mainScene.children[0].applyFrameAnimation(frameIndex);
+    }
+  });
+  animToggleStartFrame.addEventListener("click", () => {
+    if (animationToggleFrameNav.checked && mainScene.children[0].animation) {
+      frameIndex = 0;
+      animationFrameData.innerText = "Frame Index: " + frameIndex;
+      mainScene.children[0].applyFrameAnimation(frameIndex);
+    }
+  });
+  animToggleEndFrame.addEventListener("click", () => {
+    if (animationToggleFrameNav.checked && mainScene.children[0].animation) {
+      frameIndex = mainScene.children[0].animation.frames.length - 1;
       animationFrameData.innerText = "Frame Index: " + frameIndex;
       mainScene.children[0].applyFrameAnimation(frameIndex);
     }

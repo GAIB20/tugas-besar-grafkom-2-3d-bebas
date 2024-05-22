@@ -51,6 +51,12 @@ const animToggleNextFrame = getElement(
 const animTogglePrevFrame = getElement(
   "animation-toggle-prev-frame"
 ) as HTMLButtonElement;
+const animToggleStartFrame = getElement(
+  "animation-toggle-start-frame"
+) as HTMLButtonElement;
+const animToggleEndFrame = getElement(
+  "animation-toggle-end-frame"
+) as HTMLButtonElement;
 
 const animControllerInsertFrame = getElement(
   "animation-controller-insert-frame"
@@ -97,6 +103,8 @@ export {
   animationFrameData,
   animToggleNextFrame,
   animTogglePrevFrame,
+  animToggleStartFrame,
+  animToggleEndFrame,
 
   // Animation Controller
   animControllerInsertFrame,
