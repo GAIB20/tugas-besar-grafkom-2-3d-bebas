@@ -203,7 +203,10 @@ export class Node {
     return node;
   }
 
-  public insertFrameToAnimClip(index?: number): AnimationPath {
+  public insertFrameToAnimClip(
+    index?: number,
+    isChildren?: boolean
+  ): AnimationPath {
     let currentFrame: AnimationPath = {
       keyframe: {
         translation: this.position.toArray(),
@@ -216,19 +219,27 @@ export class Node {
     // Traverse child nodes
     for (let child of this.children) {
       // Insert each child's frame into the current frame's children object
-      if (currentFrame.children)
-        currentFrame.children[child._name] = child.insertFrameToAnimClip();
+      if (currentFrame.children) {
+        currentFrame.children[child._name] = child.insertFrameToAnimClip(
+          index,
+          true
+        );
+      }
     }
 
-    if (!this._animation) {
-      this._animation = {
-        name: this._name,
-        frames: [currentFrame],
-      };
-    } else {
-      if (index && index >= 0 && index < this._animation.frames.length)
-        this._animation.frames.splice(index, 0, currentFrame);
-      else this._animation.frames.push(currentFrame);
+    if (!isChildren) {
+      if (!this._animation) {
+        this._animation = {
+          name: this._name,
+          frames: [currentFrame],
+        };
+      } else {
+        if (index && index >= 0 && index < this._animation.frames.length) {
+          this._animation.frames.splice(index, 0, currentFrame);
+        } else {
+          this._animation.frames.push(currentFrame);
+        }
+      }
     }
 
     return currentFrame;
