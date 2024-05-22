@@ -1187,7 +1187,7 @@
 #     print("")
 
 
-data = [
+boxGeometryVextices = [
           "-hw, hh, hd",
           "-hw, -hh, hd",
           "hw, -hh, hd",
@@ -1231,22 +1231,154 @@ data = [
           "-hw, hh, hd",
 ]
 
-result = []
+# result = []
 
-for vertex in data:
-  if vertex not in result:
-    result.append(vertex)
+# for vertex in boxGeometryVextices:
+#   if vertex not in result:
+#     result.append(vertex)
 
-print(len(result))
-print(result)
+# print(len(result))
+# print(result)
 
-# for i, vertex1 in enumerate(data):
-#   for j, vertex2 in enumerate(result):
-#     if vertex1 == vertex2:
-#       print(f"{j}, ", end="")
-#
-#   if i != 0 and i % 6 == 0: print("\n")
-#   elif i == 5: print("\n")
+# # for i, vertex1 in enumerate(data):
+# #   for j, vertex2 in enumerate(result):
+# #     if vertex1 == vertex2:
+# #       print(f"{j}, ", end="")
+# #
+# #   if i != 0 and i % 6 == 0: print("\n")
+# #   elif i == 5: print("\n")
 
-for vertex in result:
-  print(vertex + ", ")
+# for vertex in result:
+#   print(vertex + ", ")
+
+
+def construct_indices_and_new_vertices(vertices: list) :
+    part_to_3 = []
+    for i in range(0, len(vertices), 3):
+        part_to_3.append(vertices[i:i+3])
+
+
+    final_vertices = []
+    for vertex in part_to_3:
+      if vertex not in final_vertices:
+        final_vertices.append(vertex)
+
+    print("Final vertices: \n")
+    for _vertices in final_vertices:
+        print(f"{_vertices[0]}, {_vertices[1]}, {_vertices[2]},")
+      
+    print("\n\n\n\n\n")
+
+
+    for i, vertex1 in enumerate(part_to_3):
+        for j, vertex2 in enumerate(final_vertices):
+            if vertex1 == vertex2:
+                print(f"{j}, ", end="")
+                # 5, 11, 17, 23
+        if (i+1) % 6 == 0:
+            print("\n")
+        
+
+    
+
+hollow_geometry_vertices = [
+      0, 0, 0,
+      0, 0, 100,
+      200, 0, 0,
+      200, 0, 0,
+      0, 0, 100,
+      200, 0, 100,
+
+      0, 0, 0,
+      200, 0, 100,
+      0, 0, 100,
+      0, 0, 0,
+      200, 0, 0,
+      200, 0, 100,
+
+      0, 0, 0,
+      100, 150, 100,
+      100, 150, 0,
+      0, 0, 0,
+      0, 0, 100,
+      100, 150, 100,
+
+      100, 150, 0,
+      0, 0, 100,
+      0, 0, 0,
+      100, 150, 0,
+      100, 150, 100,
+      0, 0, 100,
+
+      200, 0, 0,
+      200, 0, 100,
+      100, 150, 0,
+      100, 150, 0,
+      200, 0, 100,
+      100, 150, 100,
+
+      100, 150, 0,
+      100, 150, 100,
+      200, 0, 100,
+      200, 0, 0,
+      100, 150, 100,
+      200, 0, 100,
+
+      0, 0, 100,
+      0, 0, 0,
+      200, 0, 0,
+      200, 0, 100,
+      0, 0, 100,
+      200, 0, 0,
+
+      0, 0, 100,
+      200, 0, 100,
+      0, 0, 0,
+      200, 0, 100,
+      200, 0, 0,
+      0, 0, 0,
+
+      100, 150, 100,
+      0, 0, 0,
+      100, 150, 0,
+      100, 150, 100,
+      0, 0, 100,
+      0, 0, 0,
+
+      0, 0, 100,
+      100, 150, 0,
+      0, 0, 0,
+      0, 0, 100,
+      100, 150, 100,
+      100, 150, 0,
+
+      200, 0, 100,
+      200, 0, 0,
+      100, 150, 0,
+      100, 150, 100,
+      200, 0, 100,
+      100, 150, 0,
+
+      100, 150, 100,
+      100, 150, 0,
+      200, 0, 100,
+      100, 150, 100,
+      200, 0, 0,
+      200, 0, 100,
+
+      0, 0, 0,
+      50, 43.3, 0,
+      200, 0, 0,
+      200, 0, 0,
+      50, 43.3, 0,
+      150, 43.3, 0,
+
+      200, 0, 0,
+      150, 43.3, 0,
+      100, 150, 0,
+      100, 150, 0,
+      150, 43.3, 0,
+      100, 86.6, 0
+]
+
+construct_indices_and_new_vertices(vertices=hollow_geometry_vertices)
