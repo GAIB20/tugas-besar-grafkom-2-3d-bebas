@@ -2,7 +2,7 @@ import { Camera } from "src/cameras/camera.ts";
 import {
   PHONG_VERTEX_SHADER,
   COMMON_UNIFORM,
-  COMMON_ATTRIBUTE,
+  COMMON_ATTRIBUTE, PHONG_FRAGMENT_SHADER
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -13,6 +13,7 @@ import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 
+// TODO: Directional Light
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
   private _gl: WebGLRenderingContext;
@@ -168,7 +169,9 @@ export class WebGLRenderer {
         )
 
 
-        // diffuse
+        // TODO: Add diffuse, normal, specular, displacement
+        // texture
+        // Diffuse
         const diffuse = node.material.diffuse;
         const specular = node.material.specular;
         const normal = node.material.normal;
@@ -178,17 +181,35 @@ export class WebGLRenderer {
           this.gl,
           diffuse.data
         );
-        WebGLUtils.createTexture(this.gl, diffuse);
+
+        // WebGLUtils.createTextureColor(this.gl, diffuse);
+        WebGLUtils.createTextureImage(this.gl, diffuse);
 
         WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
           new BufferAttribute(
-            new Float32Array([-1]) /* fill with dummy data*/,
+            new Float32Array([]) /* fill with dummy data*/,
             2,
             PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD,
             { buffer: diffuse.buffer }
           )
+        );
+
+        // WebGLUtils.createUniformSetter(
+        //   this.gl,
+        //   this.glProgram,
+        //   PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
+        //   0,
+        //   this.gl.SAMPLER_2D
+        // );
+
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_TEXTURE,
+          0,
+          this.gl.SAMPLER_2D
         );
       }
 

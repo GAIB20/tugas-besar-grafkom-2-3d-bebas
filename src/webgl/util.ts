@@ -105,6 +105,8 @@ export class WebGLUtils {
       bufferAttribute.stride,
       bufferAttribute.offset
     );
+
+    return attributeLocation;
   }
 
   public static createUniformSetter = (
@@ -136,19 +138,34 @@ export class WebGLUtils {
     }
   }
 
-  public static createTexture = (
+  public static createTextureColor = (
     gl: WebGLRenderingContext,
     texture: Texture
   ) => {
     const textureId = gl.createTexture();
     if (!textureId) throw new Error('could not create texture');
 
-    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
-    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
-    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
-    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
+    gl.bindTexture(gl.TEXTURE_2D, textureId);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      texture.format,
+      1,
+      1,
+      0,
+      texture.format,
+      texture.dtype,
+      new Uint8Array(texture.color.getComponents())
+      )
+  }
 
-    // only works with image
+  public static createTextureImage = (
+    gl: WebGLRenderingContext,
+    texture: Texture
+  ) => {
+    const textureId = gl.createTexture();
+    if (!textureId) throw new Error('could not create texture');
+
     const image = new Image();
     image.src = texture.imageStr;
     image.onload = () => {
@@ -160,12 +177,14 @@ export class WebGLUtils {
         gl.generateMipmap(gl.TEXTURE_2D);
       } else {
         // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
       }
     }
   }
+
 
   private static isPowerOf2 = (value: number) => {
     return (value & (value - 1)) == 0;

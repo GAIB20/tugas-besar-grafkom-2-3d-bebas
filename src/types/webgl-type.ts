@@ -38,7 +38,8 @@ export enum PHONG_VERTEX_SHADER {
 }
 
 export enum PHONG_FRAGMENT_SHADER {
-  UNIFORM_TEXTURE = "u_texture",
+  UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
+  UNIFORM_DIFFUSE_TEXTURE = "u_diffuseTexture",
 
   // TODO
   // UNIFORM_SHININESS = "u_shininess",

@@ -9,7 +9,7 @@ export class Texture{
   private _wrapT: number; // vertical
   private _magFilter: number;
   private _minFilter: number;
-  private _format: WebGLTexture;
+  private _format: number;
   private _dtype: WEB_GL_DATA_TYPE;
   private _generateMipmap: boolean;
   private _data: TypedArray;
@@ -24,14 +24,14 @@ export class Texture{
       wrapT?: number,
       magFilter?: number,
       minFilter?: number,
-      format?: WebGLTexture,
+      format?: number,
       dtype?: WEB_GL_DATA_TYPE,
       generateMipmap?: boolean,
     } = {},
   ) {
     this._imageStr = imageSrc;
     this._data = data;
-    this._color = options.color || new Color(255, 255, 255, );
+    this._color = options.color || new Color(0, 255, 255, );
     this._wrapS = options.wrapS || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._wrapT = options.wrapT || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._magFilter = options.magFilter|| WebGLRenderingContext.LINEAR;
@@ -62,7 +62,7 @@ export class Texture{
   set wrapT(wrapT: number) { this._wrapT = wrapT; }
   set magFilter(magFilter: number) { this._magFilter = magFilter; }
   set minFilter(minFilter: number) { this._minFilter = minFilter; }
-  set format(format: WebGLTexture) { this._format = format; }
+  set format(format: number) { this._format = format; }
   set dtype(dtype: WEB_GL_DATA_TYPE) { this._dtype = dtype; }
   set generateMipmap(generateMipmap: boolean) { this._generateMipmap = generateMipmap; }
 }

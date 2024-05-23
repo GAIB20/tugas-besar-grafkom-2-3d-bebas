@@ -10,11 +10,12 @@ precision mediump float;
 //varying vec4 v_color;
 //varying vec3 v_normal, v_pos;
 
+// The texture
+uniform sampler2D u_diffuseColor;
+uniform sampler2D u_diffuseTexture;
+
 // Pass-through vertex shader
 varying vec2 v_texCoord;
-
-// The texture
-uniform sampler2D u_texture;
 
 void main(void) {
 //    vec3 N = normalize(v_normal);
@@ -33,5 +34,9 @@ void main(void) {
 //        u_specularColor.a * specular
 //    , 1.0);
 
-    gl_FragColor = texture2D(u_texture, v_texCoord);
+    vec4 diffuseColor = texture2D(u_diffuseColor, v_texCoord);
+    vec4 diffuseTexture = texture2D(u_diffuseTexture, v_texCoord);
+    vec4 diffuseFinal = diffuseColor * diffuseTexture;
+
+    gl_FragColor = diffuseFinal;
 }
