@@ -86,6 +86,17 @@ select:focus-visible,
   visibility: hidden;
 }
 
+.scene-graph-button {
+  background-color: darkcyan;
+  color: white;
+  padding: 5px 20px;
+  font-family: sans-serif;
+  text-align: left;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

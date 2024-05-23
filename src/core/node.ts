@@ -26,6 +26,10 @@ export class Node {
   protected _type!: NODE_TYPE;
   private _animation!: AnimationClip;
 
+  get name(): string {
+    return this._name;
+  }
+
   get position(): Vector3 {
     return this._position;
   }

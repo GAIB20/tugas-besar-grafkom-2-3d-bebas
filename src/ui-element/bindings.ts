@@ -72,6 +72,9 @@ const animControllerSwapFrame = getElement(
 ) as HTMLButtonElement;
 const animEasingSelect = getElement("animation-easing") as HTMLSelectElement;
 
+// Scene Graph
+const sceneGraphTree = getElement("scene-graph-tree") as HTMLUListElement;
+
 export {
   // Load n save
   loadInput,
@@ -113,4 +116,7 @@ export {
   animControllerEditFrame,
   animControllerSwapFrame,
   animEasingSelect,
+
+  // Scene Graph
+  sceneGraphTree,
 };

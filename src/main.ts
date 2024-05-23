@@ -40,6 +40,7 @@ import {
   animToggleStartFrame,
   animToggleEndFrame,
   animEasingSelect,
+  sceneGraphTree,
 } from "./ui-element/bindings";
 import { Camera } from "./cameras/camera";
 import { CAM_TYPE } from "./types/camera";
@@ -48,8 +49,10 @@ import { useOrbit } from "./composables/useOrbit";
 // Stylesheet imports
 import "src/css/global.css";
 import { EASING_FUNCTION } from "./math/extra";
+import { BasicMaterial } from "src/material/basic-material";
 import { PhongMaterial } from "src/material/phong-material.ts";
 import { Texture } from "src/material/texture.ts";
+import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { FGeometry } from "src/geometries/f-geometry.ts";
 
 /**
@@ -87,445 +90,448 @@ const main = async () => {
   let mainCamera: Camera = getSelectedCam(CAM_TYPE.ORTHOGRAPHIC);
   let mainOrbit = updateAndGetOrbit();
 
+  let selectedNode: Node | null = null;
+
   // Init showcase model
-  // const testMesh = new Mesh(
-  //   new BoxGeometry(50, 110, 50),
-  //   new BasicMaterial(
-  //     basicFragmentScript,
-  //     basicVertexScript,
-  //     new Color(1, 0, 0, 1)
-  //   ),
-  //   "Body"
-  // );
-
-  const fMesh = new Mesh(
-    new FGeometry(),
-    new PhongMaterial(
-      phongFragmentScript,
-      phongVertexScript,
-      new Color(1, 0, 0, 1),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // TODO: set texcoords yang associated with each vertex (using indices)
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-        ]),
-        "src/assets/texture/diffuse/f-texture.png",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0
-        ]),
-        "src/assets/texture/specular/container2_specular.png",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0]),
-        "src/assets/texture/normal/bricks2_normal.jpg",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
-
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
-
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
-
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0]),
-        "src/assets/texture/displacement/bricks2_disp.jpg",
-      ),
-    )
+  const testMesh = new Mesh(
+    new BoxGeometry(50, 110, 50),
+    new BasicMaterial(
+      basicFragmentScript,
+      basicVertexScript,
+      new Color(1, 0, 0, 1)
+    ),
+    "Body"
   );
-  mainScene.addChild(fMesh);
+
+  // const fMesh = new Mesh(
+  //   new FGeometry(),
+  //   new PhongMaterial(
+  //     phongFragmentScript,
+  //     phongVertexScript,
+  //     new Color(1, 0, 0, 1),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // TODO: set texcoords yang associated with each vertex (using indices)
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+  //       ]),
+  //       "src/assets/texture/diffuse/f-texture.png",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0
+  //       ]),
+  //       "src/assets/texture/specular/container2_specular.png",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0]),
+  //       "src/assets/texture/normal/bricks2_normal.jpg",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
+
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0]),
+  //       "src/assets/texture/displacement/bricks2_disp.jpg",
+  //     ),
+  //   )
+  // );
+  mainScene.addChild(testMesh);
+  updateSceneGraph(mainScene, sceneGraphTree);
 
   // Rendering
   let reverseAnim = false;
@@ -598,14 +604,19 @@ const main = async () => {
    */
   // Load and save
   loadInput.addEventListener("change", async () => {
-    const node = await importModelJSON(loadInput.files?.item(0) as File);
-    mainScene.removeChild(mainScene.children[0]);
-    mainScene.addChild(node);
-    const mesh = node as Mesh;
-    renderer.init({
-      vertexShader: mesh.material.vertexShader,
-      fragmentShader: mesh.material.fragmentShader,
-    });
+    const file = loadInput.files?.item(0);
+    if (file) {
+      const node = await importModelJSON(file);
+      mainScene.removeChild(mainScene.children[0]);
+      mainScene.addChild(node);
+      const mesh = node as Mesh;
+      renderer.init({
+        vertexShader: mesh.material.vertexShader,
+        fragmentShader: mesh.material.fragmentShader,
+      });
+  
+      updateSceneGraph(mainScene, sceneGraphTree);
+    }
   });
   saveInput.addEventListener("click", () =>
     exportModelJSON(mainScene.children[0])
@@ -624,33 +635,51 @@ const main = async () => {
     mainOrbit.updateDistance(parseFloat(camDistanceInput.value));
   });
 
-  // Transform (TODO: update with scene graph)
+  // Transform
   xTranslationInput.addEventListener("input", () => {
-    mainScene.children[0].position.x = parseInt(xTranslationInput.value);
+    if (selectedNode) {
+      selectedNode.position.x = parseInt(xTranslationInput.value);
+    }
   });
   yTranslationInput.addEventListener("input", () => {
-    mainScene.children[0].position.y = parseInt(yTranslationInput.value);
+    if (selectedNode) {
+      selectedNode.position.y = parseInt(yTranslationInput.value);
+    }
   });
   zTranslationInput.addEventListener("input", () => {
-    mainScene.children[0].position.z = parseInt(zTranslationInput.value);
+    if (selectedNode) {
+      selectedNode.position.z = parseInt(zTranslationInput.value);
+    }
   });
   xRotationInput.addEventListener("input", () => {
-    mainScene.children[0].rotateX = parseInt(xRotationInput.value);
+    if (selectedNode) {
+      selectedNode.rotation.x = parseInt(xRotationInput.value);
+    }
   });
   yRotationInput.addEventListener("input", () => {
-    mainScene.children[0].rotateY = parseInt(yRotationInput.value);
+    if (selectedNode) {
+      selectedNode.rotation.y = parseInt(yRotationInput.value);
+    }
   });
   zRotationInput.addEventListener("input", () => {
-    mainScene.children[0].rotateZ = parseInt(zRotationInput.value);
+    if (selectedNode) {
+      selectedNode.rotation.z = parseInt(zRotationInput.value);
+    }
   });
   xScaleInput.addEventListener("input", () => {
-    mainScene.children[0].scaleX = parseFloat(xScaleInput.value);
+    if (selectedNode) {
+      selectedNode.scale.x = parseInt(xScaleInput.value);
+    }
   });
   yScaleInput.addEventListener("input", () => {
-    mainScene.children[0].scaleY = parseFloat(yScaleInput.value);
+    if (selectedNode) {
+      selectedNode.scale.y = parseInt(yScaleInput.value);
+    }
   });
   zScaleInput.addEventListener("input", () => {
-    mainScene.children[0].scaleZ = parseFloat(zScaleInput.value);
+    if (selectedNode) {
+      selectedNode.scale.z = parseInt(zScaleInput.value);
+    }
   });
 
   // Animation
@@ -756,6 +785,61 @@ const main = async () => {
       animControllerSwapFrame.disabled = isEditing;
     }
   });
+
+  function updateSceneGraph(node: Node, parentElement: HTMLElement, isRoot = true) {
+    if (isRoot) { 
+      parentElement.innerHTML = ""; 
+      if (node.children.length > 0) {
+        selectedNode = node.children[0];
+        updateTransformControls();
+      }
+    }
+  
+    if (!isRoot) {
+      const li = document.createElement("li");
+  
+      const button = document.createElement("button");
+      button.textContent = node.name;
+      button.classList.add("scene-graph-button");
+      
+      button.addEventListener("click", () => {
+        selectedNode = node;
+        updateTransformControls();
+      });
+  
+      li.appendChild(button);
+      parentElement.appendChild(li);
+    }
+  
+    if (node.children.length > 0) {
+      const ul = document.createElement("ul");
+      if (!isRoot) {
+        const li = parentElement.lastElementChild;
+        if (li) {
+          li.appendChild(ul);
+        }
+      } else {
+        parentElement.appendChild(ul);
+      }
+      node.children.forEach((child) => updateSceneGraph(child, ul, false));
+    }
+  }
+  
+  function updateTransformControls() {
+    if (selectedNode) {
+      xTranslationInput.value = selectedNode.position.x.toString();
+      yTranslationInput.value = selectedNode.position.y.toString();
+      zTranslationInput.value = selectedNode.position.z.toString();
+      
+      xRotationInput.value = selectedNode.rotation.x.toString();
+      yRotationInput.value = selectedNode.rotation.y.toString();
+      zRotationInput.value = selectedNode.rotation.z.toString();
+      
+      xScaleInput.value = selectedNode.scale.x.toString();
+      yScaleInput.value = selectedNode.scale.y.toString();
+      zScaleInput.value = selectedNode.scale.z.toString();
+    }
+  }
 };
 
 main();

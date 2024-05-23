@@ -129,34 +129,6 @@
           </div>
 
           <div class="slider-container">
-            <label name="y-rotation" for="y-rotation" class="label-slider">
-              Y Rotation
-            </label>
-            <input
-              id="y-rotation"
-              type="range"
-              min="-360"
-              max="360"
-              value="0"
-              class="slider"
-            />
-          </div>
-
-          <div class="slider-container">
-            <label name="z-rotation" for="z-translation" class="label-slider">
-              Z Rotation
-            </label>
-            <input
-              id="z-rotation"
-              type="range"
-              min="-360"
-              max="360"
-              value="0"
-              class="slider"
-            />
-          </div>
-
-          <div class="slider-container">
             <label name="x-scale" for="x-scale" class="label-slider">
               X Scale
             </label>
@@ -172,6 +144,20 @@
           </div>
 
           <div class="slider-container">
+            <label name="y-rotation" for="y-rotation" class="label-slider">
+              Y Rotation
+            </label>
+            <input
+              id="y-rotation"
+              type="range"
+              min="-360"
+              max="360"
+              value="0"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
             <label name="y-scale" for="y-scale" class="label-slider">
               Y Scale
             </label>
@@ -182,6 +168,20 @@
               max="2"
               step="0.1"
               value="1"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="z-rotation" for="z-translation" class="label-slider">
+              Z Rotation
+            </label>
+            <input
+              id="z-rotation"
+              type="range"
+              min="-360"
+              max="360"
+              value="0"
               class="slider"
             />
           </div>
@@ -281,11 +281,11 @@
         </div>
       </section>
 
-      <section
-        class="flex justify-center border-4 border-black p-2 w-full max-w-[350px] overflow-scroll"
-      >
-        <h1>Scene Graph</h1>
-        <!-- Scene graph goes here -->
+      <section class="flex justify-center border-4 border-black p-2 w-full max-w-[350px] overflow-scroll">
+        <div>
+          <h1>Scene Graph</h1>
+          <ul id="scene-graph-tree"></ul>
+        </div>
       </section>
 
       <section class="flex justify-center min-w-[600px] w-full">
