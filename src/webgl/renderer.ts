@@ -13,7 +13,7 @@ import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 
-// TODO: Directional Light
+// TODO: Directional Light, Ambient Light (Change Color)
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
   private _gl: WebGLRenderingContext;
