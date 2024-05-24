@@ -12,6 +12,7 @@ import { PhongMaterial } from "src/material/phong-material.ts";
 import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
+import { Light } from "src/core/light.ts";
 
 // TODO: Directional Light, Ambient Light (Change Color)
 export class WebGLRenderer {
@@ -86,6 +87,46 @@ export class WebGLRenderer {
     return this._glProgram;
   }
 
+  public setLightsUniforms(light: Light) {
+    // Calculate ambient color by summing up colors of all lights
+    const ambientColor = new Color(0, 0, 0);
+    ambientColor.r += light.color.r;
+    ambientColor.g += light.color.g;
+    ambientColor.b += light.color.b;
+    ambientColor.a += light.color.a;
+
+    // // Directional lights
+    // const directionalLightsDirections: number[] = light.direction.toArray();
+    // const directionalLightsColors: number[] = light.color.getComponents();
+
+    WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        PHONG_FRAGMENT_SHADER.UNIFORM_AMBIENT_LIGHT_COLOR,
+        ambientColor.getRGBComponents(), // Use getComponents() to get color components
+        this.gl.FLOAT_VEC3
+    );
+
+    // WebGLUtils.createUniformSetter(
+    //     this.gl,
+    //     this.glProgram,
+    //     PHONG_FRAGMENT_SHADER.UNIFORM_DIRECTIONAL_LIGHT_DIRECTIONS,
+    //     directionalLightsDirections,
+    //     this.gl.FLOAT_VEC3,
+    //     true // Specify that it's an array
+    // );
+
+    // WebGLUtils.createUniformSetter(
+    //     this.gl,
+    //     this.glProgram,
+    //     PHONG_FRAGMENT_SHADER.UNIFORM_DIRECTIONAL_LIGHT_COLORS,
+    //     directionalLightsColors,
+    //     this.gl.FLOAT_VEC3,
+    //     true // Specify that it's an array
+    // );
+  }
+
+  
   public play(node: Node, camera: Camera) {
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
