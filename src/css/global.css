@@ -97,6 +97,10 @@ select:focus-visible,
   margin-top: 10px;
 }
 
+.scene-graph-button.active {
+  background-color: darkblue;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -25,6 +25,8 @@ export enum BASIC_VERTEX_SHADER {
 export enum PHONG_VERTEX_SHADER {
   ATTRIBUTE_POSITION = "a_position",
   ATTRIBUTE_TEX_COORD = "a_texCoord",
+  UNIFORM_WORLD_INVERSE_TRANSPOSE = "u_worldInverseTranspose",
+  
 
 
   // TODO
@@ -40,6 +42,9 @@ export enum PHONG_VERTEX_SHADER {
 export enum PHONG_FRAGMENT_SHADER {
   UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
   UNIFORM_DIFFUSE_TEXTURE = "u_diffuseTexture",
+  UNIFORM_AMBIENT_LIGHT_COLOR = "u_ambientLightColor",
+  UNIFORM_DIRECTIONAL_LIGHT_DIRECTIONS = "u_directionalLightDirections[1]",
+  UNIFORM_DIRECTIONAL_LIGHT_COLORS = "u_directionalLightColors[1]"
 
   // TODO
   // UNIFORM_SHININESS = "u_shininess",

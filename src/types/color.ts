@@ -15,6 +15,10 @@ export class Color {
     return [this.r, this.g, this.b, this.a]
   }
 
+  public getRGBComponents(): number[] {
+    return [this.r, this.g, this.b];
+  }
+
   public toHex(): string {
     let r = Math.round(this.r * 255).toString(16);
     let g = Math.round(this.g * 255).toString(16);

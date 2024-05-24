@@ -54,6 +54,8 @@ import { PhongMaterial } from "src/material/phong-material.ts";
 import { Texture } from "src/material/texture.ts";
 import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { FGeometry } from "src/geometries/f-geometry.ts";
+import { Light } from "./core/light";
+import { Vector3 } from "./math/vector3";
 
 /**
  * Main Script
@@ -102,6 +104,11 @@ const main = async () => {
     ),
     "Body"
   );
+
+  // init light
+  // const ambientLight = new Light(new Color(255, 255, 255, 1), new Vector3(0, 0, 0), "ambientLight");
+  // renderer.setLightsUniforms(ambientLight);
+  // mainScene.addChild(ambientLight);
 
   // const fMesh = new Mesh(
   //   new FGeometry(),
@@ -801,9 +808,16 @@ const main = async () => {
       const button = document.createElement("button");
       button.textContent = node.name;
       button.classList.add("scene-graph-button");
+
+      if (selectedNode === node) {
+        button.classList.add("active");
+      }
       
       button.addEventListener("click", () => {
         selectedNode = node;
+        const buttons = document.querySelectorAll(".scene-graph-button");
+        buttons.forEach((button) => button.classList.remove("active"));
+        button.classList.add("active");
         updateTransformControls();
       });
   

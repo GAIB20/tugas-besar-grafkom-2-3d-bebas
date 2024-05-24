@@ -17,6 +17,9 @@ uniform sampler2D u_diffuseTexture;
 // Pass-through vertex shader
 varying vec2 v_texCoord;
 
+// ambient color
+uniform vec3 u_ambientLightColor;
+
 void main(void) {
 //    vec3 N = normalize(v_normal);
 //    vec3 L = normalize(normalize(u_lightPosition) - v_pos);
@@ -37,6 +40,12 @@ void main(void) {
     vec4 diffuseColor = texture2D(u_diffuseColor, v_texCoord);
     vec4 diffuseTexture = texture2D(u_diffuseTexture, v_texCoord);
     vec4 diffuseFinal = diffuseColor * diffuseTexture;
+    
+    // Combine the diffuse result with the ambient light color
+    vec3 ambient = diffuseFinal.rgb * u_ambientLightColor;
 
-    gl_FragColor = diffuseFinal;
+    // Set the final fragment color, including ambient light
+    gl_FragColor = vec4(ambient + diffuseFinal.rgb, diffuseFinal.a);
+
+    //gl_FragColor = diffuseFinal;
 }
