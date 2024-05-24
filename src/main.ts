@@ -106,438 +106,438 @@ const main = async () => {
   );
 
   // init light
-  const ambientLight = new Light(new Color(255, 255, 255, 1), new Vector3(0, 0, 0), "ambientLight");
-  renderer.setLightsUniforms(ambientLight);
-  mainScene.addChild(ambientLight);
+  // const ambientLight = new Light(new Color(255, 255, 255, 1), new Vector3(0, 0, 0), "ambientLight");
+  // renderer.setLightsUniforms(ambientLight);
+  // mainScene.addChild(ambientLight);
 
-  const fMesh = new Mesh(
-    new FGeometry(),
-    new PhongMaterial(
-      phongFragmentScript,
-      phongVertexScript,
-      new Color(1, 0, 0, 1),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // TODO: set texcoords yang associated with each vertex (using indices)
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  // const fMesh = new Mesh(
+  //   new FGeometry(),
+  //   new PhongMaterial(
+  //     phongFragmentScript,
+  //     phongVertexScript,
+  //     new Color(1, 0, 0, 1),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // TODO: set texcoords yang associated with each vertex (using indices)
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
-        ]),
-        "src/assets/texture/diffuse/f-texture.png",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
+  //       ]),
+  //       "src/assets/texture/diffuse/f-texture.png",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0
-        ]),
-        "src/assets/texture/specular/container2_specular.png",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0
+  //       ]),
+  //       "src/assets/texture/specular/container2_specular.png",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0]),
-        "src/assets/texture/normal/bricks2_normal.jpg",
-      ),
-      new Texture(
-        // prettier-ignore
-        new Float32Array([
-          // left column front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0]),
+  //       "src/assets/texture/normal/bricks2_normal.jpg",
+  //     ),
+  //     new Texture(
+  //       // prettier-ignore
+  //       new Float32Array([
+  //         // left column front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // top rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // top rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // middle rung front
-          0, 0,
-          0, 1,
-          1, 0,
-          0, 1,
-          1, 1,
-          1, 0,
+  //         // middle rung front
+  //         0, 0,
+  //         0, 1,
+  //         1, 0,
+  //         0, 1,
+  //         1, 1,
+  //         1, 0,
 
-          // left column back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // left column back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // top rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // middle rung back
-          0, 0,
-          1, 0,
-          0, 1,
-          0, 1,
-          1, 0,
-          1, 1,
+  //         // middle rung back
+  //         0, 0,
+  //         1, 0,
+  //         0, 1,
+  //         0, 1,
+  //         1, 0,
+  //         1, 1,
 
-          // top
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // top rung right
-          0, 0,
-          1, 0,
-          1, 1,
-          0, 0,
-          1, 1,
-          0, 1,
+  //         // top rung right
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
 
-          // under top rung
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // under top rung
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // between top rung and middle
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // between top rung and middle
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // top of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // top of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // right of middle rung
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of middle rung
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom of middle rung.
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom of middle rung.
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // right of bottom
-          0, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
+  //         // right of bottom
+  //         0, 0,
+  //         1, 1,
+  //         0, 1,
+  //         0, 0,
+  //         1, 0,
+  //         1, 1,
 
-          // bottom
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0,
+  //         // bottom
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0,
 
-          // left side
-          0, 0,
-          0, 1,
-          1, 1,
-          0, 0,
-          1, 1,
-          1, 0]),
-        "src/assets/texture/displacement/bricks2_disp.jpg",
-      ),
-    )
-  );
-  mainScene.addChild(fMesh);
+  //         // left side
+  //         0, 0,
+  //         0, 1,
+  //         1, 1,
+  //         0, 0,
+  //         1, 1,
+  //         1, 0]),
+  //       "src/assets/texture/displacement/bricks2_disp.jpg",
+  //     ),
+  //   )
+  // );
+  mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
 
   // Rendering
