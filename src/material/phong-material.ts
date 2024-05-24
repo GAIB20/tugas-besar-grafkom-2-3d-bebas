@@ -1,9 +1,7 @@
 import { ShaderMaterial } from "src/material/shader-material.ts";
-import { Color } from "src/types/color.ts";
 import { Texture } from "src/material/texture.ts";
 
 export class PhongMaterial extends ShaderMaterial {
-  private _ambient: Color;
   private _diffuse: Texture;
   private _specular: Texture;
   private _normal: Texture;
@@ -15,15 +13,13 @@ export class PhongMaterial extends ShaderMaterial {
   constructor(
     fragmentShader: string,
     vertexShader: string,
-    ambient: Color,
     diffuse: Texture,
     specular: Texture,
     normal: Texture,
     displacement: Texture,
     shininess?: number,
     /* lightPosition: Float32Array, */) {
-    super(fragmentShader, vertexShader);
-    this._ambient = ambient;
+    super(fragmentShader, vertexShader, );
     this._diffuse = diffuse;
     this._specular = specular;
     this._normal = normal;
@@ -35,14 +31,6 @@ export class PhongMaterial extends ShaderMaterial {
   /* Getters and Setters */
   public get id(): string {
     return "phong-material";
-  }
-
-  public set ambient(ambient: Color) {
-    this._ambient = ambient;
-  }
-
-  public get ambient(): Color {
-    return this._ambient;
   }
 
   public set diffuse(diffuse: Texture) {

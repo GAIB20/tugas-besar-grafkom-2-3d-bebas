@@ -18,21 +18,21 @@ export enum COMMON_UNIFORM {
 }
 
 export enum BASIC_VERTEX_SHADER {
-  ATTRIBUTE_COLOR = "a_color",
-  ATTRIBUTE_POSITION = "a_position",
+  UNIFORM_COLOR = "u_color",
+}
+
+export enum BASIC_FRAGMENT_SHADER {
+  UNIFORM_AMBIENT_COLOR = "u_ambientColor"
 }
 
 export enum PHONG_VERTEX_SHADER {
-  ATTRIBUTE_POSITION = "a_position",
   ATTRIBUTE_TEX_COORD = "a_texCoord",
+  ATTRIBUTE_NORMAL = "a_normal",
   UNIFORM_WORLD_INVERSE_TRANSPOSE = "u_worldInverseTranspose",
-  
+
 
 
   // TODO
-  // ATTRIBUTE_COLOR = "a_color",
-  // ATTRIBUTE_NORMAL = "a_normal",
-
   // UNIFORM_WORLD_MATRIX = "u_WorldMat",
   // UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
   // UNIFORM_RESOLUTION = "u_resolution",

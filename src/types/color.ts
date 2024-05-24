@@ -1,7 +1,7 @@
 export class Color {
-  public r: number;
-  public g: number;
-  public b: number;
+  public r: number; // max 1
+  public g: number; // max 1
+  public b: number; // max 1
   public a: number;
 
   constructor(r: number, g: number, b: number, a: number = 1) {
@@ -20,9 +20,9 @@ export class Color {
   }
 
   public toHex(): string {
-    let r = Math.round(this.r * 255).toString(16);
-    let g = Math.round(this.g * 255).toString(16);
-    let b = Math.round(this.b * 255).toString(16);
+    const r = Math.round(this.r * 255).toString(16).padStart(2, '0');
+    const g = Math.round(this.g * 255).toString(16).padStart(2, '0');
+    const b = Math.round(this.b * 255).toString(16).padStart(2, '0');
     return `#${r}${g}${b}`;
   }
 

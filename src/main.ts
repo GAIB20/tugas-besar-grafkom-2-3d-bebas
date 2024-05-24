@@ -27,6 +27,16 @@ import {
   xScaleInput,
   yScaleInput,
   zScaleInput,
+  ambientLightColorInput,
+  shininessInput,
+  diffuseColorInput,
+  diffuseTextureInput,
+  specularColorInput,
+  specularTextureInput,
+  displacementTextureInput,
+  normalTextureInput,
+  displacementFactorInput,
+  displacementBiasInput,
   animToggleReverse,
   animToggleAutoPlay,
   animationToggleFrameNav,
@@ -688,6 +698,12 @@ const main = async () => {
       selectedNode.scale.z = parseInt(zScaleInput.value);
     }
   });
+
+  // Light
+  ambientLightColorInput.value = renderer.ambientLightColor.toHex();
+  ambientLightColorInput.addEventListener("input", () => {
+    renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value)
+  })
 
   // Animation
   animTogglePlay.addEventListener("change", () => {

@@ -187,7 +187,7 @@
           </div>
 
           <div class="slider-container">
-            <label name="z-scale" for="z-translation" class="label-slider">
+            <label name="z-scale" for="z-scale" class="label-slider">
               Z Scale
             </label>
             <input
@@ -202,18 +202,149 @@
           </div>
         </div>
 
+        <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4">
+          <div class="slider-container">
+            <label name="ambient-color" for="ambient-color-picker" class="color-picker">
+              Ambient Color
+            </label>
+            <input
+              id="ambient-color-picker"
+              type="color"
+              value="#ffffff"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="shininess-label" for="shininess-slider" class="label-slider">
+              Shininess
+            </label>
+            <input
+              id="shininess-slider"
+              type="range"
+              min="1"
+              max="128"
+              step="1"
+              value="128"
+              class="slider"
+            />
+          </div>
+
+
+          <div class="slider-container">
+            <label name="diffuse-color" for="diffuse-color-picker" class="color-picker">
+              Diffuse Color
+            </label>
+            <input
+              id="diffuse-color-picker"
+              type="color"
+              step="0.1"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="diffuse-texture" for="diffuse-texture-dropdown">
+              Diffuse Texture
+            </label>
+            <select name="diffuse-texture" id="diffuse-texture-dropdown">
+              <option value="none" selected>None</option>
+              <option value="texture-1">Texture 1</option>
+              <option value="texture-2">Texture 2</option>
+              <option value="texture-3">Texture 3</option>
+            </select>
+          </div>
+
+          <div class="slider-container">
+            <label name="specular-color" for="specular-color-picker" class="color-picker">
+              Specular Color
+            </label>
+            <input
+              id="specular-color-picker"
+              type="color"
+              step="0.1"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="specular-texture" for="specular-texture-dropdown">
+              Specular Texture
+            </label>
+            <select name="specular-texture" id="specular-texture-dropdown">
+              <option value="none" selected>None</option>
+              <option value="texture-1">Texture 1</option>
+              <option value="texture-2">Texture 2</option>
+              <option value="texture-3">Texture 3</option>
+            </select>
+          </div>
+
+          <div class="slider-container">
+            <label name="displacement-texture" for="displacement-texture-dropdown">
+              Disp. Texture
+            </label>
+            <select name="displacement-texture" id="displacement-texture-dropdown">
+              <option value="none" selected>None</option>
+              <option value="texture-1">Texture 1</option>
+              <option value="texture-2">Texture 2</option>
+              <option value="texture-3">Texture 3</option>
+            </select>
+          </div>
+
+          <div class="slider-container">
+            <label name="normal-texture" for="normal-texture-dropdown">
+              Normal Texture
+            </label>
+            <select name="normal-texture" id="normal-texture-dropdown">
+              <option value="none" selected>None</option>
+              <option value="texture-1">Texture 1</option>
+              <option value="texture-2">Texture 2</option>
+              <option value="texture-3">Texture 3</option>
+            </select>
+          </div>
+
+          <div class="slider-container">
+            <label name="displacement-factor-label" for="displacement-factor-slider" class="label-slider">
+              Disp. Factor
+            </label>
+            <input
+              id="displacement-factor-slider"
+              type="range"
+              min="1"
+              max="128"
+              step="1"
+              value="128"
+              class="slider"
+            />
+          </div>
+
+          <div class="slider-container">
+            <label name="displacement-bias-label" for="displacement-bias-slider" class="label-slider">
+              Disp. Bias
+            </label>
+            <input
+              id="displacement-bias-slider"
+              type="range"
+              min="1"
+              max="128"
+              step="1"
+              value="128"
+              class="slider"
+            />
+          </div>
+
+
+        </div>
+
         <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4 w-full">
           <div class="border border-2 p-2">
             <p>Animation</p>
-            <label name="animation-toggle" for="animation-toggle"> Play </label>
+            <label name="animation-toggle" for="animation-toggle-play"> Play </label>
             <input id="animation-toggle-play" type="checkbox" />
             <br />
-            <label name="animation-toggle" for="animation-toggle">
+            <label name="animation-toggle" for="animation-toggle-reverse">
               Reverse
             </label>
             <input id="animation-toggle-reverse" type="checkbox" />
             <br />
-            <label name="animation-toggle" for="animation-toggle">
+            <label name="animation-toggle" for="animation-toggle-auto-play">
               Auto Play
             </label>
             <input id="animation-toggle-auto-play" type="checkbox" checked />

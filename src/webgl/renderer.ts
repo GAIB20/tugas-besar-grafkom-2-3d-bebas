@@ -2,7 +2,9 @@ import { Camera } from "src/cameras/camera.ts";
 import {
   PHONG_VERTEX_SHADER,
   COMMON_UNIFORM,
-  COMMON_ATTRIBUTE, PHONG_FRAGMENT_SHADER
+  PHONG_FRAGMENT_SHADER,
+  BASIC_VERTEX_SHADER,
+  BASIC_FRAGMENT_SHADER
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -12,7 +14,6 @@ import { PhongMaterial } from "src/material/phong-material.ts";
 import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
-import { Light } from "src/core/light.ts";
 
 // TODO: Directional Light, Ambient Light (Change Color)
 export class WebGLRenderer {
@@ -23,6 +24,11 @@ export class WebGLRenderer {
   // Canvas Size
   private _canvasWidth: number;
   private _canvasHeight: number;
+
+  // Light
+  private _ambientLightColor: Color = new Color(1, 1, 1, 1);
+  // private _directionalLightDirections: number[][] = [[0, 0, 0]];
+  // private _directionalLightColors: Color[] = [new Color(255, 255, 255, 1)];
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
@@ -87,46 +93,14 @@ export class WebGLRenderer {
     return this._glProgram;
   }
 
-  public setLightsUniforms(light: Light) {
-    // Calculate ambient color by summing up colors of all lights
-    const ambientColor = new Color(0, 0, 0);
-    ambientColor.r += light.color.r;
-    ambientColor.g += light.color.g;
-    ambientColor.b += light.color.b;
-    ambientColor.a += light.color.a;
-
-    // // Directional lights
-    // const directionalLightsDirections: number[] = light.direction.toArray();
-    // const directionalLightsColors: number[] = light.color.getComponents();
-
-    WebGLUtils.createUniformSetter(
-        this.gl,
-        this.glProgram,
-        PHONG_FRAGMENT_SHADER.UNIFORM_AMBIENT_LIGHT_COLOR,
-        ambientColor.getRGBComponents(), // Use getComponents() to get color components
-        this.gl.FLOAT_VEC3
-    );
-
-    // WebGLUtils.createUniformSetter(
-    //     this.gl,
-    //     this.glProgram,
-    //     PHONG_FRAGMENT_SHADER.UNIFORM_DIRECTIONAL_LIGHT_DIRECTIONS,
-    //     directionalLightsDirections,
-    //     this.gl.FLOAT_VEC3,
-    //     true // Specify that it's an array
-    // );
-
-    // WebGLUtils.createUniformSetter(
-    //     this.gl,
-    //     this.glProgram,
-    //     PHONG_FRAGMENT_SHADER.UNIFORM_DIRECTIONAL_LIGHT_COLORS,
-    //     directionalLightsColors,
-    //     this.gl.FLOAT_VEC3,
-    //     true // Specify that it's an array
-    // );
+  public get ambientLightColor(): Color {
+    return this._ambientLightColor;
   }
 
-  
+  public set ambientLightColor(color: Color) {
+    this._ambientLightColor = color;
+  }
+
   public play(node: Node, camera: Camera) {
     // Clears up and set the canvas background to scene background color
     if (node instanceof Scene) {
@@ -147,69 +121,38 @@ export class WebGLRenderer {
       // DRAW
       this.gl.useProgram(this.glProgram);
 
+
+      // position
+      const positionBufferAttribute = node.geometry.getAttribute("position");
+      positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+        this.gl,
+        positionBufferAttribute.data
+      );
+      WebGLUtils.createAttribSetter(
+        this.gl,
+        this.glProgram,
+        positionBufferAttribute
+      );
+
+      // indicess
+      WebGLUtils.createBufferFromTypedArray(
+        this.gl,
+        node.geometry.getAttribute("indices").data,
+        this.gl.ELEMENT_ARRAY_BUFFER
+      )
+
       if (node.material instanceof BasicMaterial) {
-        // position
-        const positionBufferAttribute = node.geometry.getAttribute("position");
-        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          positionBufferAttribute.data
-        );
-        WebGLUtils.createAttribSetter(
+        // set color
+        WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          positionBufferAttribute
-        );
-
-        // indices
-        WebGLUtils.createBufferFromTypedArray(
-            this.gl,
-            node.geometry.getAttribute("indices").data,
-            this.gl.ELEMENT_ARRAY_BUFFER
-          )
-
-        // color
-        // Paint all vertices
-        const verticesColor: number[][] = [];
-        for (let i = 0; i < node.geometry.getAttribute("position").count; i++) {
-          verticesColor.push(node.material.color.getComponents());
-        }
-        const colorBufferAttribute = new BufferAttribute(
-          new Float32Array(verticesColor.flat()),
-          Color.size(),
-          COMMON_ATTRIBUTE.ATTRIBUTE_COLOR
-        );
-        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          colorBufferAttribute.data
-        );
-        WebGLUtils.createAttribSetter(
-          this.gl,
-          this.glProgram,
-          colorBufferAttribute
+          BASIC_VERTEX_SHADER.UNIFORM_COLOR,
+          node.material.color.getComponents(),
+          this.gl.FLOAT_VEC4
         );
       }
 
       if (node.material instanceof PhongMaterial) {
-        // position
-        const positionBufferAttribute = node.geometry.getAttribute("position");
-        positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          positionBufferAttribute.data
-        );
-        WebGLUtils.createAttribSetter(
-          this.gl,
-          this.glProgram,
-          positionBufferAttribute
-        );
-
-        // indicess
-        WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          node.geometry.getAttribute("indices").data,
-          this.gl.ELEMENT_ARRAY_BUFFER
-        )
-
-
         // TODO: Add diffuse, normal, specular, displacement
         // texture
         // Diffuse
@@ -252,7 +195,17 @@ export class WebGLRenderer {
           0,
           this.gl.SAMPLER_2D
         );
+
+        // Normal
       }
+
+      WebGLUtils.createUniformSetter(
+        this.gl,
+        this.glProgram,
+        BASIC_FRAGMENT_SHADER.UNIFORM_AMBIENT_COLOR,
+        this.ambientLightColor.getRGBComponents(),
+        this.gl.FLOAT_VEC3
+      );
 
       WebGLUtils.createUniformSetter(
         this.gl,

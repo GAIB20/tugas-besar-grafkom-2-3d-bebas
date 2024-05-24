@@ -31,7 +31,7 @@ export class Texture{
   ) {
     this._imageStr = imageSrc;
     this._data = data;
-    this._color = options.color || new Color(0, 255, 255, );
+    this._color = options.color || new Color(1, 1, 1, );
     this._wrapS = options.wrapS || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._wrapT = options.wrapT || WebGLRenderingContext.CLAMP_TO_EDGE;
     this._magFilter = options.magFilter|| WebGLRenderingContext.LINEAR;

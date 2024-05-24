@@ -31,6 +31,21 @@ const xScaleInput = getElement("x-scale") as HTMLInputElement;
 const yScaleInput = getElement("y-scale") as HTMLInputElement;
 const zScaleInput = getElement("z-scale") as HTMLInputElement;
 
+// Ambient Light
+const ambientLightColorInput = getElement("ambient-color-picker") as HTMLInputElement;
+
+// Phong Light
+const shininessInput = getElement("shininess-slider") as HTMLInputElement;
+const diffuseColorInput = getElement("diffuse-color-picker") as HTMLInputElement;
+const diffuseTextureInput = getElement("diffuse-texture-dropdown") as HTMLSelectElement;
+const specularColorInput = getElement("specular-color-picker") as HTMLInputElement;
+const specularTextureInput = getElement("specular-texture-dropdown") as HTMLSelectElement;
+const displacementTextureInput = getElement("displacement-texture-dropdown") as HTMLSelectElement;
+const normalTextureInput = getElement("normal-texture-dropdown") as HTMLSelectElement;
+const displacementFactorInput = getElement("displacement-factor-slider") as HTMLInputElement;
+const displacementBiasInput = getElement("displacement-bias-slider") as HTMLInputElement;
+
+
 // Animation
 const animTogglePlay = getElement("animation-toggle-play") as HTMLInputElement;
 const animToggleReverse = getElement(
@@ -98,6 +113,21 @@ export {
   xScaleInput,
   yScaleInput,
   zScaleInput,
+
+  // Light
+  ambientLightColorInput,
+
+  // Phong
+  shininessInput,
+  diffuseColorInput,
+  diffuseTextureInput,
+  specularColorInput,
+  specularTextureInput,
+  displacementTextureInput,
+  normalTextureInput,
+  displacementFactorInput,
+  displacementBiasInput,
+
 
   // Animation
   animTogglePlay,
