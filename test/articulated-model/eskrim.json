@@ -1,0 +1,858 @@
+{
+    "name": "Layer1",
+    "object_type": "MESH",
+    "position": [0, 0, 0],
+    "transform": {
+      "translation": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1, 1, 1]
+    },
+    "children": [
+      {
+        "name": "Layer2",
+        "object_type": "MESH",
+        "position": [0, 100, 0],
+        "transform": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "children": [],
+        "geometry": {
+            "geometry_type": "PRISM",
+            "attributes": {
+                "indices": {
+                    "data": [
+                        0, 3, 2, 
+                        0, 2, 1, 
+                        0, 4, 3, 
+                        0, 1, 4,
+                        0, 2, 4,
+                        0, 2, 3,
+                        0, 1, 2,
+                        0, 1, 3,
+                        0, 2, 1,
+                        0, 3, 4,
+                        0, 3, 1, 
+                        5, 8, 7,
+                        5, 7, 6,
+                        5, 9, 8,
+                        5, 6, 9,
+                        0, 5, 6,
+                        0, 6, 1, 
+                        1, 6, 7, 
+                        1, 7, 2, 
+                        2, 7, 8, 
+                        2, 8, 3, 
+                        3, 8, 9, 
+                        3, 9, 4, 
+                        4, 9, 5, 
+                        4, 5, 0 
+                    ],
+                    "size": -1,
+                    "options": {
+                        "dtype": 5126,
+                        "normalize": false,
+                        "stride": 0,
+                        "offset": 0
+                    }
+                },
+                "position": {
+                    "data": [
+                        0, 0, 0, 
+                        50, 0, 0, 
+                        75, 0, 43.3,
+                        25, 0, 70.7, 
+                        -25, 0, 43.3, 
+                        0, 100, 0, 
+                        50, 100, 0, 
+                        75, 100, 43.3, 
+                        25, 100, 70.7, 
+                        -25, 100, 43.3 
+                    ],
+                    "size": 3,
+                    "options": {
+                        "dtype": 5126,
+                        "normalize": false,
+                        "stride": 0,
+                        "offset": 0
+                    }
+                }
+            },
+            "width": 100,
+            "height": 100,
+            "depth": 100
+        },
+        "material": {
+            "id": "M6",
+            "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
+            "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+            "uniforms": {},
+            "color": [0.0, 1.0, 0.0, 1],
+            "type": "BASIC_MATERIAL"
+        }
+      },    
+      {
+          "name": "Layer3",
+          "object_type": "MESH",
+          "position": [0, 200, 0],
+          "transform": {
+              "translation": [0, 0, 0],
+              "rotation": [0, 0, 0],
+              "scale": [1, 1, 1]
+          },
+          "children": [],
+          "geometry": {
+              "geometry_type": "PRISM",
+              "attributes": {
+                  "indices": {
+                      "data": [
+                          0, 3, 2, 
+                          0, 2, 1, 
+                          0, 4, 3, 
+                          0, 1, 4,
+                          0, 2, 4,
+                          0, 2, 3,
+                          0, 1, 2,
+                          0, 1, 3,
+                          0, 2, 1,
+                          0, 3, 4,
+                          0, 3, 1, 
+                          5, 8, 7,
+                          5, 7, 6,
+                          5, 9, 8,
+                          5, 6, 9,
+                          0, 5, 6,
+                          0, 6, 1, 
+                          1, 6, 7, 
+                          1, 7, 2, 
+                          2, 7, 8, 
+                          2, 8, 3, 
+                          3, 8, 9, 
+                          3, 9, 4, 
+                          4, 9, 5, 
+                          4, 5, 0 
+                      ],
+                      "size": -1,
+                      "options": {
+                          "dtype": 5126,
+                          "normalize": false,
+                          "stride": 0,
+                          "offset": 0
+                      }
+                  },
+                  "position": {
+                      "data": [
+                          0, 0, 0, 
+                          50, 0, 0, 
+                          75, 0, 43.3,
+                          25, 0, 70.7, 
+                          -25, 0, 43.3, 
+                          0, 100, 0, 
+                          50, 100, 0, 
+                          75, 100, 43.3, 
+                          25, 100, 70.7, 
+                          -25, 100, 43.3 
+                      ],
+                      "size": 3,
+                      "options": {
+                          "dtype": 5126,
+                          "normalize": false,
+                          "stride": 0,
+                          "offset": 0
+                      }
+                  }
+              },
+              "width": 100,
+              "height": 100,
+              "depth": 100
+          },
+          "material": {
+              "id": "M6",
+              "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
+              "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+              "uniforms": {},
+              "color": [1.0, 0.651, 0.0, 1],
+              "type": "BASIC_MATERIAL"
+          }
+      },
+      {
+          "name": "Stick",
+          "object_type": "MESH",
+          "position": [30, 0, 35],
+          "transform": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.5, 3, 0.5]
+          },
+          "children": [],
+          "geometry": {
+            "geometry_type": "BOX",
+            "attributes": {
+              "indices": {
+                "data": [
+                  0, 1, 2, 3, 0, 2, 4, 5, 6, 7, 5, 4, 4, 0, 3, 7, 4, 3, 6, 5, 2, 1,
+                  6, 2, 5, 3, 2, 5, 7, 3, 6, 0, 4, 6, 1, 0
+                ],
+                "size": -1,
+                "options": {
+                  "dtype": 5126,
+                  "normalize": false,
+                  "stride": 0,
+                  "offset": 0
+                }
+              },
+              "position": {
+                "data": [
+                  -17.5, 25, 25, -17.5, -25, 25, 17.5, -25, 25, 17.5, 25, 25, -17.5,
+                  25, -25, 17.5, -25, -25, -17.5, -25, -25, 17.5, 25, -25
+                ],
+                "size": 3,
+                "options": {
+                  "dtype": 5126,
+                  "normalize": false,
+                  "stride": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "width": 35,
+            "height": 50,
+            "depth": 50
+          },
+          "material": {
+            "id": "M1",
+            "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
+            "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+            "uniforms": {},
+            "color": [0.588, 0.314, 0.271, 1],
+            "type": "BASIC_MATERIAL"
+          }
+      },
+      {
+          "name": "Layer4",
+          "object_type": "MESH",
+          "position": [0, 300, 0],
+          "transform": {
+              "translation": [0, 0, 0],
+              "rotation": [0, 0, 0],
+              "scale": [1, 1, 1]
+          },
+          "children": [],
+          "geometry": {
+              "geometry_type": "PRISM",
+              "attributes": {
+                  "indices": {
+                      "data": [
+                          0, 3, 2, 
+                          0, 2, 1, 
+                          0, 4, 3, 
+                          0, 1, 4,
+                          0, 2, 4,
+                          0, 2, 3,
+                          0, 1, 2,
+                          0, 1, 3,
+                          0, 2, 1,
+                          0, 3, 4,
+                          0, 3, 1, 
+                          5, 8, 7,
+                          5, 7, 6,
+                          5, 9, 8,
+                          5, 6, 9,
+                          0, 5, 6,
+                          0, 6, 1, 
+                          1, 6, 7, 
+                          1, 7, 2, 
+                          2, 7, 8, 
+                          2, 8, 3, 
+                          3, 8, 9, 
+                          3, 9, 4, 
+                          4, 9, 5, 
+                          4, 5, 0 
+                      ],
+                      "size": -1,
+                      "options": {
+                          "dtype": 5126,
+                          "normalize": false,
+                          "stride": 0,
+                          "offset": 0
+                      }
+                  },
+                  "position": {
+                      "data": [
+                          0, 0, 0, 
+                          50, 0, 0, 
+                          75, 0, 43.3,
+                          25, 0, 70.7, 
+                          -25, 0, 43.3, 
+                          0, 100, 0, 
+                          50, 100, 0, 
+                          75, 100, 43.3, 
+                          25, 100, 70.7, 
+                          -25, 100, 43.3 
+                      ],
+                      "size": 3,
+                      "options": {
+                          "dtype": 5126,
+                          "normalize": false,
+                          "stride": 0,
+                          "offset": 0
+                      }
+                  }
+              },
+              "width": 100,
+              "height": 100,
+              "depth": 100
+          },
+          "material": {
+              "id": "M6",
+              "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
+              "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+              "uniforms": {},
+              "color": [1.0, 0.0, 0.0, 1],
+              "type": "BASIC_MATERIAL"
+          }
+      }    
+    ],
+    "animation": {
+      "name": "Layer1",
+      "frames": [
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, 0, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, 200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, 300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -100, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, 200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, 300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -300, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, 200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, 300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, 200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, 300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, 200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -350, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, 100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -250, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -350, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, -150, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -250, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -350, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, -100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -250, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -350, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, -100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -350, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -400, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, -100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        },
+        {
+          "keyframe": {
+            "translation": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [1, 1, 1]
+          },
+          "children": {
+            "Stick": {
+              "keyframe": {
+                "translation": [30, -300, 35],
+                "rotation": [0, 0, 0],
+                "scale": [0.5, 3, 0.5]
+              },
+              "children": {}
+            },
+            "Layer2": {
+              "keyframe": {
+                "translation": [0, -100, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer3": {
+              "keyframe": {
+                "translation": [0, -200, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            },
+            "Layer4": {
+              "keyframe": {
+                "translation": [0, -300, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1]
+              },
+              "children": {}
+            }
+
+          }
+        }
+      ]
+    },
+    "geometry": {
+        "geometry_type": "PRISM",
+        "attributes": {
+            "indices": {
+                "data": [
+                    0, 3, 2, 
+                    0, 2, 1, 
+                    0, 4, 3, 
+                    0, 1, 4,
+                    0, 2, 4,
+                    0, 2, 3,
+                    0, 1, 2,
+                    0, 1, 3,
+                    0, 2, 1,
+                    0, 3, 4,
+                    0, 3, 1, 
+                    5, 8, 7,
+                    5, 7, 6,
+                    5, 9, 8,
+                    5, 6, 9,
+                    0, 5, 6,
+                    0, 6, 1, 
+                    1, 6, 7, 
+                    1, 7, 2, 
+                    2, 7, 8, 
+                    2, 8, 3, 
+                    3, 8, 9, 
+                    3, 9, 4, 
+                    4, 9, 5, 
+                    4, 5, 0 
+                ],
+                "size": -1,
+                "options": {
+                    "dtype": 5126,
+                    "normalize": false,
+                    "stride": 0,
+                    "offset": 0
+                }
+            },
+            "position": {
+                "data": [
+                    0, 0, 0, 
+                    50, 0, 0, 
+                    75, 0, 43.3,
+                    25, 0, 70.7, 
+                    -25, 0, 43.3, 
+                    0, 100, 0, 
+                    50, 100, 0, 
+                    75, 100, 43.3, 
+                    25, 100, 70.7, 
+                    -25, 100, 43.3 
+                ],
+                "size": 3,
+                "options": {
+                    "dtype": 5126,
+                    "normalize": false,
+                    "stride": 0,
+                    "offset": 0
+                }
+            }
+        },
+        "width": 100,
+        "height": 100,
+        "depth": 100
+    },
+    "material": {
+        "id": "M6",
+        "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
+        "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+        "uniforms": {},
+        "color": [1.0, 1.0, 0.0, 1],
+        "type": "BASIC_MATERIAL"
+    }
+  }
+  
