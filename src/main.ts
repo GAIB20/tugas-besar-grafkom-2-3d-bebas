@@ -801,9 +801,16 @@ const main = async () => {
       const button = document.createElement("button");
       button.textContent = node.name;
       button.classList.add("scene-graph-button");
+
+      if (selectedNode === node) {
+        button.classList.add("active");
+      }
       
       button.addEventListener("click", () => {
         selectedNode = node;
+        const buttons = document.querySelectorAll(".scene-graph-button");
+        buttons.forEach((button) => button.classList.remove("active"));
+        button.classList.add("active");
         updateTransformControls();
       });
   
