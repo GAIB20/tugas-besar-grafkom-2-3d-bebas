@@ -12,6 +12,7 @@ import { Mesh } from "src/core/mesh";
 import { Node } from "src/core/node";
 import { BoxGeometry } from "src/geometries/box-geometry";
 import { HollowBoxGeometry } from "src/geometries/hollow-box-geometry";
+import { HollowGeometry6 } from "src/geometries/hollow-hexagonal-prism-geometry";
 import { BufferGeometry } from "src/geometries/buffer-geometry";
 
 export const DeserializeNode = (json: INode) => {
@@ -31,6 +32,8 @@ export const DeserializeGeometry = (json: IBufferGeometry) => {
       return BoxGeometry.fromJSON(json as IBoxGeometry);
     case GEOMETRY_TYPE.HOLLOW_BOX:
       return HollowBoxGeometry.fromJSON(json as IHollowBoxGeometry);
+    case GEOMETRY_TYPE.HOLLOW_HEXAGONAL_PRISM:
+      return HollowGeometry6.fromJSON(json);
     default:
       return BufferGeometry.fromJSON(json);
   }

@@ -1,3 +1,4 @@
+import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
 import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
@@ -6,6 +7,7 @@ import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 export class HollowGeometry6 extends BufferGeometry {
   constructor() {
     super();
+    this._type = GEOMETRY_TYPE.HOLLOW_HEXAGONAL_PRISM;
 
     const indices = new Uint16Array([
       0, 1, 2, 2, 1, 3,
@@ -147,5 +149,22 @@ export class HollowGeometry6 extends BufferGeometry {
     this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""))
     this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
     this.calculateNormals();
+  }
+
+  get type() {
+    return "HOLLOW_HEXAGONAL_PRISM";
+  }
+
+  public toJSON() {
+    const attributes = super.toJSON();
+    return {
+      ...attributes,
+    };
+  }
+
+  public static fromJSON(json: any, geometry?: HollowGeometry6) {
+    if (!geometry) geometry = new HollowGeometry6();
+    super.fromJSON(json, geometry);
+    return geometry;
   }
 }
