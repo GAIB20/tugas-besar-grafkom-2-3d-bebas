@@ -6,6 +6,7 @@ import { Color } from "src/types/color";
 import { IBasicMaterial, IMesh } from "src/types/deserializer";
 import { MATERIAL_TYPE, NODE_TYPE } from "src/types/serializer";
 import { DeserializeGeometry } from "src/utils/deserializer";
+import { SHADER_SCRIPTS } from "src/shaders";
 
 export class Mesh extends Node {
   private _geometry: BufferGeometry;
@@ -58,26 +59,25 @@ export class Mesh extends Node {
           const materialJSON = json.material as IBasicMaterial;
           const color = materialJSON.color;
           material = new BasicMaterial(
-            json.material.fragment_shader,
-            json.material.vertex_shader,
+            SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
+            SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
             new Color(color[0], color[1], color[2], color[3])
           );
           break;
-        // TODO: other material
+        // TODO: phong material
+        // case MATERIAL_TYPE.PHONG:
+        //   break;
+
         default:
           material = new BasicMaterial(
-            json.material.fragment_shader,
-            json.material.vertex_shader,
+            SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
+            SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
             new Color(1, 0, 0, 1)
           );
           break;
       }
 
-      node = new Mesh(
-        DeserializeGeometry(json.geometry),
-        material,
-        json.name
-      );
+      node = new Mesh(DeserializeGeometry(json.geometry), material, json.name);
     }
     super.fromJSON(json, node);
     return node;

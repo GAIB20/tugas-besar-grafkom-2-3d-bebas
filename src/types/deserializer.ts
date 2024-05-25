@@ -47,8 +47,6 @@ export interface IMesh extends INode {
 
 export interface IShaderMaterial {
   id: string;
-  vertex_shader: string;
-  fragment_shader: string;
   uniform: { [key: string]: UniformType };
   type: MATERIAL_TYPE;
 }

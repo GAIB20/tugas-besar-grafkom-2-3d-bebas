@@ -4,12 +4,8 @@ import { Mesh } from "./core/mesh";
 import { Color } from "./types/color";
 import { Scene } from "./core/scene";
 import { useCamera } from "./composables/useCamera";
-import {
-  exportModelJSON,
-  importModelJSON,
-  readFile,
-} from "./utils/file-handler";
-import { SHADER_PATH } from "./shaders";
+import { exportModelJSON, importModelJSON } from "./utils/file-handler";
+import { SHADER_SCRIPTS } from "./shaders";
 import { Node } from "./core/node";
 import {
   loadInput,
@@ -69,19 +65,15 @@ import { FGeometry } from "src/geometries/f-geometry.ts";
  * Main Script
  */
 const main = async () => {
-  // Shader scripts
-  const basicVertexScript = await readFile(SHADER_PATH.BASIC_VERTEX_SHADER);
-  const basicFragmentScript = await readFile(SHADER_PATH.BASIC_FRAGMENT_SHADER);
-
-  const phongVertexScript = await readFile(SHADER_PATH.PHONG_VERTEX_SHADER);
-  const phongFragmentScript = await readFile(SHADER_PATH.PHONG_FRAGMENT_SHADER);
-
   // Init program
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const renderer = new WebGLRenderer(canvas);
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
-  renderer.init({ vertexShader: phongVertexScript, fragmentShader: phongFragmentScript, });
+  renderer.init({
+    vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+  });
 
   // Init scene
   const { getSelectedCam, cameras } = useCamera(renderer);
@@ -108,8 +100,8 @@ const main = async () => {
   // ),
 
     new PhongMaterial(
-      phongFragmentScript,
-      phongVertexScript,
+      SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+      SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
       new Texture(
 "src/assets/texture/diffuse/Bricks092_Diffuse.jpg",
       ),
@@ -262,25 +254,25 @@ const main = async () => {
   });
   xScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.x = parseInt(xScaleInput.value);
+      selectedNode.scaleX = parseFloat(xScaleInput.value);
     }
   });
   yScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.y = parseInt(yScaleInput.value);
+      selectedNode.scaleY = parseFloat(yScaleInput.value);
     }
   });
   zScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.z = parseInt(zScaleInput.value);
+      selectedNode.scaleZ = parseFloat(zScaleInput.value);
     }
   });
 
   // Light
   ambientLightColorInput.value = renderer.ambientLightColor.toHex();
   ambientLightColorInput.addEventListener("input", () => {
-    renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value)
-  })
+    renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value);
+  });
 
   // Animation
   animTogglePlay.addEventListener("change", () => {
@@ -386,7 +378,11 @@ const main = async () => {
     }
   });
 
-  function updateSceneGraph(node: Node, parentElement: HTMLElement, isRoot = true) {
+  function updateSceneGraph(
+    node: Node,
+    parentElement: HTMLElement,
+    isRoot = true
+  ) {
     if (isRoot) {
       parentElement.innerHTML = "";
       if (node.children.length > 0) {

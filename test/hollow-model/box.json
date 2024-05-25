@@ -46,9 +46,7 @@
     "size": 5
   },
   "material": {
-    "id": "M0",
-    "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-    "fragment_shader": "precision highp float;\r\n\r\n// Light Model\r\nuniform vec3 u_ambientColor;\r\n\r\n// Fragment Vertex Shader\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  vec3 color = u_ambientColor * v_Color.rgb;\r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
+    "id": "M1",
     "uniforms": {},
     "color": [1, 0, 0, 1],
     "type": "BASIC_MATERIAL"
