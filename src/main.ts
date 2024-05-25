@@ -4,12 +4,8 @@ import { Mesh } from "./core/mesh";
 import { Color } from "./types/color";
 import { Scene } from "./core/scene";
 import { useCamera } from "./composables/useCamera";
-import {
-  exportModelJSON,
-  importModelJSON,
-  readFile,
-} from "./utils/file-handler";
-import { SHADER_PATH } from "./shaders";
+import { exportModelJSON, importModelJSON } from "./utils/file-handler";
+import { SHADER_SCRIPTS } from "./shaders";
 import { Node } from "./core/node";
 import {
   loadInput,
@@ -69,19 +65,15 @@ import { FGeometry } from "src/geometries/f-geometry.ts";
  * Main Script
  */
 const main = async () => {
-  // Shader scripts
-  const basicVertexScript = await readFile(SHADER_PATH.BASIC_VERTEX_SHADER);
-  const basicFragmentScript = await readFile(SHADER_PATH.BASIC_FRAGMENT_SHADER);
-
-  const phongVertexScript = await readFile(SHADER_PATH.PHONG_VERTEX_SHADER);
-  const phongFragmentScript = await readFile(SHADER_PATH.PHONG_FRAGMENT_SHADER);
-
   // Init program
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const renderer = new WebGLRenderer(canvas);
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
-  renderer.init({ vertexShader: phongVertexScript, fragmentShader: phongFragmentScript, });
+  renderer.init({
+    vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+  });
 
   // Init scene
   const { getSelectedCam, cameras } = useCamera(renderer);
@@ -102,14 +94,14 @@ const main = async () => {
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
     new PhongMaterial(
-      phongFragmentScript,
-      phongVertexScript,
+      SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+      SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
       new Texture(
         // prettier-ignore
         new Float32Array([
           // TODO: remove this (remove data attribute from texture)
         ]),
-        "src/assets/texture/diffuse/bricks2.jpg",
+        "src/assets/texture/diffuse/bricks2.jpg"
       ),
       new Texture(
         // prettier-ignore
@@ -242,7 +234,7 @@ const main = async () => {
           1, 1,
           1, 0
         ]),
-        "src/assets/texture/specular/container2_specular.png",
+        "src/assets/texture/specular/container2_specular.png"
       ),
       new Texture(
         // prettier-ignore
@@ -374,7 +366,7 @@ const main = async () => {
           0, 0,
           1, 1,
           1, 0]),
-        "src/assets/texture/normal/bricks2_normal.jpg",
+        "src/assets/texture/normal/bricks2_normal.jpg"
       ),
       new Texture(
         // prettier-ignore
@@ -506,8 +498,8 @@ const main = async () => {
           0, 0,
           1, 1,
           1, 0]),
-        "src/assets/texture/displacement/bricks2_disp.jpg",
-      ),
+        "src/assets/texture/displacement/bricks2_disp.jpg"
+      )
     )
   );
   mainScene.addChild(testMesh);
@@ -665,8 +657,8 @@ const main = async () => {
   // Light
   ambientLightColorInput.value = renderer.ambientLightColor.toHex();
   ambientLightColorInput.addEventListener("input", () => {
-    renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value)
-  })
+    renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value);
+  });
 
   // Animation
   animTogglePlay.addEventListener("change", () => {
@@ -772,7 +764,11 @@ const main = async () => {
     }
   });
 
-  function updateSceneGraph(node: Node, parentElement: HTMLElement, isRoot = true) {
+  function updateSceneGraph(
+    node: Node,
+    parentElement: HTMLElement,
+    isRoot = true
+  ) {
     if (isRoot) {
       parentElement.innerHTML = "";
       if (node.children.length > 0) {
