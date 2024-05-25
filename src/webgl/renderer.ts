@@ -4,7 +4,7 @@ import {
   COMMON_UNIFORM,
   PHONG_FRAGMENT_SHADER,
   BASIC_VERTEX_SHADER,
-  BASIC_FRAGMENT_SHADER
+  BASIC_FRAGMENT_SHADER, COMMON_ATTRIBUTE
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -139,13 +139,25 @@ export class WebGLRenderer {
       );
 
       if (node.material instanceof BasicMaterial) {
-        // set color
-        WebGLUtils.createUniformSetter(
+        // color
+        // Paint all vertices
+        const verticesColor: number[][] = [];
+        for (let i = 0; i < constructedPositionVertices.length / 3; i++) {
+          verticesColor.push(node.material.color.getComponents());
+        }
+        const colorBufferAttribute = new BufferAttribute(
+          new Float32Array(verticesColor.flat()),
+          Color.size(),
+          COMMON_ATTRIBUTE.ATTRIBUTE_COLOR
+        );
+        colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          colorBufferAttribute.data
+        );
+        WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
-          BASIC_VERTEX_SHADER.UNIFORM_COLOR,
-          node.material.color.getComponents(),
-          this.gl.FLOAT_VEC4
+          colorBufferAttribute
         );
       }
 
