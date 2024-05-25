@@ -121,25 +121,21 @@ export class WebGLRenderer {
       // DRAW
       this.gl.useProgram(this.glProgram);
 
-
       // position
       const positionBufferAttribute = node.geometry.getAttribute("position");
+      const constructedPositionVertices = WebGLUtils.createPositionUsingVerticesAndIndices(
+        positionBufferAttribute.data,
+        node.geometry.getAttribute("indices").data
+      );
       positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
         this.gl,
-        positionBufferAttribute.data
+        constructedPositionVertices
       );
       WebGLUtils.createAttribSetter(
         this.gl,
         this.glProgram,
         positionBufferAttribute
       );
-
-      // indicess
-      WebGLUtils.createBufferFromTypedArray(
-        this.gl,
-        node.geometry.getAttribute("indices").data,
-        this.gl.ELEMENT_ARRAY_BUFFER
-      )
 
       if (node.material instanceof BasicMaterial) {
         // set color
@@ -223,13 +219,11 @@ export class WebGLRenderer {
         this.gl.FLOAT_MAT4
       );
 
-      this.gl.drawElements(
+      this._gl.drawArrays(
         this.gl.TRIANGLES,
-        node.geometry.getAttribute("indices").data.length,
-        this.gl.UNSIGNED_SHORT,
-        0
+        0,
+        constructedPositionVertices.length / positionBufferAttribute.size
       );
-
     }
 
     node.children.forEach((child) => {
