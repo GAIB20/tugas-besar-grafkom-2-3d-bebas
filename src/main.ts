@@ -640,17 +640,17 @@ const main = async () => {
   });
   xScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.x = parseInt(xScaleInput.value);
+      selectedNode.scaleX = parseFloat(xScaleInput.value);
     }
   });
   yScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.y = parseInt(yScaleInput.value);
+      selectedNode.scaleY = parseFloat(yScaleInput.value);
     }
   });
   zScaleInput.addEventListener("input", () => {
     if (selectedNode) {
-      selectedNode.scale.z = parseInt(zScaleInput.value);
+      selectedNode.scaleZ = parseFloat(zScaleInput.value);
     }
   });
 
