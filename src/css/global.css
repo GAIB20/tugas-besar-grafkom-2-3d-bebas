@@ -95,10 +95,15 @@ select:focus-visible,
   border-radius: 0.3rem;
   cursor: pointer;
   margin-top: 10px;
+  display: block;
 }
 
 .scene-graph-button.active {
   background-color: darkblue;
+}
+
+#scene-graph-tree ul {
+  margin-left: 20px;
 }
 
 @media (prefers-color-scheme: light) {
