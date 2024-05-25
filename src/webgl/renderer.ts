@@ -1,10 +1,10 @@
 import { Camera } from "src/cameras/camera.ts";
 import {
-  PHONG_VERTEX_SHADER,
+  COMMON_ATTRIBUTE,
   COMMON_UNIFORM,
+  BASIC_FRAGMENT_SHADER,
+  PHONG_VERTEX_SHADER,
   PHONG_FRAGMENT_SHADER,
-  BASIC_VERTEX_SHADER,
-  BASIC_FRAGMENT_SHADER, COMMON_ATTRIBUTE
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -162,50 +162,50 @@ export class WebGLRenderer {
       }
 
       if (node.material instanceof PhongMaterial) {
-        // TODO: Add diffuse, normal, specular, displacement
         const texCoordBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TEXCOORD);
+        texCoordBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          texCoordBufferAttribute.data,
+        );
+        WebGLUtils.createAttribSetter(
+          this.gl,
+          this.glProgram,
+          texCoordBufferAttribute
+        );
 
+        // TODO: Add diffuse, normal, specular, displacement
         // texture
-        // Diffuse
         const diffuse = node.material.diffuse;
         const specular = node.material.specular;
         const normal = node.material.normal;
         const displacement = node.material.displacement;
 
-        diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          texCoordBufferAttribute.data,
-        );
 
-        // WebGLUtils.createTextureColor(this.gl, diffuse);
-        WebGLUtils.createTextureImage(this.gl, diffuse);
+        // Diffuse
+        const diffuseColor = WebGLUtils.createTextureColor(this.gl, diffuse);
+        const diffuseTexture = WebGLUtils.createTextureImage(this.gl, diffuse);
 
-        WebGLUtils.createAttribSetter(
+        this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
+        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseColor); // bind the texture to texture unit 0
+        WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          new BufferAttribute(
-            new Float32Array([]) /* fill with dummy data*/,
-            2,
-            PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD,
-            { buffer: diffuse.buffer }
-          )
-        );
+          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
+          0,
+          this.gl.SAMPLER_2D
+        ); // 0 is the texture unit
 
-        // WebGLUtils.createUniformSetter(
-        //   this.gl,
-        //   this.glProgram,
-        //   PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
-        //   0,
-        //   this.gl.SAMPLER_2D
-        // );
-
+        this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
+        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseTexture); // bind the texture to texture unit 1
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
           PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_TEXTURE,
-          0,
+          1,
           this.gl.SAMPLER_2D
-        );
+        ); // 1 is the texture unit
+
+
 
         // Normal
         const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);

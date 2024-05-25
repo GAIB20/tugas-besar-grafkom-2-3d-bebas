@@ -1,5 +1,6 @@
 import { ShaderMaterial } from "src/material/shader-material.ts";
 import { Texture } from "src/material/texture.ts";
+import { SHADER_SCRIPTS } from "src/shaders";
 
 export class PhongMaterial extends ShaderMaterial {
   private _diffuse: Texture;
@@ -11,15 +12,16 @@ export class PhongMaterial extends ShaderMaterial {
 
   /* constructor */
   constructor(
-    fragmentShader: string,
-    vertexShader: string,
     diffuse: Texture,
     specular: Texture,
     normal: Texture,
     displacement: Texture,
     shininess?: number,
     /* lightPosition: Float32Array, */) {
-    super(fragmentShader, vertexShader, );
+    super(
+      SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+      SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+      );
     this._diffuse = diffuse;
     this._specular = specular;
     this._normal = normal;

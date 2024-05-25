@@ -1,20 +1,9 @@
 import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 import { BufferAttribute } from "./buffer-attribute.ts";
-import { Vector3 } from "src/math/vector3.ts";
 import { IBufferAttribute, IBufferGeometry } from "src/types/deserializer.ts";
-import { WebGLUtils } from "src/webgl/util.ts";
 
 export class BufferGeometry {
-  /* TODO: Update this if you have more attributes
-    Buffer Attributes name
-      - position
-      - normals
-      - indices
-      - texCoords
-    */
-
   private _attributes: { [name: string]: BufferAttribute };
-  // private _indices: BufferAttribute;
   protected _type: GEOMETRY_TYPE;
   constructor() {
     this._attributes = {};
@@ -24,20 +13,6 @@ export class BufferGeometry {
   get attributes() {
     return this._attributes;
   }
-
-  // get indices() {
-  //   return this._indices;
-  // }
-  //
-  // setIndices(indices: BufferAttribute) {
-  //   this._indices = indices;
-  //   return this;
-  // }
-  //
-  // removeIndices() {
-  //   this._indices = undefined;
-  //   return this;
-  // }
 
   setAttribute(name: string, attribute: BufferAttribute) {
     this._attributes[name] = attribute;

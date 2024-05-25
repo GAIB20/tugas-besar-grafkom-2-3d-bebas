@@ -60,6 +60,7 @@ import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { Texture } from "src/material/texture.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
 import { FGeometry } from "src/geometries/f-geometry.ts";
+import { WebGLUtils } from "src/webgl/util.ts";
 
 /**
  * Main Script
@@ -91,6 +92,28 @@ const main = async () => {
 
   let selectedNode: Node | null = null;
 
+  // texture resources
+  const diffuseImageElements = [
+    document.getElementById("diffuse-1") as HTMLImageElement,
+    document.getElementById("diffuse-2") as HTMLImageElement,
+    document.getElementById("diffuse-3") as HTMLImageElement,
+  ];
+  const specularImageElements = [
+    document.getElementById("specular-1") as HTMLImageElement,
+    document.getElementById("specular-2") as HTMLImageElement,
+    document.getElementById("specular-3") as HTMLImageElement,
+  ];
+  const normalImageElements = [
+    document.getElementById("normal-1") as HTMLImageElement,
+    document.getElementById("normal-2") as HTMLImageElement,
+    document.getElementById("normal-3") as HTMLImageElement,
+  ];
+  const displacementImageElements = [
+    document.getElementById("displacement-1") as HTMLImageElement,
+    document.getElementById("displacement-2") as HTMLImageElement,
+    document.getElementById("displacement-3") as HTMLImageElement,
+  ];
+
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
   // new BasicMaterial(
@@ -100,19 +123,17 @@ const main = async () => {
   // ),
 
     new PhongMaterial(
-      SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
-      SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
       new Texture(
-"src/assets/texture/diffuse/Bricks092_Diffuse.jpg",
+        diffuseImageElements[0],
       ),
       new Texture(
-        "src/assets/texture/specular/Bricks092_Specular.png",
+        specularImageElements[0],
       ),
       new Texture(
-        "src/assets/texture/normal/Bricks092_Normal.jpg",
+        normalImageElements[0],
       ),
       new Texture(
-        "src/assets/texture/displacement/Bricks092_Displacement.jpg",
+        displacementImageElements[0],
       ),
     )
   );

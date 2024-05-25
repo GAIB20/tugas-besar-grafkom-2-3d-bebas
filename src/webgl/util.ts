@@ -146,6 +146,10 @@ export class WebGLUtils {
     if (!textureId) throw new Error('could not create texture');
 
     gl.bindTexture(gl.TEXTURE_2D, textureId);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
@@ -155,8 +159,10 @@ export class WebGLUtils {
       0,
       texture.format,
       texture.dtype,
-      new Uint8Array(texture.color.getComponents())
+      new Uint8Array(texture.color.getComponents(true))
       )
+
+    return textureId;
   }
 
   public static createTextureImage = (
@@ -166,28 +172,24 @@ export class WebGLUtils {
     const textureId = gl.createTexture();
     if (!textureId) throw new Error('could not create texture');
 
-    const image = new Image();
-    image.src = texture.imageStr;
-    image.onload = () => {
-      gl.bindTexture(gl.TEXTURE_2D, textureId);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.bindTexture(gl.TEXTURE_2D, textureId);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.imageElement);
 
-      if (this.isPowerOf2(image.width) && this.isPowerOf2(image.height)) {
-        // Yes, it's a power of 2. Generate mips.
-        gl.generateMipmap(gl.TEXTURE_2D);
-        console.log('power of 2');
-      } else {
-        console.log('not power of 2');
-        // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
-      }
+    if (this.isPowerOf2(texture.imageElement.width) && this.isPowerOf2(texture.imageElement.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+      // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, texture.minFilter);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, texture.magFilter);
     }
+
+    return textureId;
   }
 
-  private static isPowerOf2 = (value: number) => {
+  public static isPowerOf2 = (value: number) => {
     return (value & (value - 1)) == 0;
   }
 
@@ -203,5 +205,17 @@ export class WebGLUtils {
       positions.push(vertices[index * 3 + 2]);
     }
     return new Float32Array(positions);
+  }
+
+  public static loadImages = (images: string[]) => {
+    return images.map((image) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = image;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+        return img;
+      });
+    });
   }
 }

@@ -11,7 +11,15 @@ export class Color {
     this.a = a;
   }
 
-  public getComponents(): number[] {
+  public getComponents(is8Bit:boolean =false): number[] {
+    if (is8Bit) {
+      return [
+        Math.round(this.r * 255),
+        Math.round(this.g * 255),
+        Math.round(this.b * 255),
+        Math.round(this.a * 255)
+      ];
+    }
     return [this.r, this.g, this.b, this.a]
   }
 
