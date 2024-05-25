@@ -32,5 +32,5 @@ void main(void) {
 
     // Set the final fragment color, including ambient light
     gl_FragColor = vec4(finalColor, diffuseFinal.a);
-//    gl_FragColor.rgb *= light;
+    gl_FragColor.rgb *= light;
 }

@@ -3,6 +3,7 @@ import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
 import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
 import { IHollowBoxGeometry } from "src/types/deserializer.ts";
+import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
 export class HollowBoxGeometry extends BufferGeometry {
   size: number;
@@ -66,8 +67,8 @@ export class HollowBoxGeometry extends BufferGeometry {
     ]);
 
     vertices = vertices.map(el => el * this.size);
-    this.setAttribute("indices", new BufferAttribute(indices, -1, ""));
-    this.setAttribute("position", new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+    this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
     this.calculateNormals();
   }
 

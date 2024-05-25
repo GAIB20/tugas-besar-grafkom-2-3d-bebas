@@ -1,6 +1,7 @@
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
 import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
+import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
 export class PlaneGeometry extends BufferGeometry {
     width: number;
@@ -22,8 +23,8 @@ export class PlaneGeometry extends BufferGeometry {
           0, hw, 0, // 3
         ]);
 
-        this.setAttribute("indices", new BufferAttribute(indices, -1, ""));
-        this.setAttribute('position', new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+        this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+        this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
         this.calculateNormals();
     }
 }

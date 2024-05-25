@@ -44,7 +44,8 @@ export enum PHONG_FRAGMENT_SHADER {
   UNIFORM_DIFFUSE_TEXTURE = "u_diffuseTexture",
   UNIFORM_AMBIENT_LIGHT_COLOR = "u_ambientLightColor",
   UNIFORM_DIRECTIONAL_LIGHT_DIRECTIONS = "u_directionalLightDirections[1]",
-  UNIFORM_DIRECTIONAL_LIGHT_COLORS = "u_directionalLightColors[1]"
+  UNIFORM_DIRECTIONAL_LIGHT_COLORS = "u_directionalLightColors[1]",
+  UNIFORM_REVERSE_LIGHT_DIRECTION = "u_reverseLightDirection",
 
   // TODO
   // UNIFORM_SHININESS = "u_shininess",

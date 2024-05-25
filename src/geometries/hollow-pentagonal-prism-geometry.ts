@@ -1,6 +1,7 @@
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
 import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
+import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
 export class HollowGeometry5 extends BufferGeometry {
 
@@ -82,8 +83,8 @@ export class HollowGeometry5 extends BufferGeometry {
       7.725, -23.775, 100,
     ]);
 
-    this.setAttribute("indices", new BufferAttribute(indices, -1, ""));
-    this.setAttribute("position", new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+    this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
     this.calculateNormals();
   }
 }

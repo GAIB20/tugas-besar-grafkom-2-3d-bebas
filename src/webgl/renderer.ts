@@ -14,6 +14,8 @@ import { PhongMaterial } from "src/material/phong-material.ts";
 import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
+import { BufferAttributeName } from "src/types/buffer-attribute.ts";
+import { Vector3 } from "src/math/vector3.ts";
 
 // TODO: Directional Light, Ambient Light (Change Color)
 export class WebGLRenderer {
@@ -27,8 +29,7 @@ export class WebGLRenderer {
 
   // Light
   private _ambientLightColor: Color = new Color(1, 1, 1, 1);
-  // private _directionalLightDirections: number[][] = [[0, 0, 0]];
-  // private _directionalLightColors: Color[] = [new Color(255, 255, 255, 1)];
+  private _directionalLightDirection: Vector3 = new Vector3(0.5, 0.7, 1).normalize();
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
@@ -122,10 +123,10 @@ export class WebGLRenderer {
       this.gl.useProgram(this.glProgram);
 
       // position
-      const positionBufferAttribute = node.geometry.getAttribute("position");
+      const positionBufferAttribute = node.geometry.getAttribute(BufferAttributeName.POSITION);
       const constructedPositionVertices = WebGLUtils.createPositionUsingVerticesAndIndices(
         positionBufferAttribute.data,
-        node.geometry.getAttribute("indices").data
+        node.geometry.getAttribute(BufferAttributeName.INDICES).data
       );
       positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
         this.gl,
@@ -150,7 +151,7 @@ export class WebGLRenderer {
 
       if (node.material instanceof PhongMaterial) {
         // TODO: Add diffuse, normal, specular, displacement
-        const texCoordBufferAttribute = node.geometry.getAttribute("texCoords");
+        const texCoordBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TEXCOORD);
 
         // texture
         // Diffuse
@@ -195,6 +196,23 @@ export class WebGLRenderer {
         );
 
         // Normal
+        const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
+        normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          normalBufferAttribute.data
+        );
+        WebGLUtils.createAttribSetter(
+          this.gl,
+          this.glProgram,
+          normalBufferAttribute
+        );
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_REVERSE_LIGHT_DIRECTION,
+          this._directionalLightDirection.toArray(),
+          this.gl.FLOAT_VEC3
+        );
       }
 
       WebGLUtils.createUniformSetter(
