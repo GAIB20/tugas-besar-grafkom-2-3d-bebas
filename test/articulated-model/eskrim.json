@@ -23,9 +23,9 @@
             "attributes": {
                 "indices": {
                     "data": [
-                        0, 3, 2, 
-                        0, 2, 1, 
-                        0, 4, 3, 
+                        0, 3, 2,
+                        0, 2, 1,
+                        0, 4, 3,
                         0, 1, 4,
                         0, 2, 4,
                         0, 2, 3,
@@ -33,21 +33,21 @@
                         0, 1, 3,
                         0, 2, 1,
                         0, 3, 4,
-                        0, 3, 1, 
+                        0, 3, 1,
                         5, 8, 7,
                         5, 7, 6,
                         5, 9, 8,
                         5, 6, 9,
                         0, 5, 6,
-                        0, 6, 1, 
-                        1, 6, 7, 
-                        1, 7, 2, 
-                        2, 7, 8, 
-                        2, 8, 3, 
-                        3, 8, 9, 
-                        3, 9, 4, 
-                        4, 9, 5, 
-                        4, 5, 0 
+                        0, 6, 1,
+                        1, 6, 7,
+                        1, 7, 2,
+                        2, 7, 8,
+                        2, 8, 3,
+                        3, 8, 9,
+                        3, 9, 4,
+                        4, 9, 5,
+                        4, 5, 0
                     ],
                     "size": -1,
                     "options": {
@@ -59,16 +59,16 @@
                 },
                 "position": {
                     "data": [
-                        0, 0, 0, 
-                        50, 0, 0, 
+                        0, 0, 0,
+                        50, 0, 0,
                         75, 0, 43.3,
-                        25, 0, 70.7, 
-                        -25, 0, 43.3, 
-                        0, 100, 0, 
-                        50, 100, 0, 
-                        75, 100, 43.3, 
-                        25, 100, 70.7, 
-                        -25, 100, 43.3 
+                        25, 0, 70.7,
+                        -25, 0, 43.3,
+                        0, 100, 0,
+                        50, 100, 0,
+                        75, 100, 43.3,
+                        25, 100, 70.7,
+                        -25, 100, 43.3
                     ],
                     "size": 3,
                     "options": {
@@ -86,12 +86,12 @@
         "material": {
             "id": "M6",
             "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-            "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+            "fragment_shader": "precision highp float;\r\n uniform vec3 u_ambientColor; \r\n varying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n vec3 color = u_ambientColor * v_Color.rgb; \r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
             "uniforms": {},
             "color": [0.0, 1.0, 0.0, 1],
             "type": "BASIC_MATERIAL"
         }
-      },    
+      },
       {
           "name": "Layer3",
           "object_type": "MESH",
@@ -107,9 +107,9 @@
               "attributes": {
                   "indices": {
                       "data": [
-                          0, 3, 2, 
-                          0, 2, 1, 
-                          0, 4, 3, 
+                          0, 3, 2,
+                          0, 2, 1,
+                          0, 4, 3,
                           0, 1, 4,
                           0, 2, 4,
                           0, 2, 3,
@@ -117,21 +117,21 @@
                           0, 1, 3,
                           0, 2, 1,
                           0, 3, 4,
-                          0, 3, 1, 
+                          0, 3, 1,
                           5, 8, 7,
                           5, 7, 6,
                           5, 9, 8,
                           5, 6, 9,
                           0, 5, 6,
-                          0, 6, 1, 
-                          1, 6, 7, 
-                          1, 7, 2, 
-                          2, 7, 8, 
-                          2, 8, 3, 
-                          3, 8, 9, 
-                          3, 9, 4, 
-                          4, 9, 5, 
-                          4, 5, 0 
+                          0, 6, 1,
+                          1, 6, 7,
+                          1, 7, 2,
+                          2, 7, 8,
+                          2, 8, 3,
+                          3, 8, 9,
+                          3, 9, 4,
+                          4, 9, 5,
+                          4, 5, 0
                       ],
                       "size": -1,
                       "options": {
@@ -143,16 +143,16 @@
                   },
                   "position": {
                       "data": [
-                          0, 0, 0, 
-                          50, 0, 0, 
+                          0, 0, 0,
+                          50, 0, 0,
                           75, 0, 43.3,
-                          25, 0, 70.7, 
-                          -25, 0, 43.3, 
-                          0, 100, 0, 
-                          50, 100, 0, 
-                          75, 100, 43.3, 
-                          25, 100, 70.7, 
-                          -25, 100, 43.3 
+                          25, 0, 70.7,
+                          -25, 0, 43.3,
+                          0, 100, 0,
+                          50, 100, 0,
+                          75, 100, 43.3,
+                          25, 100, 70.7,
+                          -25, 100, 43.3
                       ],
                       "size": 3,
                       "options": {
@@ -170,7 +170,7 @@
           "material": {
               "id": "M6",
               "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-              "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+              "fragment_shader": "precision highp float;\r\n uniform vec3 u_ambientColor; \r\n varying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n vec3 color = u_ambientColor * v_Color.rgb; \r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
               "uniforms": {},
               "color": [1.0, 0.651, 0.0, 1],
               "type": "BASIC_MATERIAL"
@@ -223,7 +223,7 @@
           "material": {
             "id": "M1",
             "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-            "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+            "fragment_shader": "precision highp float;\r\n uniform vec3 u_ambientColor; \r\n varying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n vec3 color = u_ambientColor * v_Color.rgb; \r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
             "uniforms": {},
             "color": [0.588, 0.314, 0.271, 1],
             "type": "BASIC_MATERIAL"
@@ -244,9 +244,9 @@
               "attributes": {
                   "indices": {
                       "data": [
-                          0, 3, 2, 
-                          0, 2, 1, 
-                          0, 4, 3, 
+                          0, 3, 2,
+                          0, 2, 1,
+                          0, 4, 3,
                           0, 1, 4,
                           0, 2, 4,
                           0, 2, 3,
@@ -254,21 +254,21 @@
                           0, 1, 3,
                           0, 2, 1,
                           0, 3, 4,
-                          0, 3, 1, 
+                          0, 3, 1,
                           5, 8, 7,
                           5, 7, 6,
                           5, 9, 8,
                           5, 6, 9,
                           0, 5, 6,
-                          0, 6, 1, 
-                          1, 6, 7, 
-                          1, 7, 2, 
-                          2, 7, 8, 
-                          2, 8, 3, 
-                          3, 8, 9, 
-                          3, 9, 4, 
-                          4, 9, 5, 
-                          4, 5, 0 
+                          0, 6, 1,
+                          1, 6, 7,
+                          1, 7, 2,
+                          2, 7, 8,
+                          2, 8, 3,
+                          3, 8, 9,
+                          3, 9, 4,
+                          4, 9, 5,
+                          4, 5, 0
                       ],
                       "size": -1,
                       "options": {
@@ -280,16 +280,16 @@
                   },
                   "position": {
                       "data": [
-                          0, 0, 0, 
-                          50, 0, 0, 
+                          0, 0, 0,
+                          50, 0, 0,
                           75, 0, 43.3,
-                          25, 0, 70.7, 
-                          -25, 0, 43.3, 
-                          0, 100, 0, 
-                          50, 100, 0, 
-                          75, 100, 43.3, 
-                          25, 100, 70.7, 
-                          -25, 100, 43.3 
+                          25, 0, 70.7,
+                          -25, 0, 43.3,
+                          0, 100, 0,
+                          50, 100, 0,
+                          75, 100, 43.3,
+                          25, 100, 70.7,
+                          -25, 100, 43.3
                       ],
                       "size": 3,
                       "options": {
@@ -307,12 +307,12 @@
           "material": {
               "id": "M6",
               "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-              "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+              "fragment_shader": "precision highp float;\r\n uniform vec3 u_ambientColor; \r\n varying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n vec3 color = u_ambientColor * v_Color.rgb; \r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
               "uniforms": {},
               "color": [1.0, 0.0, 0.0, 1],
               "type": "BASIC_MATERIAL"
           }
-      }    
+      }
     ],
     "animation": {
       "name": "Layer1",
@@ -786,9 +786,9 @@
         "attributes": {
             "indices": {
                 "data": [
-                    0, 3, 2, 
-                    0, 2, 1, 
-                    0, 4, 3, 
+                    0, 3, 2,
+                    0, 2, 1,
+                    0, 4, 3,
                     0, 1, 4,
                     0, 2, 4,
                     0, 2, 3,
@@ -796,21 +796,21 @@
                     0, 1, 3,
                     0, 2, 1,
                     0, 3, 4,
-                    0, 3, 1, 
+                    0, 3, 1,
                     5, 8, 7,
                     5, 7, 6,
                     5, 9, 8,
                     5, 6, 9,
                     0, 5, 6,
-                    0, 6, 1, 
-                    1, 6, 7, 
-                    1, 7, 2, 
-                    2, 7, 8, 
-                    2, 8, 3, 
-                    3, 8, 9, 
-                    3, 9, 4, 
-                    4, 9, 5, 
-                    4, 5, 0 
+                    0, 6, 1,
+                    1, 6, 7,
+                    1, 7, 2,
+                    2, 7, 8,
+                    2, 8, 3,
+                    3, 8, 9,
+                    3, 9, 4,
+                    4, 9, 5,
+                    4, 5, 0
                 ],
                 "size": -1,
                 "options": {
@@ -822,16 +822,16 @@
             },
             "position": {
                 "data": [
-                    0, 0, 0, 
-                    50, 0, 0, 
+                    0, 0, 0,
+                    50, 0, 0,
                     75, 0, 43.3,
-                    25, 0, 70.7, 
-                    -25, 0, 43.3, 
-                    0, 100, 0, 
-                    50, 100, 0, 
-                    75, 100, 43.3, 
-                    25, 100, 70.7, 
-                    -25, 100, 43.3 
+                    25, 0, 70.7,
+                    -25, 0, 43.3,
+                    0, 100, 0,
+                    50, 100, 0,
+                    75, 100, 43.3,
+                    25, 100, 70.7,
+                    -25, 100, 43.3
                 ],
                 "size": 3,
                 "options": {
@@ -849,10 +849,9 @@
     "material": {
         "id": "M6",
         "vertex_shader": "attribute vec4 a_color;\r\nattribute vec4 a_position;\r\n\r\nuniform mat4 u_ViewProjMat;\r\nuniform mat4 u_WorldMat;\r\n\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_Position = u_ViewProjMat * u_WorldMat * a_position;\r\n\r\n  v_Color = a_color;\r\n}\r\n",
-        "fragment_shader": "precision highp float;\r\nvarying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n  gl_FragColor = v_Color;\r\n}\r\n",
+        "fragment_shader": "precision highp float;\r\n uniform vec3 u_ambientColor; \r\n varying vec4 v_Color;\r\n\r\nvoid main(void) {\r\n vec3 color = u_ambientColor * v_Color.rgb; \r\n  gl_FragColor = vec4(color, v_Color.a);\r\n}\r\n",
         "uniforms": {},
         "color": [1.0, 1.0, 0.0, 1],
         "type": "BASIC_MATERIAL"
     }
   }
-  
