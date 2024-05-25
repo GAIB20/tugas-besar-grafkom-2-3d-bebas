@@ -4,6 +4,7 @@ attribute vec3 a_normal;
 
 uniform mat4 u_WorldMat;
 uniform mat4 u_ViewProjMat;
+uniform mat4 u_worldInverseTranspose;
 //uniform vec2 u_resolution;
 //uniform bool u_useVertexColor;
 //
@@ -20,6 +21,6 @@ void main(void) {
 //    v_normal = mat3(u_worldMatrix) * a_normal;
 //    v_color = mix(vec4(1,1,1,1), a_color, float(u_useVertexColor));
 
-    v_normal = a_normal;
+    v_normal = mat3(u_worldInverseTranspose) * a_normal;
     v_texCoord = a_texCoord;
 }

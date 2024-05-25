@@ -206,6 +206,15 @@ export class WebGLRenderer {
           this.glProgram,
           normalBufferAttribute
         );
+
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_WORLD_INVERSE_TRANSPOSE,
+          node.worldMatrix.inverse().transpose().toArray(),
+          this.gl.FLOAT_MAT4
+        )
+
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
