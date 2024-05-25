@@ -175,7 +175,9 @@ export class WebGLUtils {
       if (this.isPowerOf2(image.width) && this.isPowerOf2(image.height)) {
         // Yes, it's a power of 2. Generate mips.
         gl.generateMipmap(gl.TEXTURE_2D);
+        console.log('power of 2');
       } else {
+        console.log('not power of 2');
         // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, texture.wrapS);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, texture.wrapT);
@@ -185,8 +187,21 @@ export class WebGLUtils {
     }
   }
 
-
   private static isPowerOf2 = (value: number) => {
     return (value & (value - 1)) == 0;
+  }
+
+  public static createPositionUsingVerticesAndIndices = (
+    vertices: TypedArray,
+    indices: TypedArray
+  ) => {
+    const positions: number[] = [];
+    for (let i = 0; i < indices.length; i++) {
+      const index = indices[i];
+      positions.push(vertices[index * 3]);
+      positions.push(vertices[index * 3 + 1]);
+      positions.push(vertices[index * 3 + 2]);
+    }
+    return new Float32Array(positions);
   }
 }
