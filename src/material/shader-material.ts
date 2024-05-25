@@ -57,8 +57,6 @@ export abstract class ShaderMaterial {
 
     return {
       id: this._id,
-      vertex_shader: this.vertexShader,
-      fragment_shader: this.fragmentShader,
       uniforms: uniformsData,
     };
   }
