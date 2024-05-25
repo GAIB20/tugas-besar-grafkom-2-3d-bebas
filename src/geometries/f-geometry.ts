@@ -1,10 +1,140 @@
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
-import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
+import { COMMON_ATTRIBUTE, PHONG_VERTEX_SHADER } from "src/types/webgl-type.ts";
 
 export class FGeometry extends BufferGeometry {
     constructor() {
         super();
+
+        const texCoords = new Float32Array([
+          // left column front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // top rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // middle rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // left column back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // middle rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // top rung right
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // under top rung
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // between top rung and middle
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // top of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // right of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom of middle rung.
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // right of bottom
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // left side
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0
+        ]);
 
         const indices = new Uint16Array([
           0, 1, 2, 1, 3, 2,
@@ -64,8 +194,9 @@ export class FGeometry extends BufferGeometry {
           67, 90, 30,
         ]);
 
-        this.setAttribute('indices', new BufferAttribute(indices, -1, ""));
         this.setAttribute('position', new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+        this.setAttribute('indices', new BufferAttribute(indices, -1, ""));
+        this.setAttribute('texCoords', new BufferAttribute(texCoords, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD));
         this.calculateNormals();
     }
 }

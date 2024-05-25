@@ -60,12 +60,10 @@ import { useOrbit } from "./composables/useOrbit";
 import "src/css/global.css";
 import { EASING_FUNCTION } from "./math/extra";
 import { BasicMaterial } from "src/material/basic-material";
-import { PhongMaterial } from "src/material/phong-material.ts";
-import { Texture } from "src/material/texture.ts";
 import { BoxGeometry } from "src/geometries/box-geometry.ts";
+import { Texture } from "src/material/texture.ts";
+import { PhongMaterial } from "src/material/phong-material.ts";
 import { FGeometry } from "src/geometries/f-geometry.ts";
-import { Light } from "./core/light";
-import { Vector3 } from "./math/vector3";
 
 /**
  * Main Script
@@ -83,10 +81,7 @@ const main = async () => {
   const renderer = new WebGLRenderer(canvas);
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
-  renderer.init({
-    vertexShader: phongVertexScript,
-    fragmentShader: phongFragmentScript,
-  });
+  renderer.init({ vertexShader: phongVertexScript, fragmentShader: phongFragmentScript, });
 
   // Init scene
   const { getSelectedCam, cameras } = useCamera(renderer);
@@ -104,449 +99,417 @@ const main = async () => {
 
   let selectedNode: Node | null = null;
 
-  // Init showcase model
   const testMesh = new Mesh(
-    new BoxGeometry(50, 110, 50),
-    new BasicMaterial(
-      basicFragmentScript,
-      basicVertexScript,
-      new Color(1, 0, 0, 1)
-    ),
-    "Body"
+    new BoxGeometry(50, 50, 50),
+    new PhongMaterial(
+      phongFragmentScript,
+      phongVertexScript,
+      new Texture(
+        // prettier-ignore
+        new Float32Array([
+          // TODO: remove this (remove data attribute from texture)
+        ]),
+        "src/assets/texture/diffuse/bricks2.jpg",
+      ),
+      new Texture(
+        // prettier-ignore
+        new Float32Array([
+          // left column front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // top rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // middle rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // left column back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // middle rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // top rung right
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // under top rung
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // between top rung and middle
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // top of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // right of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom of middle rung.
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // right of bottom
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // left side
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0
+        ]),
+        "src/assets/texture/specular/container2_specular.png",
+      ),
+      new Texture(
+        // prettier-ignore
+        new Float32Array([
+          // left column front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // top rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // middle rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // left column back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // middle rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // top rung right
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // under top rung
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // between top rung and middle
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // top of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // right of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom of middle rung.
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // right of bottom
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // left side
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0]),
+        "src/assets/texture/normal/bricks2_normal.jpg",
+      ),
+      new Texture(
+        // prettier-ignore
+        new Float32Array([
+          // left column front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // top rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // middle rung front
+          0, 0,
+          0, 1,
+          1, 0,
+          0, 1,
+          1, 1,
+          1, 0,
+
+          // left column back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // middle rung back
+          0, 0,
+          1, 0,
+          0, 1,
+          0, 1,
+          1, 0,
+          1, 1,
+
+          // top
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // top rung right
+          0, 0,
+          1, 0,
+          1, 1,
+          0, 0,
+          1, 1,
+          0, 1,
+
+          // under top rung
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // between top rung and middle
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // top of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // right of middle rung
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom of middle rung.
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // right of bottom
+          0, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+
+          // bottom
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0,
+
+          // left side
+          0, 0,
+          0, 1,
+          1, 1,
+          0, 0,
+          1, 1,
+          1, 0]),
+        "src/assets/texture/displacement/bricks2_disp.jpg",
+      ),
+    )
   );
-
-  // init light
-  // const ambientLight = new Light(new Color(255, 255, 255, 1), new Vector3(0, 0, 0), "ambientLight");
-  // renderer.setLightsUniforms(ambientLight);
-  // mainScene.addChild(ambientLight);
-
-  // const fMesh = new Mesh(
-  //   new FGeometry(),
-  //   new PhongMaterial(
-  //     phongFragmentScript,
-  //     phongVertexScript,
-  //     new Color(1, 0, 0, 1),
-  //     new Texture(
-  //       // prettier-ignore
-  //       new Float32Array([
-  //         // TODO: set texcoords yang associated with each vertex (using indices)
-  //         // left column front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // top rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-  //       ]),
-  //       "src/assets/texture/diffuse/f-texture.png",
-  //     ),
-  //     new Texture(
-  //       // prettier-ignore
-  //       new Float32Array([
-  //         // left column front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // top rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // middle rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left column back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // middle rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // top rung right
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // under top rung
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // between top rung and middle
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // right of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom of middle rung.
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // right of bottom
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left side
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0
-  //       ]),
-  //       "src/assets/texture/specular/container2_specular.png",
-  //     ),
-  //     new Texture(
-  //       // prettier-ignore
-  //       new Float32Array([
-  //         // left column front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // top rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // middle rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left column back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // middle rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // top rung right
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // under top rung
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // between top rung and middle
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // right of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom of middle rung.
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // right of bottom
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left side
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0]),
-  //       "src/assets/texture/normal/bricks2_normal.jpg",
-  //     ),
-  //     new Texture(
-  //       // prettier-ignore
-  //       new Float32Array([
-  //         // left column front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // top rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // middle rung front
-  //         0, 0,
-  //         0, 1,
-  //         1, 0,
-  //         0, 1,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left column back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // middle rung back
-  //         0, 0,
-  //         1, 0,
-  //         0, 1,
-  //         0, 1,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // top rung right
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-
-  //         // under top rung
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // between top rung and middle
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // top of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // right of middle rung
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom of middle rung.
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // right of bottom
-  //         0, 0,
-  //         1, 1,
-  //         0, 1,
-  //         0, 0,
-  //         1, 0,
-  //         1, 1,
-
-  //         // bottom
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0,
-
-  //         // left side
-  //         0, 0,
-  //         0, 1,
-  //         1, 1,
-  //         0, 0,
-  //         1, 1,
-  //         1, 0]),
-  //       "src/assets/texture/displacement/bricks2_disp.jpg",
-  //     ),
-  //   )
-  // );
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
 
@@ -631,7 +594,7 @@ const main = async () => {
         vertexShader: mesh.material.vertexShader,
         fragmentShader: mesh.material.fragmentShader,
       });
-  
+
       updateSceneGraph(mainScene, sceneGraphTree);
     }
   });
@@ -810,17 +773,17 @@ const main = async () => {
   });
 
   function updateSceneGraph(node: Node, parentElement: HTMLElement, isRoot = true) {
-    if (isRoot) { 
-      parentElement.innerHTML = ""; 
+    if (isRoot) {
+      parentElement.innerHTML = "";
       if (node.children.length > 0) {
         selectedNode = node.children[0];
         updateTransformControls();
       }
     }
-  
+
     if (!isRoot) {
       const li = document.createElement("li");
-  
+
       const button = document.createElement("button");
       button.textContent = node.name;
       button.classList.add("scene-graph-button");
@@ -828,7 +791,7 @@ const main = async () => {
       if (selectedNode === node) {
         button.classList.add("active");
       }
-      
+
       button.addEventListener("click", () => {
         selectedNode = node;
         const buttons = document.querySelectorAll(".scene-graph-button");
@@ -836,11 +799,11 @@ const main = async () => {
         button.classList.add("active");
         updateTransformControls();
       });
-  
+
       li.appendChild(button);
       parentElement.appendChild(li);
     }
-  
+
     if (node.children.length > 0) {
       const ul = document.createElement("ul");
       if (!isRoot) {
@@ -854,17 +817,17 @@ const main = async () => {
       node.children.forEach((child) => updateSceneGraph(child, ul, false));
     }
   }
-  
+
   function updateTransformControls() {
     if (selectedNode) {
       xTranslationInput.value = selectedNode.position.x.toString();
       yTranslationInput.value = selectedNode.position.y.toString();
       zTranslationInput.value = selectedNode.position.z.toString();
-      
+
       xRotationInput.value = selectedNode.rotation.x.toString();
       yRotationInput.value = selectedNode.rotation.y.toString();
       zRotationInput.value = selectedNode.rotation.z.toString();
-      
+
       xScaleInput.value = selectedNode.scale.x.toString();
       yScaleInput.value = selectedNode.scale.y.toString();
       zScaleInput.value = selectedNode.scale.z.toString();

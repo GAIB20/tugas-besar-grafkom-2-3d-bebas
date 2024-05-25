@@ -150,6 +150,8 @@ export class WebGLRenderer {
 
       if (node.material instanceof PhongMaterial) {
         // TODO: Add diffuse, normal, specular, displacement
+        const texCoordBufferAttribute = node.geometry.getAttribute("texCoords");
+
         // texture
         // Diffuse
         const diffuse = node.material.diffuse;
@@ -159,7 +161,7 @@ export class WebGLRenderer {
 
         diffuse.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
-          diffuse.data
+          texCoordBufferAttribute.data,
         );
 
         // WebGLUtils.createTextureColor(this.gl, diffuse);
