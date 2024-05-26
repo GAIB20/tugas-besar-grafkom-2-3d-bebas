@@ -113,7 +113,10 @@ const main = async () => {
     document.getElementById("displacement-3") as HTMLImageElement,
   ];
 
-  const testMesh = new Mesh(new BoxGeometry(50, 50, 50), new BasicMaterial());
+  const testMesh = new Mesh(
+    new BoxGeometry(150, 150, 150),
+    new BasicMaterial()
+  );
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
 
@@ -305,21 +308,17 @@ const main = async () => {
   // Phong Mapping
   diffuseMappingCheckbox.addEventListener("change", () => {
     diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
-    // TODO
     renderer.isDiffuse = diffuseMappingCheckbox.checked;
   });
 
   specularMappingCheckbox.addEventListener("change", () => {
     specularColorInput.disabled = !specularMappingCheckbox.checked;
-    // TODO
     renderer.isSpecular = specularMappingCheckbox.checked;
-
   });
 
   displacementMappingCheckbox.addEventListener("change", () => {
     displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
     displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
-    // TODO
     renderer.isDisplacement = displacementMappingCheckbox.checked;
   });
 
