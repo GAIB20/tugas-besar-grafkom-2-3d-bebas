@@ -37,11 +37,4 @@ void main() {
     gl_FragColor = u_ambientColor +
     lambertian * u_diffuseColor * texture2D(u_diffuseMap, v_texcoord) +
     specular * u_specularColor * texture2D(u_specularMap, v_texcoord);
-
-    // only ambient
-    if(mode == 2) gl_FragColor = u_ambientColor;
-    // only diffuse
-    if(mode == 3) gl_FragColor = lambertian * u_diffuseColor;
-    // only specular
-    if(mode == 4) gl_FragColor = specular * u_specularColor;
 }
