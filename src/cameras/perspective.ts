@@ -8,7 +8,6 @@ export class PerspectiveCamera extends Camera {
   far: number;
 
   constructor(fovy: number, aspect: number, near: number, far: number) {
-    // TODO: check this
     super(); // Setup Node
     this.fovy = fovy;
     this.aspect = aspect;
@@ -21,7 +20,6 @@ export class PerspectiveCamera extends Camera {
   }
 
   computeProjectionMatrix() {
-    // TODO: check this
     // M4.perspective() menghasilkan proyeksi matriks perspective
     // dengan 4 tupel fovy, aspect, near, dan far.
     this._projectionMatrix = Matrix4.perspective(

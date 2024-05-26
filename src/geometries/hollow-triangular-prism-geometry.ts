@@ -58,7 +58,6 @@ export class HollowGeometry3 extends BufferGeometry {
       50, 43.3, 0, 
     ]);
 
-    // TODO: match this with indices data
     const colors = new Float32Array([
       0, 0, 1, 1,
       0, 0, 1, 1,

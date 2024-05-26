@@ -25,48 +25,48 @@ export class WebGLRenderer {
 
   // Light
   private _ambientLightColor: Color = new Color(0, 0, 0, 1);
-  private _lightPosition: Vector3 = new Vector3(70, 70, 70);
-
-  // bool
-  private _isDiffuse = false;
-  private _isSpecular = false;
-  private _isDisplacement = false;
-  private _isNormalMap = false;
-
-  public set isDiffuse(val: boolean) {
-    this._isDiffuse = val;
-  }
-
-  public get isDiffuse() {
-    return this._isDiffuse;
-  }
-
-  public set isSpecular(val: boolean) {
-    this._isSpecular = val;
-  }
-
-  public get isSpecular() {
-    return this._isSpecular;
-  }
-
-  public set isDisplacement(val: boolean) {
-    this._isDisplacement = val;
-  }
-
-  public get isDisplacement() {
-    return this._isDisplacement;
-  }
-
-  public set isNormalMap(val: boolean) {
-    this._isNormalMap = val;
-  }
-
-  public get isNormalMap() {
-    return this._isNormalMap;
-  }
+  private _lightPosition: Vector3 = new Vector3(570, 570, 570);
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
+
+  // Phong map
+  private _useDiffuseMap = false;
+  private _useSpecularMap = false;
+  private _useNormalMap = false;
+  private _useDisplacementMap = false;
+
+  public get useDiffuseMap() {
+    return this._useDiffuseMap;
+  }
+
+  public set useDiffuseMap(val: boolean) {
+    this._useDiffuseMap = val;
+  }
+
+  public get useSpecularMap() {
+    return this._useSpecularMap;
+  }
+
+  public set useSpecularMap(val: boolean) {
+    this._useSpecularMap = val;
+  }
+
+  public get useNormalMap() {
+    return this._useNormalMap;
+  }
+
+  public set useNormalMap(val: boolean) {
+    this._useNormalMap = val;
+  }
+
+  public get useDisplacementMap() {
+    return this._useDisplacementMap;
+  }
+
+  public set useDisplacementMap(val: boolean) {
+    this._useDisplacementMap = val;
+  }
 
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
@@ -228,172 +228,123 @@ export class WebGLRenderer {
         const displacement = node.material.displacement;
 
         // Diffuse
-        if (this.isDiffuse) {
-          // Set diffuse color
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
-            diffuse.color.getComponents(),
-            this.gl.FLOAT_VEC4
-          );
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_DIFFUSE_MAP,
+          this.useDiffuseMap ? 1 : 0,
+          this.gl.BOOL
+        );
 
-          // Set diffuse texture
-          const diffuseTexture = WebGLUtils.createTextureImage(
-            this.gl,
-            diffuse
-          );
-          this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
-          this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseTexture); // bind the texture to texture unit 0
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_MAP,
-            0,
-            this.gl.SAMPLER_2D
-          ); // 0 is the texture unit
-        } else {
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
-            [0, 0, 0, 1],
-            this.gl.FLOAT_VEC4
-          );
+        // Set diffuse color
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
+          diffuse.color.getComponents(),
+          this.gl.FLOAT_VEC4
+        );
 
-          // Unbind any texture from texture unit 0
-          this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
-          this.gl.bindTexture(this.gl.TEXTURE_2D, null); // unbind texture
-        }
+        // Set diffuse texture
+        const diffuseTexture = WebGLUtils.createTextureImage(this.gl, diffuse);
+        this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
+        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseTexture); // bind the texture to texture unit 0
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_MAP,
+          0,
+          this.gl.SAMPLER_2D
+        ); // 0 is the texture unit
 
         // Specular
-        if (this.isSpecular) {
-          // Set specular color
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_COLOR,
-            specular.color.getComponents(),
-            this.gl.FLOAT_VEC4
-          );
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_SPECULAR_MAP,
+          this.useSpecularMap ? 1 : 0,
+          this.gl.BOOL
+        );
+        // Set specular color
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_COLOR,
+          specular.color.getComponents(),
+          this.gl.FLOAT_VEC4
+        );
 
-          // Set specular texture
-          const specularTexture = WebGLUtils.createTextureImage(
-            this.gl,
-            specular
-          );
-          this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
-          this.gl.bindTexture(this.gl.TEXTURE_2D, specularTexture); // bind the texture to texture unit 1
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_MAP,
-            1,
-            this.gl.SAMPLER_2D
-          ); // 1 is the texture unit
-        } else {
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_COLOR,
-            [0, 0, 0, 1],
-            this.gl.FLOAT_VEC4
-          );
-
-          this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
-          this.gl.bindTexture(this.gl.TEXTURE_2D, null); // unbind texture
-        }
+        // Set specular texture
+        const specularTexture = WebGLUtils.createTextureImage(this.gl, specular);
+        this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
+        this.gl.bindTexture(this.gl.TEXTURE_2D, specularTexture); // bind the texture to texture unit 1
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_MAP,
+          1,
+          this.gl.SAMPLER_2D
+        ); // 1 is the texture unit
 
         // Normal Mapping
-        if (this.isNormalMap) {
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
-            1,
-            this.gl.BOOL
-          );
+        // does use normal map?
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
+          this.useNormalMap ? 1 : 0,
+          this.gl.BOOL
+        );
 
-          // Set normal texture
-          const normalTexture = WebGLUtils.createTextureImage(this.gl, normal);
-          this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
-          this.gl.bindTexture(this.gl.TEXTURE_2D, normalTexture); // bind the texture to texture unit 2
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_NORMAL_MAP,
-            2,
-            this.gl.SAMPLER_2D
-          ); // 2 is the texture unit
-        } else {
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
-            0,
-            this.gl.BOOL
-          );
-
-          this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
-          this.gl.bindTexture(this.gl.TEXTURE_2D, null); // unbind texture
-        }
+        // Set normal texture
+        const normalTexture = WebGLUtils.createTextureImage(this.gl, normal);
+        this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
+        this.gl.bindTexture(this.gl.TEXTURE_2D, normalTexture); // bind the texture to texture unit 2
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_NORMAL_MAP,
+          2,
+          this.gl.SAMPLER_2D
+        ); // 2 is the texture unit
 
         // Displacement
-        if (this._isDisplacement) {
-          // Set displacement Map
-          const displacementTexture = WebGLUtils.createTextureImage(
-            this.gl,
-            displacement
-          );
-          this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
-          this.gl.bindTexture(this.gl.TEXTURE_2D, displacementTexture); // bind the texture to texture unit 3
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_MAP,
-            3,
-            this.gl.SAMPLER_2D
-          ); // 3 is the texture unit
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_USE_DISPLACEMENT_MAP,
+          this.useDisplacementMap ? 1 : 0,
+          this.gl.BOOL
+        );
+        // Set displacement Map
+        const displacementTexture = WebGLUtils.createTextureImage(this.gl, displacement);
+        this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
+        this.gl.bindTexture(this.gl.TEXTURE_2D, displacementTexture); // bind the texture to texture unit 3
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_MAP,
+          3,
+          this.gl.SAMPLER_2D
+        ); // 3 is the texture unit
 
-          // Set displacement factor
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_FACTOR,
-            displacement.factor,
-            this.gl.FLOAT
-          );
+        // Set displacement factor
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_FACTOR,
+          displacement.factor,
+          this.gl.FLOAT
+        );
 
-          // Set displacement bias
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_BIAS,
-            displacement.bias,
-            this.gl.FLOAT
-          );
-        } else {
-          this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
-          this.gl.bindTexture(this.gl.TEXTURE_2D, null); // unbind texture
-
-          // Set displacement factor
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_FACTOR,
-            0,
-            this.gl.FLOAT
-          );
-
-          // Set displacement bias
-          WebGLUtils.createUniformSetter(
-            this.gl,
-            this.glProgram,
-            PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_BIAS,
-            0,
-            this.gl.FLOAT
-          );
-        }
+        // Set displacement bias
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_BIAS,
+          displacement.bias,
+          this.gl.FLOAT
+        );
 
         // Light Position
         WebGLUtils.createUniformSetter(

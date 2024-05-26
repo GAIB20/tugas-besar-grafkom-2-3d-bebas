@@ -10,7 +10,6 @@ export class BoxGeometry extends BufferGeometry {
     height: number;
     depth: number;
 
-    // TODO: need to check
     constructor(width=1, height=1, depth=1) {
       super();
       this._type = GEOMETRY_TYPE.BOX;
@@ -138,7 +137,6 @@ export class BoxGeometry extends BufferGeometry {
       ]);
 
       const colors = new Float32Array([
-        // TODO: add color
         // z+
         0, 0, 1, 1,
         0, 0, 1, 1,

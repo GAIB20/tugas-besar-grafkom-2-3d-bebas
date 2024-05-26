@@ -102,7 +102,6 @@ export class Matrix4 {
 
   public static DEG2RAD: number = Math.PI / 180;
 
-  // TODO: to check, currently cant inverse identity
   public inverse() {
     const m = this._elements;
     // prettier-ignore

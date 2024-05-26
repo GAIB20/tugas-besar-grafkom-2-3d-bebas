@@ -30,6 +30,7 @@ export enum PHONG_VERTEX_SHADER {
   UNIFORM_DISPLACEMENT_FACTOR = "u_displacementFactor",
   UNIFORM_DISPLACEMENT_BIAS = "u_displacementBias",
   UNIFORM_LIGHT_POSITION = "u_lightPosition",
+  UNIFORM_USE_DISPLACEMENT_MAP = "u_useDisplacementMap",
 }
 
 export enum PHONG_FRAGMENT_SHADER {
@@ -40,6 +41,8 @@ export enum PHONG_FRAGMENT_SHADER {
   UNIFORM_NORMAL_MAP = "u_normalMap",
   UNIFORM_USE_NORMAL_MAP = "u_useNormalMap",
   UNIFORM_SHININESS = "u_shininess",
+  UNIFORM_USE_DIFFUSE_MAP = "u_useDiffuseMap",
+  UNIFORM_USE_SPECULAR_MAP = "u_useSpecularMap",
 }
 
 export enum WEB_GL_DATA_TYPE {
@@ -80,7 +83,6 @@ export type AttributeDataType = [AttributeSingleDataType] | number[];
 export type AttributeSetters = (...v: AttributeDataType) => void;
 export type AttributeMapSetters = { [key: string]: AttributeSetters };
 
-// TODO: check this commented attr
 export type ProgramInfo = {
   program: WebGLProgram;
   // uniformSetters: UniformMapSetters,

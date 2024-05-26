@@ -17,7 +17,6 @@ export class OrthographicCamera extends Camera {
     near: number,
     far: number
   ) {
-    // TODO: check this
     super(); // Setup Node
     this.left = left;
     this.right = right;
@@ -31,7 +30,6 @@ export class OrthographicCamera extends Camera {
   }
 
   computeProjectionMatrix() {
-    // TODO: check this
     // M4.orthographic() menghasilkan proyeksi matriks ortografik
     // dengan 6 tupel left, right, bottom, top, near, dan far.
     this._projectionMatrix = Matrix4.orthographic(

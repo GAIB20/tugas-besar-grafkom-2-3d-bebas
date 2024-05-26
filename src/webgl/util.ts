@@ -23,7 +23,6 @@ export class WebGLUtils {
     gl.compileShader(shader);
     const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!success) {
-      console.log(gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
       throw new Error("could not compile shader");
     }

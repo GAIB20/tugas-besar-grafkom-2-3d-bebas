@@ -56,9 +56,6 @@ export class Mesh extends Node {
         case MATERIAL_TYPE.BASIC:
           material = new BasicMaterial();
           break;
-        // TODO: phong material
-        // case MATERIAL_TYPE.PHONG:
-        //   break;
 
         default:
           material = new BasicMaterial();

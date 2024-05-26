@@ -113,11 +113,11 @@ const main = async () => {
     document.getElementById("displacement-3") as HTMLImageElement,
   ];
 
-  const testMesh = new Mesh(
-    new BoxGeometry(150, 150, 150),
+  const showcaseModel = new Mesh(
+    new BoxGeometry(250, 250, 250),
     new BasicMaterial()
   );
-  mainScene.addChild(testMesh);
+  mainScene.addChild(showcaseModel);
   updateSceneGraph(mainScene, sceneGraphTree);
 
   shininessInput.disabled = !phongCheckbox.checked;
@@ -294,7 +294,6 @@ const main = async () => {
   textureSelection.addEventListener("change", () => {
     const selectedTexture = textureSelection.value;
     const textureIndex = parseInt(selectedTexture.split("-")[1]) - 1;
-    // TODO: Need to check
     const mainMesh = mainScene.children[0] as Mesh;
     if (mainMesh.material instanceof PhongMaterial) {
       mainMesh.material = new PhongMaterial(
@@ -309,18 +308,30 @@ const main = async () => {
   // Phong Mapping
   diffuseMappingCheckbox.addEventListener("change", () => {
     diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
-    renderer.isDiffuse = diffuseMappingCheckbox.checked;
+    renderer.useDiffuseMap = diffuseMappingCheckbox.checked;
+  });
+
+  diffuseColorInput.addEventListener("input", () => {
+    if (phongCheckbox.checked)
+      ((selectedNode as Mesh).material as PhongMaterial).diffuse.color =
+        Color.fromHex(diffuseColorInput.value);
   });
 
   specularMappingCheckbox.addEventListener("change", () => {
     specularColorInput.disabled = !specularMappingCheckbox.checked;
-    renderer.isSpecular = specularMappingCheckbox.checked;
+    renderer.useSpecularMap = specularMappingCheckbox.checked;
+  });
+
+  specularColorInput.addEventListener("input", () => {
+    if (phongCheckbox.checked)
+      ((selectedNode as Mesh).material as PhongMaterial).specular.color =
+        Color.fromHex(specularColorInput.value);
   });
 
   displacementMappingCheckbox.addEventListener("change", () => {
     displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
     displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
-    renderer.isDisplacement = displacementMappingCheckbox.checked;
+    renderer.useDisplacementMap = displacementMappingCheckbox.checked;
   });
 
   displacementFactorInput.addEventListener("input", () => {
@@ -342,7 +353,7 @@ const main = async () => {
   });
 
   normalMappingCheckbox.addEventListener("change", () => {
-    renderer.isNormalMap = normalMappingCheckbox.checked;
+    renderer.useNormalMap = normalMappingCheckbox.checked;
   });
 
   phongCheckbox.addEventListener("change", () => {
@@ -353,7 +364,6 @@ const main = async () => {
     diffuseMappingCheckbox.disabled = !isPhongChecked;
     textureSelection.disabled = !isPhongChecked;
     normalMappingCheckbox.disabled = !isPhongChecked;
-    shininessInput.disabled = !isPhongChecked;
 
     displacementFactorInput.disabled =
       !isPhongChecked || !displacementMappingCheckbox.checked;
