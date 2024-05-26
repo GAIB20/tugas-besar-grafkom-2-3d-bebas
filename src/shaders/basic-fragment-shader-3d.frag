@@ -7,5 +7,5 @@ uniform vec4 u_ambientColor;
 varying vec4 v_Color;
 
 void main(void) {
-  gl_FragColor = u_ambientColor * v_Color;
+  gl_FragColor = u_ambientColor + v_Color;
 }
