@@ -32,14 +32,14 @@ export class BoxGeometry extends BufferGeometry {
         4, 6, 0, 0, 6, 1,
       ]);
       const vertices = new Float32Array([
-        -hw, hh, hd,
-        -hw, -hh, hd,
-        hw, -hh, hd,
-        hw, hh, hd,
-        -hw, hh, -hd,
-        hw, -hh, -hd,
-        -hw, -hh, -hd,
-        hw, hh, -hd,
+        -hw, hh, hd, // 0
+        -hw, -hh, hd, // 1
+        hw, -hh, hd, // 2
+        hw, hh, hd, // 3
+        -hw, hh, -hd,  // 4
+        hw, -hh, -hd, // 5
+        -hw, -hh, -hd, // 6
+        hw, hh, -hd, // 7
       ]);
 
       const texCoords = new Float32Array([

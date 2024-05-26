@@ -154,6 +154,31 @@ export class WebGLRenderer {
       }
 
       if (node.material instanceof PhongMaterial) {
+        // tangent
+        const tangentBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TANGENT);
+        tangentBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          tangentBufferAttribute.data
+        );
+        WebGLUtils.createAttribSetter(
+          this.gl,
+          this.glProgram,
+          tangentBufferAttribute
+        );
+
+        // normal
+        const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
+        normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
+          this.gl,
+          normalBufferAttribute.data
+        );
+        WebGLUtils.createAttribSetter(
+          this.gl,
+          this.glProgram,
+          normalBufferAttribute
+        );
+
+        // texCoord
         const texCoordBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TEXCOORD);
         texCoordBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
@@ -165,13 +190,12 @@ export class WebGLRenderer {
           texCoordBufferAttribute
         );
 
-        // TODO: Add diffuse, normal, specular, displacement
+
         // texture
         const diffuse = node.material.diffuse;
         const specular = node.material.specular;
         const normal = node.material.normal;
         const displacement = node.material.displacement;
-
 
         // Diffuse
         // Set diffuse color
@@ -241,18 +265,36 @@ export class WebGLRenderer {
           this.gl.SAMPLER_2D
         ); // 2 is the texture unit
 
-
-        // Normal Direction
-        const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
-        normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          normalBufferAttribute.data
-        );
-        WebGLUtils.createAttribSetter(
+        // Displacement
+        const displacementTexture = WebGLUtils.createTextureImage(this.gl, displacement);
+        this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
+        this.gl.bindTexture(this.gl.TEXTURE_2D, displacementTexture); // bind the texture to texture unit 3
+        WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          normalBufferAttribute
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_MAP,
+          3,
+          this.gl.SAMPLER_2D
+        ); // 3 is the texture unit
+
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_FACTOR,
+          displacement.factor,
+          this.gl.FLOAT
         );
+
+
+        // camera position
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_CAMERA_POSITION,
+          camera.position.toArray(),
+          this.gl.FLOAT_VEC3
+        );
+
 
         // Light Direction
         WebGLUtils.createUniformSetter(

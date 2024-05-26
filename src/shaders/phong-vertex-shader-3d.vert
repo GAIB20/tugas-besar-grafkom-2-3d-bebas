@@ -6,7 +6,7 @@ attribute vec2 a_texcoord;
 
 uniform mat4 u_worldMatrix;
 uniform mat4 u_viewProjectionMatrix;
-uniform mat4 u_normalMatrix;
+uniform mat4 u_normalMatrix; // TODO
 uniform vec3 u_lightDirection;
 uniform vec3 u_cameraPosition;
 uniform sampler2D u_displacementMap;

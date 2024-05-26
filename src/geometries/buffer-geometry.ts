@@ -76,9 +76,9 @@ export class BufferGeometry {
     const normals = new Array(positionArray.length).fill(0);
 
     for (let i = 0; i < indicesArray.length; i += 3) {
-      v1.set(positionArray.slice(i, i + 3));
-      v2.set(positionArray.slice(i + 3, i + 6));
-      v3.set(positionArray.slice(i + 6, i + 9));
+      v1.set(positionArray.slice(i * 3 + 0, i * 3 + 3));
+      v2.set(positionArray.slice(i * 3 + 3, i * 3 + 6));
+      v3.set(positionArray.slice(i * 3 + 6, i * 3 + 9));
 
       uv1.set(texcoordArray.slice(i, i + 2));
       uv2.set(texcoordArray.slice(i + 2, i + 4));
@@ -93,21 +93,19 @@ export class BufferGeometry {
 
       const t = (
         Vector3.subtract(
-        e1.multiplyScalar(dUV2.y),
-        e2.multiplyScalar(dUV1.y)
+        Vector3.copy(e1).multiplyScalar(dUV2.y),
+        Vector3.copy(e2).multiplyScalar(dUV1.y)
         ).multiplyScalar(f)
       )
+
 
       const b = (
         Vector3.subtract(
-        e2.multiplyScalar(dUV1.x),
-        e1.multiplyScalar(dUV2.x)
+          Vector3.copy(e2).multiplyScalar(dUV1.x),
+          Vector3.copy(e1).multiplyScalar(dUV2.x)
         ).multiplyScalar(f)
       )
 
-      // TODO: get normal
-      console.log(v1, v2, v3)
-      console.log(e1, e2)
       const n = Vector3.cross(e1, e2);
 
       // Set normal, tangent, dan bitangent
@@ -127,9 +125,7 @@ export class BufferGeometry {
       }
     }
 
-    console.log("normals")
-    console.log(normals)
-
+    this.setAttribute(BufferAttributeName.NORMAL, new BufferAttribute(new Float32Array(normals), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL));
     this.setAttribute(BufferAttributeName.TANGENT, new BufferAttribute(new Float32Array(tangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_TANGENT));
     this.setAttribute(BufferAttributeName.BITANGENT, new BufferAttribute(new Float32Array(bitangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_BITANGENT));
   }
