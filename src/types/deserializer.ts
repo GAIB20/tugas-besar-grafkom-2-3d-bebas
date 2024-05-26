@@ -51,9 +51,6 @@ export interface IShaderMaterial {
   type: MATERIAL_TYPE;
 }
 
-export interface IBasicMaterial extends IShaderMaterial {
-  color: number[];
-}
 
 export interface IBufferGeometry {
   geometry_type: GEOMETRY_TYPE;
@@ -71,6 +68,7 @@ export interface IHollowBoxGeometry extends IBufferGeometry {
 }
 
 export interface IBufferAttribute {
+  name: string;
   data: number[];
   size: number;
   options: {
