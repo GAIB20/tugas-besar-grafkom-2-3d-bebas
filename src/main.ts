@@ -55,12 +55,10 @@ import { useOrbit } from "./composables/useOrbit";
 // Stylesheet imports
 import "src/css/global.css";
 import { EASING_FUNCTION } from "./math/extra";
-import { BasicMaterial } from "src/material/basic-material";
 import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { Texture } from "src/material/texture.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
-import { FGeometry } from "src/geometries/f-geometry.ts";
-import { WebGLUtils } from "src/webgl/util.ts";
+import { Displacement } from "src/material/displacement.ts";
 
 /**
  * Main Script
@@ -132,7 +130,7 @@ const main = async () => {
       new Texture(
         normalImageElements[0],
       ),
-      new Texture(
+      new Displacement(
         displacementImageElements[0],
       ),
     )

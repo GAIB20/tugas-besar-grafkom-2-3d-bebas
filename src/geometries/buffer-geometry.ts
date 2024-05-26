@@ -106,7 +106,7 @@ export class BufferGeometry {
         ).multiplyScalar(f)
       )
 
-      const n = Vector3.cross(e1, e2);
+      const n = Vector3.cross(e1, e2).normalize();
 
       // Set normal, tangent, dan bitangent
       // sebagai atribut dari ketiga vertex

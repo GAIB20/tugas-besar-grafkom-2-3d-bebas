@@ -1,10 +1,8 @@
 import { Camera } from "src/cameras/camera.ts";
 import {
-  COMMON_ATTRIBUTE,
   COMMON_UNIFORM,
-  BASIC_FRAGMENT_SHADER,
   PHONG_VERTEX_SHADER,
-  PHONG_FRAGMENT_SHADER, BASIC_VERTEX_SHADER
+  PHONG_FRAGMENT_SHADER,
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -13,7 +11,6 @@ import { Scene } from "src/core/scene.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
 import { Color } from "src/types/color.ts";
 import { WebGLUtils } from "src/webgl/util.ts";
-import { BufferAttribute } from "src/geometries/buffer-attribute.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 import { Vector3 } from "src/math/vector3.ts";
 
@@ -203,7 +200,7 @@ export class WebGLRenderer {
           this.gl,
           this.glProgram,
           PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
-          diffuse.color.getComponents(true),
+          diffuse.color.getComponents(),
           this.gl.FLOAT_VEC4
         );
 
@@ -303,6 +300,15 @@ export class WebGLRenderer {
           PHONG_VERTEX_SHADER.UNIFORM_LIGHT_DIRECTION,
           this._directionalLightDirection.toArray(),
           this.gl.FLOAT_VEC3
+        );
+
+        // normal matrix
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_NORMAL_MATRIX,
+          node.worldMatrix.inverse().transpose().toArray(),
+          this.gl.FLOAT_MAT4
         );
 
         // Shininess
