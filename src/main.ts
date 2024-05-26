@@ -115,7 +115,8 @@ const main = async () => {
 
   const showcaseModel = new Mesh(
     new BoxGeometry(250, 250, 250),
-    new BasicMaterial()
+    new BasicMaterial(),
+    "Box"
   );
   mainScene.addChild(showcaseModel);
   updateSceneGraph(mainScene, sceneGraphTree);
