@@ -68,17 +68,20 @@ NOTE: Semua animasi hanya berlaku pada _articulated model_
 
 <img src="public/guide_11.jpg" width=350>
 
-15. Untuk semua jenis mapping (normal, diffuse, specular, dan displacement), dapat diaktifkan/non-aktifkan melalui checkbox. Untuk diffuse dan specular, warnanya dapat dipilih menggunakan color picker pada tampilan jika mapping telah diaktifkan. Untuk displacement, nilai factor dan biasnya dapat di-set melalui slider yang tersedia  apabila mapping telah diaktifkan.
+15. Untuk semua jenis mapping (normal, diffuse, specular, dan displacement), dapat diaktifkan/non-aktifkan melalui checkbox. Untuk diffuse dan specular, warnanya dapat dipilih menggunakan color picker pada tampilan jika mapping telah diaktifkan. Untuk displacement, nilai factor dan biasnya dapat di-set melalui slider yang tersedia apabila mapping telah diaktifkan.
 
 <img src="public/guide_12.jpg" width=350>
 
+## Spesifikasi
 
+1. Wajib: Selesai
+2. Lanjutan: Vertex Color, Animation Controller, Animation Tweening, Smooth Shading
 
 ## Pembagian Tugas
 
-| NIM      | Hollow Model | Object Model | Pembagian Kerja |
-| -------- | ------------ | ------------ | --------------- |
-| 13521075 | x            | x            | x               |
-| 13521087 | Triangular-prism            | Gerobak            | x               |
-| 13521097 | Penta-prism            | Eskrim            | x               |
-| 13521102 | Box          | Tower        | x               |
+| NIM      | Hollow Model     | Object Model | Pembagian Kerja                                                                |
+| -------- | ---------------- | ------------ | ------------------------------------------------------------------------------ |
+| 13521075 | Hexagonal-prism  | Human        | Math Library, Geometry, Scene Graph                                            |
+| 13521087 | Triangular-prism | Gerobak      | Render, Material, Vertex Color, Smooth Shading                                 |
+| 13521097 | Penta-prism      | Eskrim       | Node, Light, Material                                                          |
+| 13521102 | Box              | Tower        | Camera, Orbit controls, JSON, Render, Animation Controller, Animation Tweening |
