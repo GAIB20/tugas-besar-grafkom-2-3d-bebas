@@ -52,11 +52,33 @@
 
 NOTE: Semua animasi hanya berlaku pada _articulated model_
 
+9. Untuk mengubah ambient color pada object, tekan bagian color picker yang berjudul `Ambient Color` dan warna ambient akan terubah pada object dalam canvas.
+
+<img src="public/guide_8.jpg" width=350>
+
+10. Object pada canvas dapat memiliki sebuah material; basic ataupun phong. Untuk mengaktifkan phong material pada object, tekan checkbox dengan judul `Phong`. Jika checkbox tersebut tecentang, atribut lainnya seperti shininess, diffuse, specular, dan juga displacement dapat diubah.
+
+<img src="public/guide_9.jpg" width=350>
+
+11. Shininess dapat diatur menggunakan slider yang sudah ada dengan nilai antara 1 hingga 128.
+
+<img src="public/guide_10.jpg" width=350>
+
+13. Terdapat 3 buah texture yang dapat dipilih untuk setiap object, texture ini dapat diatur dari dropdown `Texture` yang sudah tersedia.
+
+<img src="public/guide_11.jpg" width=350>
+
+15. Untuk semua jenis mapping (normal, diffuse, specular, dan displacement), dapat diaktifkan/non-aktifkan melalui checkbox. Untuk diffuse dan specular, warnanya dapat dipilih menggunakan color picker pada tampilan jika mapping telah diaktifkan. Untuk displacement, nilai factor dan biasnya dapat di-set melalui slider yang tersedia  apabila mapping telah diaktifkan.
+
+<img src="public/guide_12.jpg" width=350>
+
+
+
 ## Pembagian Tugas
 
 | NIM      | Hollow Model | Object Model | Pembagian Kerja |
 | -------- | ------------ | ------------ | --------------- |
 | 13521075 | x            | x            | x               |
-| 13521087 | x            | x            | x               |
-| 13521097 | x            | x            | x               |
+| 13521087 | Triangular-prism            | Gerobak            | x               |
+| 13521097 | Penta-prism            | Eskrim            | x               |
 | 13521102 | Box          | Tower        | x               |
