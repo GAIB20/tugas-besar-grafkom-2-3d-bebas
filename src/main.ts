@@ -26,11 +26,11 @@ import {
   ambientLightColorInput,
   shininessInput,
   diffuseColorInput,
-  diffuseTextureInput,
+  diffuseMappingCheckbox,
   specularColorInput,
-  specularTextureInput,
-  displacementTextureInput,
-  normalTextureInput,
+  specularMappingCheckbox,
+  displacementMappingCheckbox,
+  normalMappingCheckbox,
   displacementFactorInput,
   displacementBiasInput,
   animToggleReverse,
@@ -135,6 +135,11 @@ const main = async () => {
   );
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
+
+  diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
+  specularColorInput.disabled = !specularMappingCheckbox.checked;
+  displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
+  displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
 
   // Rendering
   let reverseAnim = false;
@@ -290,6 +295,24 @@ const main = async () => {
   ambientLightColorInput.addEventListener("input", () => {
     renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value);
   });
+
+  // Phong Mapping
+    diffuseMappingCheckbox.addEventListener("change", () => {
+      diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
+    });
+
+    specularMappingCheckbox.addEventListener("change", () => {
+      specularColorInput.disabled = !specularMappingCheckbox.checked;
+    });
+
+    displacementMappingCheckbox.addEventListener("change", () => {
+      displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
+      displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
+    });
+
+    normalMappingCheckbox.addEventListener("change", () => {
+      // No changes for now (?)
+    });
 
   // Animation
   animTogglePlay.addEventListener("change", () => {

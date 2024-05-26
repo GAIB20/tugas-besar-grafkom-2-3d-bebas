@@ -37,11 +37,11 @@ const ambientLightColorInput = getElement("ambient-color-picker") as HTMLInputEl
 // Phong Light
 const shininessInput = getElement("shininess-slider") as HTMLInputElement;
 const diffuseColorInput = getElement("diffuse-color-picker") as HTMLInputElement;
-const diffuseTextureInput = getElement("diffuse-texture-dropdown") as HTMLSelectElement;
+const diffuseMappingCheckbox = getElement("diffuse-mapping-checkbox") as HTMLInputElement;
 const specularColorInput = getElement("specular-color-picker") as HTMLInputElement;
-const specularTextureInput = getElement("specular-texture-dropdown") as HTMLSelectElement;
-const displacementTextureInput = getElement("displacement-texture-dropdown") as HTMLSelectElement;
-const normalTextureInput = getElement("normal-texture-dropdown") as HTMLSelectElement;
+const specularMappingCheckbox = getElement("specular-mapping-checkbox") as HTMLInputElement;
+const displacementMappingCheckbox = getElement("displacement-mapping-checkbox") as HTMLInputElement;
+const normalMappingCheckbox = getElement("normal-mapping-checkbox") as HTMLInputElement;
 const displacementFactorInput = getElement("displacement-factor-slider") as HTMLInputElement;
 const displacementBiasInput = getElement("displacement-bias-slider") as HTMLInputElement;
 
@@ -120,11 +120,11 @@ export {
   // Phong
   shininessInput,
   diffuseColorInput,
-  diffuseTextureInput,
+  diffuseMappingCheckbox,
   specularColorInput,
-  specularTextureInput,
-  displacementTextureInput,
-  normalTextureInput,
+  specularMappingCheckbox,
+  displacementMappingCheckbox,
+  normalMappingCheckbox,
   displacementFactorInput,
   displacementBiasInput,
 
