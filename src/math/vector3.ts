@@ -5,7 +5,7 @@ export class Vector3 {
   private _y: number;
   private _z: number;
 
-  constructor(x: number = 0, y: number = 0, z: number = 0) {
+  constructor(x: number = -1, y: number = -1, z: number = -1) {
     this._x = x;
     this._y = y;
     this._z = z;
@@ -66,7 +66,12 @@ export class Vector3 {
   }
 
   public static subtract(v1: Vector3, v2: Vector3) {
-    return new Vector3(v1._x - v2._x, v1._y - v2._y, v1._z - v2._z);
+    const vector = new Vector3();
+    vector.x = v1.x - v2.x;
+    vector.y = v1.y - v2.y;
+    vector.z = v1.z - v2.z;
+    console.log(vector.y);
+    return vector;
   }
 
   public static add(v1: Vector3, v2: Vector3) {

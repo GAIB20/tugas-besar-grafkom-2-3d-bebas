@@ -2,7 +2,7 @@ export class Vector2 {
   private _x: number;
   private _y: number;
 
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x: number = -1, y: number = -1) {
     this._x = x;
     this._y = y;
   }

@@ -141,15 +141,7 @@ export class WebGLRenderer {
       if (node.material instanceof BasicMaterial) {
         // color
         // Paint all vertices
-        const verticesColor: number[][] = [];
-        for (let i = 0; i < constructedPositionVertices.length / 3; i++) {
-          verticesColor.push(node.material.color.getComponents());
-        }
-        const colorBufferAttribute = new BufferAttribute(
-          new Float32Array(verticesColor.flat()),
-          Color.size(),
-          BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR
-        );
+        const colorBufferAttribute = node.geometry.getAttribute(BufferAttributeName.COLOR);
         colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
           colorBufferAttribute.data

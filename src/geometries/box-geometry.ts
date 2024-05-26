@@ -1,7 +1,7 @@
 import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
-import { COMMON_ATTRIBUTE, PHONG_VERTEX_SHADER } from "src/types/webgl-type.ts";
+import { BASIC_VERTEX_SHADER, COMMON_ATTRIBUTE, PHONG_VERTEX_SHADER } from "src/types/webgl-type.ts";
 import { IBoxGeometry } from "src/types/deserializer.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
@@ -136,10 +136,15 @@ export class BoxGeometry extends BufferGeometry {
         -1, 0, 0,
       ]);
 
+      const colors = new Float32Array([
+
+        ]);
+
       this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION,));
       this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
       this.setAttribute(BufferAttributeName.TEXCOORD, new BufferAttribute(texCoords, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD, ));
       this.setAttribute(BufferAttributeName.NORMAL, new BufferAttribute(normals, 3, PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL));
+      this.setAttribute(BufferAttributeName.COLOR, new BufferAttribute(colors, 3, BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR));
       this.calculateNormals();
     }
 

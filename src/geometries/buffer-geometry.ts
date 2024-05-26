@@ -53,8 +53,8 @@ export class BufferGeometry {
     const indices = this.getAttribute(BufferAttributeName.INDICES);
     if (!indices) return;
 
-    const normals = this.getAttribute(BufferAttributeName.NORMAL);
-    if (!normals) return;
+    const normal = this.getAttribute(BufferAttributeName.NORMAL);
+    if (!normal) return;
 
     const v1 = new Vector3();
     const v2 = new Vector3();
@@ -73,6 +73,7 @@ export class BufferGeometry {
 
     const tangents = new Array(positionArray.length).fill(0);
     const bitangents = new Array(positionArray.length).fill(0);
+    const normals = new Array(positionArray.length).fill(0);
 
     for (let i = 0; i < indicesArray.length; i += 3) {
       v1.set(positionArray.slice(i, i + 3));
@@ -104,6 +105,11 @@ export class BufferGeometry {
         ).multiplyScalar(f)
       )
 
+      // TODO: get normal
+      console.log(v1, v2, v3)
+      console.log(e1, e2)
+      const n = Vector3.cross(e1, e2);
+
       // Set normal, tangent, dan bitangent
       // sebagai atribut dari ketiga vertex
       for (let j = 0; j < 3; j++) {
@@ -114,8 +120,15 @@ export class BufferGeometry {
         bitangents[i * 3 + j * 3] = b.toArray()[0]
         bitangents[i * 3 + j * 3 + 1] = b.toArray()[1]
         bitangents[i * 3 + j * 3 + 2] = b.toArray()[2]
+
+        normals[i * 3 + j * 3] = n.toArray()[0]
+        normals[i * 3 + j * 3 + 1] = n.toArray()[1]
+        normals[i * 3 + j * 3 + 2] = n.toArray()[2]
       }
     }
+
+    console.log("normals")
+    console.log(normals)
 
     this.setAttribute(BufferAttributeName.TANGENT, new BufferAttribute(new Float32Array(tangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_TANGENT));
     this.setAttribute(BufferAttributeName.BITANGENT, new BufferAttribute(new Float32Array(bitangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_BITANGENT));
