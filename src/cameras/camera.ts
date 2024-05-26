@@ -16,7 +16,6 @@ export abstract class Camera extends Node {
   public computeWorldMatrix() {
     super.computeWorldMatrix();
 
-    // TODO: use the commented code after Matrix4.inverse() is fixed
     if (
       this.worldMatrix.toArray()[0] == 1 &&
       this.worldMatrix.toArray()[5] == 1 &&

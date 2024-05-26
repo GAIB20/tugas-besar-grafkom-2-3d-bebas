@@ -59,7 +59,7 @@
             }
           },
           "texcoord": {
-            "name": "a_texCoord",
+            "name": "a_texcoord",
             "data": [
               0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
 
@@ -158,7 +158,7 @@
             }
           },
           "texcoord": {
-            "name": "a_texCoord",
+            "name": "a_texcoord",
             "data": [
               0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
 
@@ -257,7 +257,7 @@
             }
           },
           "texcoord": {
-            "name": "a_texCoord",
+            "name": "a_texcoord",
             "data": [
               0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
 
@@ -616,7 +616,7 @@
         }
       },
       "texcoord": {
-        "name": "a_texCoord",
+        "name": "a_texcoord",
         "data": [
           0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
 

@@ -128,7 +128,6 @@ export class BufferAttribute {
     return this._data.length;
   }
 
-  // TODO: check this function
   set(index: number, data: number[]) {
     this._isDirty = true;
     // Set elemen[index] dengan data (data.length == this._size)

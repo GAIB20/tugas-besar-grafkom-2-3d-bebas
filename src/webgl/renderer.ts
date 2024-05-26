@@ -25,10 +25,48 @@ export class WebGLRenderer {
 
   // Light
   private _ambientLightColor: Color = new Color(0, 0, 0, 1);
-  private _lightPosition: Vector3 = new Vector3(70, 70, 70);
+  private _lightPosition: Vector3 = new Vector3(570, 570, 570);
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
+
+  // Phong map
+  private _useDiffuseMap = false;
+  private _useSpecularMap = false;
+  private _useNormalMap = false;
+  private _useDisplacementMap = false;
+
+  public get useDiffuseMap() {
+    return this._useDiffuseMap;
+  }
+
+  public set useDiffuseMap(val: boolean) {
+    this._useDiffuseMap = val;
+  }
+
+  public get useSpecularMap() {
+    return this._useSpecularMap;
+  }
+
+  public set useSpecularMap(val: boolean) {
+    this._useSpecularMap = val;
+  }
+
+  public get useNormalMap() {
+    return this._useNormalMap;
+  }
+
+  public set useNormalMap(val: boolean) {
+    this._useNormalMap = val;
+  }
+
+  public get useDisplacementMap() {
+    return this._useDisplacementMap;
+  }
+
+  public set useDisplacementMap(val: boolean) {
+    this._useDisplacementMap = val;
+  }
 
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
@@ -119,11 +157,14 @@ export class WebGLRenderer {
       this.gl.useProgram(this.glProgram);
 
       // position
-      const positionBufferAttribute = node.geometry.getAttribute(BufferAttributeName.POSITION);
-      const constructedPositionVertices = WebGLUtils.createPositionUsingVerticesAndIndices(
-        positionBufferAttribute.data,
-        node.geometry.getAttribute(BufferAttributeName.INDICES).data
+      const positionBufferAttribute = node.geometry.getAttribute(
+        BufferAttributeName.POSITION
       );
+      const constructedPositionVertices =
+        WebGLUtils.createPositionUsingVerticesAndIndices(
+          positionBufferAttribute.data,
+          node.geometry.getAttribute(BufferAttributeName.INDICES).data
+        );
       positionBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
         this.gl,
         constructedPositionVertices
@@ -135,10 +176,11 @@ export class WebGLRenderer {
       );
 
       if (node.material instanceof BasicMaterial) {
-        console.log("masuk")
         // color
         // Paint all vertices
-        const colorBufferAttribute = node.geometry.getAttribute(BufferAttributeName.COLOR);
+        const colorBufferAttribute = node.geometry.getAttribute(
+          BufferAttributeName.COLOR
+        );
         colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
           colorBufferAttribute.data
@@ -152,7 +194,9 @@ export class WebGLRenderer {
 
       if (node.material instanceof PhongMaterial) {
         // normal
-        const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
+        const normalBufferAttribute = node.geometry.getAttribute(
+          BufferAttributeName.NORMAL
+        );
         normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
           normalBufferAttribute.data
@@ -164,17 +208,18 @@ export class WebGLRenderer {
         );
 
         // texCoord
-        const texCoordBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TEXCOORD);
+        const texCoordBufferAttribute = node.geometry.getAttribute(
+          BufferAttributeName.TEXCOORD
+        );
         texCoordBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
-          texCoordBufferAttribute.data,
+          texCoordBufferAttribute.data
         );
         WebGLUtils.createAttribSetter(
           this.gl,
           this.glProgram,
           texCoordBufferAttribute
         );
-
 
         // texture
         const diffuse = node.material.diffuse;
@@ -183,6 +228,14 @@ export class WebGLRenderer {
         const displacement = node.material.displacement;
 
         // Diffuse
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_DIFFUSE_MAP,
+          this.useDiffuseMap ? 1 : 0,
+          this.gl.BOOL
+        );
+
         // Set diffuse color
         WebGLUtils.createUniformSetter(
           this.gl,
@@ -204,8 +257,14 @@ export class WebGLRenderer {
           this.gl.SAMPLER_2D
         ); // 0 is the texture unit
 
-
         // Specular
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_SPECULAR_MAP,
+          this.useSpecularMap ? 1 : 0,
+          this.gl.BOOL
+        );
         // Set specular color
         WebGLUtils.createUniformSetter(
           this.gl,
@@ -227,14 +286,13 @@ export class WebGLRenderer {
           this.gl.SAMPLER_2D
         ); // 1 is the texture unit
 
-
         // Normal Mapping
         // does use normal map?
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
           PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
-          normal ? 1 : 0, // TODO
+          this.useNormalMap ? 1 : 0,
           this.gl.BOOL
         );
 
@@ -251,6 +309,13 @@ export class WebGLRenderer {
         ); // 2 is the texture unit
 
         // Displacement
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_VERTEX_SHADER.UNIFORM_USE_DISPLACEMENT_MAP,
+          this.useDisplacementMap ? 1 : 0,
+          this.gl.BOOL
+        );
         // Set displacement Map
         const displacementTexture = WebGLUtils.createTextureImage(this.gl, displacement);
         this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
@@ -281,7 +346,6 @@ export class WebGLRenderer {
           this.gl.FLOAT
         );
 
-
         // Light Position
         WebGLUtils.createUniformSetter(
           this.gl,
@@ -290,7 +354,6 @@ export class WebGLRenderer {
           this._lightPosition.toArray(),
           this.gl.FLOAT_VEC3
         );
-
 
         // normal matrix
         WebGLUtils.createUniformSetter(

@@ -21,7 +21,6 @@ export class ObliqueCamera extends Camera {
     near: number,
     far: number
   ) {
-    // TODO: check this
     super(); // Setup Node
     this.theta = theta;
     this.phi = phi;
@@ -39,7 +38,6 @@ export class ObliqueCamera extends Camera {
   }
 
   computeProjectionMatrix() {
-    // TODO: check this
     // M4.oblique() menghasilkan proyeksi matriks oblique
     // dengan 2 tupel theta dan phi + 6 tuple orthographic.
     this._projectionMatrix = Matrix4.oblique(

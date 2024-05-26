@@ -70,11 +70,9 @@ const main = async () => {
   // Init program
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const renderer = new WebGLRenderer(canvas);
-  // TODO: render script dynamically
-  // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
   renderer.init({
-    vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
-    fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+    vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
   });
 
   // Init scene
@@ -115,27 +113,11 @@ const main = async () => {
     document.getElementById("displacement-3") as HTMLImageElement,
   ];
 
-  const testMesh = new Mesh(
-    new BoxGeometry(50, 50, 50),
-  // new BasicMaterial(
-  // ),
-
-    new PhongMaterial(
-      new Texture(
-        diffuseImageElements[0],
-      ),
-      new Texture(
-        specularImageElements[0],
-      ),
-      new Texture(
-        normalImageElements[0],
-      ),
-      new Displacement(
-        displacementImageElements[0],
-      ),
-    )
+  const showcaseModel = new Mesh(
+    new BoxGeometry(250, 250, 250),
+    new BasicMaterial()
   );
-  mainScene.addChild(testMesh);
+  mainScene.addChild(showcaseModel);
   updateSceneGraph(mainScene, sceneGraphTree);
 
   diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
@@ -305,112 +287,112 @@ const main = async () => {
     if (selectedMesh.material instanceof PhongMaterial) {
       selectedMesh.material.shininess = parseFloat(shininessInput.value);
     }
-  })
+  });
 
   // Texture Selection
   textureSelection.addEventListener("change", () => {
     const selectedTexture = textureSelection.value;
     const textureIndex = parseInt(selectedTexture.split("-")[1]) - 1;
-    // TODO: Need to check
     const mainMesh = mainScene.children[0] as Mesh;
     if (mainMesh.material instanceof PhongMaterial) {
       mainMesh.material = new PhongMaterial(
-        new Texture(
-          diffuseImageElements[textureIndex],
-        ),
-        new Texture(
-          specularImageElements[textureIndex],
-        ),
-        new Texture(
-          normalImageElements[textureIndex],
-        ),
-        new Displacement(
-          displacementImageElements[textureIndex],
-        )
+        new Texture(diffuseImageElements[textureIndex]),
+        new Texture(specularImageElements[textureIndex]),
+        new Texture(normalImageElements[textureIndex]),
+        new Displacement(displacementImageElements[textureIndex])
       );
     }
   });
 
   // Phong Mapping
-    diffuseMappingCheckbox.addEventListener("change", () => {
-      diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
-      // TODO
-    });
+  diffuseMappingCheckbox.addEventListener("change", () => {
+    diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
+    renderer.useDiffuseMap = diffuseMappingCheckbox.checked;
+  });
 
-    specularMappingCheckbox.addEventListener("change", () => {
-      specularColorInput.disabled = !specularMappingCheckbox.checked;
-      // TODO
-    });
+  diffuseColorInput.addEventListener("input", () => {
+    if (phongCheckbox.checked)
+      ((selectedNode as Mesh).material as PhongMaterial).diffuse.color =
+        Color.fromHex(diffuseColorInput.value);
+  });
 
-    displacementMappingCheckbox.addEventListener("change", () => {
-      displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
-      displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
-      // TODO
-    });
+  specularMappingCheckbox.addEventListener("change", () => {
+    specularColorInput.disabled = !specularMappingCheckbox.checked;
+    renderer.useSpecularMap = specularMappingCheckbox.checked;
+  });
 
-    displacementFactorInput.addEventListener("input", () => {
-      const selectedMesh = selectedNode as Mesh;
-      if (selectedMesh.material instanceof PhongMaterial) {
-        selectedMesh.material.displacement.factor = parseFloat(displacementFactorInput.value);
-      }
-    })
+  specularColorInput.addEventListener("input", () => {
+    if (phongCheckbox.checked)
+      ((selectedNode as Mesh).material as PhongMaterial).specular.color =
+        Color.fromHex(specularColorInput.value);
+  });
 
-    displacementBiasInput.addEventListener("input", () => {
-      const selectedMesh = selectedNode as Mesh;
-      if (selectedMesh.material instanceof PhongMaterial) {
-        selectedMesh.material.displacement.bias = parseFloat(displacementBiasInput.value);
-      }
-    })
+  displacementMappingCheckbox.addEventListener("change", () => {
+    displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
+    displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
+    renderer.useDisplacementMap = displacementMappingCheckbox.checked;
+  });
 
-    normalMappingCheckbox.addEventListener("change", () => {
-      // No changes for now (?)
-      // TODO
-    });
+  displacementFactorInput.addEventListener("input", () => {
+    const selectedMesh = selectedNode as Mesh;
+    if (selectedMesh.material instanceof PhongMaterial) {
+      selectedMesh.material.displacement.factor = parseFloat(
+        displacementFactorInput.value
+      );
+    }
+  });
 
-    phongCheckbox.addEventListener("change", () => {
-      const isPhongChecked = phongCheckbox.checked;
-      // Menonaktifkan atau mengaktifkan input lainnya berdasarkan status phongCheckbox
-      displacementMappingCheckbox.disabled = !isPhongChecked;
-      specularMappingCheckbox.disabled = !isPhongChecked;
-      diffuseMappingCheckbox.disabled = !isPhongChecked;
-      textureSelection.disabled = !isPhongChecked;
-      normalMappingCheckbox.disabled = !isPhongChecked;
+  displacementBiasInput.addEventListener("input", () => {
+    const selectedMesh = selectedNode as Mesh;
+    if (selectedMesh.material instanceof PhongMaterial) {
+      selectedMesh.material.displacement.bias = parseFloat(
+        displacementBiasInput.value
+      );
+    }
+  });
 
-      displacementFactorInput.disabled = !isPhongChecked || !displacementMappingCheckbox.checked;
-      displacementBiasInput.disabled = !isPhongChecked || !displacementMappingCheckbox.checked;
-      specularColorInput.disabled = !isPhongChecked || !specularMappingCheckbox.checked;
-      diffuseColorInput.disabled = !isPhongChecked || !diffuseMappingCheckbox.checked;
-      
-      if(phongCheckbox.checked){
-        (mainScene.children[0] as Mesh).material = new PhongMaterial(
-          new Texture(
-            diffuseImageElements[0],
-          ),
-          new Texture(
-            specularImageElements[0],
-          ),
-          new Texture(
-            normalImageElements[0],
-          ),
-          new Displacement(
-            displacementImageElements[0],
-          )
-        );
-        renderer.init({
-          vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
-          fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
-        });
-      }
-      else{
-        (mainScene.children[0] as Mesh).material = new BasicMaterial();
+  normalMappingCheckbox.addEventListener("change", () => {
+    renderer.useNormalMap = normalMappingCheckbox.checked;
+  });
 
-        renderer.init({
-          vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
-          fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
-        });
-      }
-    
-    });
+  phongCheckbox.addEventListener("change", () => {
+    const isPhongChecked = phongCheckbox.checked;
+    // Menonaktifkan atau mengaktifkan input lainnya berdasarkan status phongCheckbox
+    displacementMappingCheckbox.disabled = !isPhongChecked;
+    specularMappingCheckbox.disabled = !isPhongChecked;
+    diffuseMappingCheckbox.disabled = !isPhongChecked;
+    textureSelection.disabled = !isPhongChecked;
+    normalMappingCheckbox.disabled = !isPhongChecked;
+
+    displacementFactorInput.disabled =
+      !isPhongChecked || !displacementMappingCheckbox.checked;
+    displacementBiasInput.disabled =
+      !isPhongChecked || !displacementMappingCheckbox.checked;
+    specularColorInput.disabled =
+      !isPhongChecked || !specularMappingCheckbox.checked;
+    diffuseColorInput.disabled =
+      !isPhongChecked || !diffuseMappingCheckbox.checked;
+
+    if (phongCheckbox.checked) {
+      (mainScene.children[0] as Mesh).material = new PhongMaterial(
+        new Texture(diffuseImageElements[0]),
+        new Texture(specularImageElements[0]),
+        new Texture(normalImageElements[0]),
+        new Displacement(displacementImageElements[0])
+      );
+      renderer.init({
+        vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+        fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+      });
+    } else {
+      (mainScene.children[0] as Mesh).material = new BasicMaterial();
+
+      renderer.init({
+        vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+        fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
+      });
+    }
+  });
 
   // Animation
   animTogglePlay.addEventListener("change", () => {

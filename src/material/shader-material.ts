@@ -51,7 +51,6 @@ export abstract class ShaderMaterial {
     const uniformsData: { [name: string]: [string, any] | UniformType } = {};
     for (const key in this.uniforms) {
       const uniform = this.uniforms[key];
-      // TODO: test with other material
       uniformsData[key] = uniform;
     }
 

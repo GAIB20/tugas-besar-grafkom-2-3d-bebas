@@ -33,12 +33,6 @@
             <option value="3">Oblique</option>
           </select>
 
-          <select name="mapping-type" id="mapping-type">
-            <option value="texture" selected>Texture</option>
-            <option value="environment">Environment</option>
-            <option value="bump">Bump</option>
-          </select>
-
           <button id="reset-cam" class="label-button">Reset View</button>
 
           <div class="slider-container">
@@ -202,27 +196,31 @@
           </div>
         </div>
 
-        <div class="slider-container border-b-4 border-black pb-4">
-          <label name="phong" for="phong-checkbox">
-            Phong
-          </label>
-          <input type="checkbox" id="phong-checkbox" />
+        <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4 w-full">
+          <div class="slider-container">
+            <label name="phong" for="phong-checkbox"> Phong </label>
+            <input type="checkbox" id="phong-checkbox" />
+          </div>
+
+          <div class="slider-container">
+            <label
+              name="ambient-color"
+              for="ambient-color-picker"
+              class="color-picker"
+            >
+              Ambient Color
+            </label>
+            <input id="ambient-color-picker" type="color" value="#ffffff" />
+          </div>
         </div>
 
         <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4">
           <div class="slider-container">
-            <label name="ambient-color" for="ambient-color-picker" class="color-picker">
-              Ambient Color
-            </label>
-            <input
-              id="ambient-color-picker"
-              type="color"
-              value="#ffffff"
-            />
-          </div>
-
-          <div class="slider-container">
-            <label name="shininess-label" for="shininess-slider" class="label-slider">
+            <label
+              name="shininess-label"
+              for="shininess-slider"
+              class="label-slider"
+            >
               Shininess
             </label>
             <input
@@ -260,7 +258,11 @@
           </div>
 
           <div class="slider-container">
-            <label name="diffuse-color" for="diffuse-color-picker" class="color-picker">
+            <label
+              name="diffuse-color"
+              for="diffuse-color-picker"
+              class="color-picker"
+            >
               Diffuse Color
             </label>
             <input id="diffuse-color-picker" type="color" step="0.1" />
@@ -274,21 +276,32 @@
           </div>
 
           <div class="slider-container">
-            <label name="specular-color" for="specular-color-picker" class="color-picker">
+            <label
+              name="specular-color"
+              for="specular-color-picker"
+              class="color-picker"
+            >
               Specular Color
             </label>
             <input id="specular-color-picker" type="color" step="0.1" />
           </div>
 
           <div class="slider-container">
-            <label name="displacement-mapping" for="displacement-mapping-checkbox">
+            <label
+              name="displacement-mapping"
+              for="displacement-mapping-checkbox"
+            >
               Disp. Mapping
             </label>
             <input type="checkbox" id="displacement-mapping-checkbox" />
           </div>
 
           <div class="slider-container">
-            <label name="displacement-factor-label" for="displacement-factor-slider" class="label-slider">
+            <label
+              name="displacement-factor-label"
+              for="displacement-factor-slider"
+              class="label-slider"
+            >
               Disp. Factor
             </label>
             <input
@@ -297,13 +310,17 @@
               min="0"
               max="128"
               step="1"
-              value="128"
+              value="0"
               class="slider"
             />
           </div>
 
           <div class="slider-container">
-            <label name="displacement-bias-label" for="displacement-bias-slider" class="label-slider">
+            <label
+              name="displacement-bias-label"
+              for="displacement-bias-slider"
+              class="label-slider"
+            >
               Disp. Bias
             </label>
             <input
@@ -312,18 +329,18 @@
               min="0"
               max="128"
               step="1"
-              value="128"
+              value="0"
               class="slider"
             />
           </div>
-
-
         </div>
 
         <div class="flex flex-wrap gap-3 border-b-4 border-black pb-4 w-full">
           <div class="border border-2 p-2">
             <p>Animation</p>
-            <label name="animation-toggle" for="animation-toggle-play"> Play </label>
+            <label name="animation-toggle" for="animation-toggle-play">
+              Play
+            </label>
             <input id="animation-toggle-play" type="checkbox" />
             <br />
             <label name="animation-toggle" for="animation-toggle-reverse">
@@ -348,11 +365,6 @@
               <option value="elastic">Elastic</option>
               <option value="bounce">Bounce</option>
             </select>
-          </div>
-
-          <div>
-            <label name="shading-toggle" for="shading-toggle"> Shading </label>
-            <input id="shading-toggle" type="checkbox" checked />
           </div>
         </div>
 
@@ -399,7 +411,9 @@
         </div>
       </section>
 
-      <section class="flex flex-col items-center border-4 border-black p-2 w-full max-w-[350px] overflow-scroll">
+      <section
+        class="flex flex-col items-center border-4 border-black p-2 w-full max-w-[350px] overflow-scroll"
+      >
         <h1 class="text-center">Scene Graph</h1>
         <div class="self-start">
           <ul id="scene-graph-tree"></ul>
@@ -416,21 +430,69 @@
       </section>
     </div>
 
-    <img id="diffuse-1" src="src/assets/texture/diffuse/MetalPlates006_Diffuse.jpg" hidden />
-    <img id="diffuse-2" src="src/assets/texture/diffuse/Bricks092_Diffuse.jpg" hidden />
-    <img id="diffuse-3" src="src/assets/texture/diffuse/Ground054_Diffuse.jpg" hidden/>
+    <img
+      id="diffuse-1"
+      src="src/assets/texture/diffuse/MetalPlates006_Diffuse.jpg"
+      hidden
+    />
+    <img
+      id="diffuse-2"
+      src="src/assets/texture/diffuse/Bricks092_Diffuse.jpg"
+      hidden
+    />
+    <img
+      id="diffuse-3"
+      src="src/assets/texture/diffuse/Ground054_Diffuse.jpg"
+      hidden
+    />
 
-    <img id="specular-1" src="src/assets/texture/specular/MetalPlates006_Roughness.jpg" hidden/>
-    <img id="specular-2" src="src/assets/texture/specular/Bricks092_Specular.jpg" hidden/>
-    <img id="specular-3" src="src/assets/texture/specular/Ground054_Specular.jpg" hidden/>
+    <img
+      id="specular-1"
+      src="src/assets/texture/specular/MetalPlates006_Roughness.jpg"
+      hidden
+    />
+    <img
+      id="specular-2"
+      src="src/assets/texture/specular/Bricks092_Specular.jpg"
+      hidden
+    />
+    <img
+      id="specular-3"
+      src="src/assets/texture/specular/Ground054_Specular.jpg"
+      hidden
+    />
 
-    <img id="displacement-1" src="src/assets/texture/displacement/MetalPlates006_Displacement.jpg" hidden/>
-    <img id="displacement-2" src="src/assets/texture/displacement/Bricks092_Displacement.jpg" hidden/>
-    <img id="displacement-3" src="src/assets/texture/displacement/Ground054_Displacement.jpg" hidden/>
+    <img
+      id="displacement-1"
+      src="src/assets/texture/displacement/MetalPlates006_Displacement.jpg"
+      hidden
+    />
+    <img
+      id="displacement-2"
+      src="src/assets/texture/displacement/Bricks092_Displacement.jpg"
+      hidden
+    />
+    <img
+      id="displacement-3"
+      src="src/assets/texture/displacement/Ground054_Displacement.jpg"
+      hidden
+    />
 
-    <img id="normal-1" src="src/assets/texture/normal/MetalPlates006_Normal.jpg" hidden/>
-    <img id="normal-2" src="src/assets/texture/normal/Bricks092_Normal.jpg" hidden/>
-    <img id="normal-3" src="src/assets/texture/normal/Ground054_Normal.jpg" hidden/>
+    <img
+      id="normal-1"
+      src="src/assets/texture/normal/MetalPlates006_Normal.jpg"
+      hidden
+    />
+    <img
+      id="normal-2"
+      src="src/assets/texture/normal/Bricks092_Normal.jpg"
+      hidden
+    />
+    <img
+      id="normal-3"
+      src="src/assets/texture/normal/Ground054_Normal.jpg"
+      hidden
+    />
 
     <script type="module" src="/src/main.ts"></script>
   </body>

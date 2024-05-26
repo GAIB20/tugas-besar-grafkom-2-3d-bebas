@@ -4,6 +4,7 @@ attribute vec2 a_texcoord;
 uniform mat4 u_viewProjectionMatrix, u_worldMatrix, u_normalMatrix;
 
 uniform sampler2D u_displacementMap;
+uniform bool u_useDisplacementMap;
 uniform float u_displacementFactor;
 uniform float u_displacementBias;
 
@@ -17,9 +18,11 @@ void main(){
     vertPos = vec3(vertPos4) / vertPos4.w;
     normalInterp = vec3(u_normalMatrix * vec4(a_normal, 0.0));
 
-    float displacement = texture2D(u_displacementMap, a_texcoord).r;
-    displacement = displacement * u_displacementFactor + u_displacementBias;
-    vertPos4.xyz += normalize(normalInterp) * displacement;
+    if (u_useDisplacementMap) {
+      float displacement = texture2D(u_displacementMap, a_texcoord).r;
+      displacement = displacement * u_displacementFactor + u_displacementBias;
+      vertPos4.xyz += normalize(normalInterp) * displacement;
+    }
 
     gl_Position = u_viewProjectionMatrix * vertPos4;
     v_texcoord = a_texcoord;

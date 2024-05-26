@@ -7,8 +7,10 @@ uniform float u_shininess; // Shininess
 // Material color
 uniform vec4 u_ambientColor;
 uniform sampler2D u_diffuseMap;
+uniform bool u_useDiffuseMap;
 uniform vec4 u_diffuseColor;
 uniform sampler2D u_specularMap;
+uniform bool u_useSpecularMap;
 uniform vec4 u_specularColor;
 uniform bool u_useNormalMap;
 uniform sampler2D u_normalMap;
@@ -34,7 +36,13 @@ void main() {
         float specAngle = max(dot(R, V), 0.0);
         specular = pow(specAngle, u_shininess);
     }
-    gl_FragColor = u_ambientColor +
-    lambertian * u_diffuseColor * texture2D(u_diffuseMap, v_texcoord) +
-    specular * u_specularColor * texture2D(u_specularMap, v_texcoord);
+    gl_FragColor = u_ambientColor;
+
+    if (u_useDiffuseMap) {
+      gl_FragColor += lambertian * u_diffuseColor * texture2D(u_diffuseMap, v_texcoord);
+    }
+
+    if (u_useSpecularMap) {
+      gl_FragColor += specular * u_specularColor * texture2D(u_specularMap, v_texcoord);
+    }
 }
