@@ -168,6 +168,7 @@ export class BufferAttribute {
     };
 
     return {
+      name: this.attributeName,
       data: Array.from(this.data),
       size: this.size,
       options: opts,
@@ -177,11 +178,11 @@ export class BufferAttribute {
   static fromJSON(json: IBufferAttribute, bufAttr?: BufferAttribute) {
     if (!bufAttr)
       bufAttr = new BufferAttribute(
-        json.size == -1 // if indices
+        json.name == "" // if indices
           ? new Uint16Array(json.data)
           : new Float32Array(json.data),
         json.size,
-        COMMON_ATTRIBUTE.ATTRIBUTE_POSITION,
+        json.name,
         json.options
       );
     return bufAttr;
