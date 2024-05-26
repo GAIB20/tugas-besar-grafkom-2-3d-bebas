@@ -295,22 +295,33 @@ const main = async () => {
     renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value);
   });
 
+  shininessInput.addEventListener("input", () => {
+    const tempMesh = mainScene.children[0] as Mesh;
+    if (tempMesh.material instanceof PhongMaterial) {
+      tempMesh.material.shininess = parseFloat(shininessInput.value);
+    }
+  })
+
   // Phong Mapping
     diffuseMappingCheckbox.addEventListener("change", () => {
       diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
+      // TODO
     });
 
     specularMappingCheckbox.addEventListener("change", () => {
       specularColorInput.disabled = !specularMappingCheckbox.checked;
+      // TODO
     });
 
     displacementMappingCheckbox.addEventListener("change", () => {
       displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
       displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
+      // TODO
     });
 
     normalMappingCheckbox.addEventListener("change", () => {
       // No changes for now (?)
+      // TODO
     });
 
   // Animation
