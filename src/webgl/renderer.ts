@@ -25,7 +25,7 @@ export class WebGLRenderer {
 
   // Light
   private _ambientLightColor: Color = new Color(0, 0, 0, 1);
-  private _lightPosition: Vector3 = new Vector3(570, 570, 570);
+  private _lightPosition: Vector3 = new Vector3(300, 300, 300);
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
