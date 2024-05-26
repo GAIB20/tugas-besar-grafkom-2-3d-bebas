@@ -2,7 +2,6 @@ import { IBufferAttribute } from "src/types/deserializer";
 import {
   TypedArray,
   WEB_GL_DATA_TYPE,
-  COMMON_ATTRIBUTE,
 } from "src/types/webgl-type.ts";
 
 export class BufferAttribute {

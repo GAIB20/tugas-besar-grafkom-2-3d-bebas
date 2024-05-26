@@ -1,4 +1,3 @@
-import { Color } from "./color";
 import { GEOMETRY_TYPE, MATERIAL_TYPE, NODE_TYPE } from "./serializer";
 import { UniformType } from "./uniform-type";
 

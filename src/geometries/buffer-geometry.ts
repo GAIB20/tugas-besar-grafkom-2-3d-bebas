@@ -71,8 +71,8 @@ export class BufferGeometry {
     const positionArray = Array.from(position.data);
     const texcoordArray = Array.from(texcoord.data);
 
-    const tangents = new Array(positionArray.length).fill(0);
-    const bitangents = new Array(positionArray.length).fill(0);
+    // const tangents = new Array(positionArray.length).fill(0);
+    // const bitangents = new Array(positionArray.length).fill(0);
     const normals = new Array(positionArray.length).fill(0);
 
     for (let i = 0; i < indicesArray.length; i += 3) {
@@ -86,38 +86,38 @@ export class BufferGeometry {
 
       const e1   = Vector3.subtract(v2, v1);
       const e2  = Vector3.subtract(v3, v1);
-      const dUV1 = Vector2.subtract(uv2, uv1);
-      const dUV2 = Vector2.subtract(uv3, uv1);
-
-      const f = 1.0 / dUV1.x * dUV2.y - dUV2.x * dUV1.y;
-
-      const t = (
-        Vector3.subtract(
-        Vector3.copy(e1).multiplyScalar(dUV2.y),
-        Vector3.copy(e2).multiplyScalar(dUV1.y)
-        ).multiplyScalar(f)
-      )
-
-
-      const b = (
-        Vector3.subtract(
-          Vector3.copy(e2).multiplyScalar(dUV1.x),
-          Vector3.copy(e1).multiplyScalar(dUV2.x)
-        ).multiplyScalar(f)
-      )
+      // const dUV1 = Vector2.subtract(uv2, uv1);
+      // const dUV2 = Vector2.subtract(uv3, uv1);
+      //
+      // const f = 1.0 / dUV1.x * dUV2.y - dUV2.x * dUV1.y;
+      //
+      // const t = (
+      //   Vector3.subtract(
+      //   Vector3.copy(e1).multiplyScalar(dUV2.y),
+      //   Vector3.copy(e2).multiplyScalar(dUV1.y)
+      //   ).multiplyScalar(f)
+      // )
+      //
+      //
+      // const b = (
+      //   Vector3.subtract(
+      //     Vector3.copy(e2).multiplyScalar(dUV1.x),
+      //     Vector3.copy(e1).multiplyScalar(dUV2.x)
+      //   ).multiplyScalar(f)
+      // )
 
       const n = Vector3.cross(e1, e2).normalize();
 
       // Set normal, tangent, dan bitangent
       // sebagai atribut dari ketiga vertex
       for (let j = 0; j < 3; j++) {
-        tangents[i * 3 + j * 3] = t.toArray()[0]
-        tangents[i * 3 + j * 3 + 1] = t.toArray()[1]
-        tangents[i * 3 + j * 3 + 2] = t.toArray()[2]
-
-        bitangents[i * 3 + j * 3] = b.toArray()[0]
-        bitangents[i * 3 + j * 3 + 1] = b.toArray()[1]
-        bitangents[i * 3 + j * 3 + 2] = b.toArray()[2]
+        // tangents[i * 3 + j * 3] = t.toArray()[0]
+        // tangents[i * 3 + j * 3 + 1] = t.toArray()[1]
+        // tangents[i * 3 + j * 3 + 2] = t.toArray()[2]
+        //
+        // bitangents[i * 3 + j * 3] = b.toArray()[0]
+        // bitangents[i * 3 + j * 3 + 1] = b.toArray()[1]
+        // bitangents[i * 3 + j * 3 + 2] = b.toArray()[2]
 
         normals[i * 3 + j * 3] = n.toArray()[0]
         normals[i * 3 + j * 3 + 1] = n.toArray()[1]
@@ -126,8 +126,8 @@ export class BufferGeometry {
     }
 
     this.setAttribute(BufferAttributeName.NORMAL, new BufferAttribute(new Float32Array(normals), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL));
-    this.setAttribute(BufferAttributeName.TANGENT, new BufferAttribute(new Float32Array(tangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_TANGENT));
-    this.setAttribute(BufferAttributeName.BITANGENT, new BufferAttribute(new Float32Array(bitangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_BITANGENT));
+    // this.setAttribute(BufferAttributeName.TANGENT, new BufferAttribute(new Float32Array(tangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_TANGENT));
+    // this.setAttribute(BufferAttributeName.BITANGENT, new BufferAttribute(new Float32Array(bitangents), 3, PHONG_VERTEX_SHADER.ATTRIBUTE_BITANGENT));
   }
 
   toJSON() {

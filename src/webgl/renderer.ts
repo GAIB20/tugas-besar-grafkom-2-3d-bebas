@@ -2,7 +2,7 @@ import { Camera } from "src/cameras/camera.ts";
 import {
   COMMON_UNIFORM,
   PHONG_VERTEX_SHADER,
-  PHONG_FRAGMENT_SHADER, BASIC_VERTEX_SHADER
+  PHONG_FRAGMENT_SHADER,
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -14,7 +14,6 @@ import { WebGLUtils } from "src/webgl/util.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 import { Vector3 } from "src/math/vector3.ts";
 
-// TODO: Directional Light, Ambient Light (Change Color)
 export class WebGLRenderer {
   private _canvas: HTMLCanvasElement;
   private _gl: WebGLRenderingContext;
@@ -25,8 +24,8 @@ export class WebGLRenderer {
   private _canvasHeight: number;
 
   // Light
-  private _ambientLightColor: Color = new Color(1, 1, 1, 1);
-  private _directionalLightDirection: Vector3 = new Vector3(0.5, 0.7, 1).normalize();
+  private _ambientLightColor: Color = new Color(0, 0, 0, 1);
+  private _lightPosition: Vector3 = new Vector3(70, 70, 70);
 
   // WebGL constants
   private readonly WEB_GL_NAMESPACE = "webgl";
@@ -136,6 +135,7 @@ export class WebGLRenderer {
       );
 
       if (node.material instanceof BasicMaterial) {
+        console.log("masuk")
         // color
         // Paint all vertices
         const colorBufferAttribute = node.geometry.getAttribute(BufferAttributeName.COLOR);
@@ -151,18 +151,6 @@ export class WebGLRenderer {
       }
 
       if (node.material instanceof PhongMaterial) {
-        // tangent
-        const tangentBufferAttribute = node.geometry.getAttribute(BufferAttributeName.TANGENT);
-        tangentBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
-          this.gl,
-          tangentBufferAttribute.data
-        );
-        WebGLUtils.createAttribSetter(
-          this.gl,
-          this.glProgram,
-          tangentBufferAttribute
-        );
-
         // normal
         const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
         normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
@@ -246,7 +234,7 @@ export class WebGLRenderer {
           this.gl,
           this.glProgram,
           PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
-          normal ? 1 : 0,
+          normal ? 1 : 0, // TODO
           this.gl.BOOL
         );
 
@@ -263,6 +251,7 @@ export class WebGLRenderer {
         ); // 2 is the texture unit
 
         // Displacement
+        // Set displacement Map
         const displacementTexture = WebGLUtils.createTextureImage(this.gl, displacement);
         this.gl.activeTexture(this.gl.TEXTURE3); // activate texture unit 3
         this.gl.bindTexture(this.gl.TEXTURE_2D, displacementTexture); // bind the texture to texture unit 3
@@ -274,6 +263,7 @@ export class WebGLRenderer {
           this.gl.SAMPLER_2D
         ); // 3 is the texture unit
 
+        // Set displacement factor
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
@@ -282,25 +272,25 @@ export class WebGLRenderer {
           this.gl.FLOAT
         );
 
-
-        // camera position
+        // Set displacement bias
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          PHONG_VERTEX_SHADER.UNIFORM_CAMERA_POSITION,
-          camera.position.toArray(),
-          this.gl.FLOAT_VEC3
+          PHONG_VERTEX_SHADER.UNIFORM_DISPLACEMENT_BIAS,
+          displacement.bias,
+          this.gl.FLOAT
         );
 
 
-        // Light Direction
+        // Light Position
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          PHONG_VERTEX_SHADER.UNIFORM_LIGHT_DIRECTION,
-          this._directionalLightDirection.toArray(),
+          PHONG_VERTEX_SHADER.UNIFORM_LIGHT_POSITION,
+          this._lightPosition.toArray(),
           this.gl.FLOAT_VEC3
         );
+
 
         // normal matrix
         WebGLUtils.createUniformSetter(

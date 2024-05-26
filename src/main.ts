@@ -60,6 +60,7 @@ import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { Texture } from "src/material/texture.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
 import { Displacement } from "src/material/displacement.ts";
+import { BasicMaterial } from "src/material/basic-material.ts";
 
 /**
  * Main Script
@@ -297,9 +298,9 @@ const main = async () => {
   });
 
   shininessInput.addEventListener("input", () => {
-    const tempMesh = mainScene.children[0] as Mesh;
-    if (tempMesh.material instanceof PhongMaterial) {
-      tempMesh.material.shininess = parseFloat(shininessInput.value);
+    const selectedMesh = selectedNode as Mesh;
+    if (selectedMesh.material instanceof PhongMaterial) {
+      selectedMesh.material.shininess = parseFloat(shininessInput.value);
     }
   })
 
@@ -343,6 +344,20 @@ const main = async () => {
       displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
       // TODO
     });
+
+    displacementFactorInput.addEventListener("input", () => {
+      const selectedMesh = selectedNode as Mesh;
+      if (selectedMesh.material instanceof PhongMaterial) {
+        selectedMesh.material.displacement.factor = parseFloat(displacementFactorInput.value);
+      }
+    })
+
+    displacementBiasInput.addEventListener("input", () => {
+      const selectedMesh = selectedNode as Mesh;
+      if (selectedMesh.material instanceof PhongMaterial) {
+        selectedMesh.material.displacement.bias = parseFloat(displacementBiasInput.value);
+      }
+    })
 
     normalMappingCheckbox.addEventListener("change", () => {
       // No changes for now (?)

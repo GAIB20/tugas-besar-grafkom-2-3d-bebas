@@ -25,13 +25,11 @@ export enum BASIC_FRAGMENT_SHADER {
 export enum PHONG_VERTEX_SHADER {
   ATTRIBUTE_TEX_COORD = "a_texcoord",
   ATTRIBUTE_NORMAL = "a_normal",
-  ATTRIBUTE_TANGENT = "a_tangent",
-  ATTRIBUTE_BITANGENT = "a_bitangent",
-  UNIFORM_LIGHT_DIRECTION = "u_lightDirection",
   UNIFORM_NORMAL_MATRIX= "u_normalMatrix",
-  UNIFORM_CAMERA_POSITION = "u_cameraPosition",
   UNIFORM_DISPLACEMENT_MAP = "u_displacementMap",
   UNIFORM_DISPLACEMENT_FACTOR = "u_displacementFactor",
+  UNIFORM_DISPLACEMENT_BIAS = "u_displacementBias",
+  UNIFORM_LIGHT_POSITION = "u_lightPosition",
 }
 
 export enum PHONG_FRAGMENT_SHADER {
