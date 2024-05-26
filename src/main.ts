@@ -120,6 +120,7 @@ const main = async () => {
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
 
+  shininessInput.disabled = !phongCheckbox.checked;
   diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
   specularColorInput.disabled = !specularMappingCheckbox.checked;
   displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
@@ -352,6 +353,7 @@ const main = async () => {
     diffuseMappingCheckbox.disabled = !isPhongChecked;
     textureSelection.disabled = !isPhongChecked;
     normalMappingCheckbox.disabled = !isPhongChecked;
+    shininessInput.disabled = !isPhongChecked;
 
     displacementFactorInput.disabled =
       !isPhongChecked || !displacementMappingCheckbox.checked;
