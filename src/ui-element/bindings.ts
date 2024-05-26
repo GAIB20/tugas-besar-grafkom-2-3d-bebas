@@ -98,9 +98,6 @@ export {
   resetCamBtn,
   camDistanceInput,
 
-  // Texture
-  textureSelectInput,
-
   // Transformation
   xTranslationInput,
   yTranslationInput,
