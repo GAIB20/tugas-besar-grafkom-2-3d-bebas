@@ -71,8 +71,8 @@ const main = async () => {
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const renderer = new WebGLRenderer(canvas);
   renderer.init({
-    vertexShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
-    fragmentShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+    vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
   });
 
   // Init scene
