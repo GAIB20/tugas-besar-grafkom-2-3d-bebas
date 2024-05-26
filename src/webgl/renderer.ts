@@ -164,7 +164,6 @@ export class WebGLRenderer {
       );
 
       if (node.material instanceof BasicMaterial) {
-        console.log("masuk")
         // color
         // Paint all vertices
         const colorBufferAttribute = node.geometry.getAttribute(BufferAttributeName.COLOR);
