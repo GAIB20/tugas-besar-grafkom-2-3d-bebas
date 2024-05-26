@@ -44,6 +44,7 @@ const displacementMappingCheckbox = getElement("displacement-mapping-checkbox") 
 const normalMappingCheckbox = getElement("normal-mapping-checkbox") as HTMLInputElement;
 const displacementFactorInput = getElement("displacement-factor-slider") as HTMLInputElement;
 const displacementBiasInput = getElement("displacement-bias-slider") as HTMLInputElement;
+const textureSelection = getElement("texture-selection") as HTMLSelectElement;
 
 
 // Animation
@@ -127,7 +128,7 @@ export {
   normalMappingCheckbox,
   displacementFactorInput,
   displacementBiasInput,
-
+  textureSelection,
 
   // Animation
   animTogglePlay,

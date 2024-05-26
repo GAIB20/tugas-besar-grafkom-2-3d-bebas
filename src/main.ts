@@ -33,6 +33,7 @@ import {
   normalMappingCheckbox,
   displacementFactorInput,
   displacementBiasInput,
+  textureSelection,
   animToggleReverse,
   animToggleAutoPlay,
   animationToggleFrameNav,
@@ -301,6 +302,30 @@ const main = async () => {
       tempMesh.material.shininess = parseFloat(shininessInput.value);
     }
   })
+
+  // Texture Selection
+  textureSelection.addEventListener("change", () => {
+    const selectedTexture = textureSelection.value;
+    const textureIndex = parseInt(selectedTexture.split("-")[1]) - 1;
+    // TODO: Need to check
+    const mainMesh = mainScene.children[0] as Mesh;
+    if (mainMesh.material instanceof PhongMaterial) {
+      mainMesh.material = new PhongMaterial(
+        new Texture(
+          diffuseImageElements[textureIndex],
+        ),
+        new Texture(
+          specularImageElements[textureIndex],
+        ),
+        new Texture(
+          normalImageElements[textureIndex],
+        ),
+        new Displacement(
+          displacementImageElements[textureIndex],
+        )
+      );
+    }
+  });
 
   // Phong Mapping
     diffuseMappingCheckbox.addEventListener("change", () => {
