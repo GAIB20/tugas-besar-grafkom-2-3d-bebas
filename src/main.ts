@@ -306,17 +306,21 @@ const main = async () => {
   diffuseMappingCheckbox.addEventListener("change", () => {
     diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
     // TODO
+    renderer.isDiffuse = diffuseMappingCheckbox.checked;
   });
 
   specularMappingCheckbox.addEventListener("change", () => {
     specularColorInput.disabled = !specularMappingCheckbox.checked;
     // TODO
+    renderer.isSpecular = specularMappingCheckbox.checked;
+
   });
 
   displacementMappingCheckbox.addEventListener("change", () => {
     displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
     displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
     // TODO
+    renderer.isDisplacement = displacementMappingCheckbox.checked;
   });
 
   displacementFactorInput.addEventListener("input", () => {
