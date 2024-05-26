@@ -54,9 +54,9 @@ NOTE: Semua animasi hanya berlaku pada _articulated model_
 
 ## Pembagian Tugas
 
-| NIM      | Hollow Model | Object Model |
-| -------- | ------------ | ------------ |
-| 13521075 | x            | x            |
-| 13521087 | x            | x            |
-| 13521097 | x            | x            |
-| 13521102 | Box          | Tower        |
+| NIM      | Hollow Model | Object Model | Pembagian Kerja |
+| -------- | ------------ | ------------ | --------------- |
+| 13521075 | x            | x            | x               |
+| 13521087 | x            | x            | x               |
+| 13521097 | x            | x            | x               |
+| 13521102 | Box          | Tower        | x               |
