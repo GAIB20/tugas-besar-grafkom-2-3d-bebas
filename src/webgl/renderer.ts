@@ -4,7 +4,7 @@ import {
   COMMON_UNIFORM,
   BASIC_FRAGMENT_SHADER,
   PHONG_VERTEX_SHADER,
-  PHONG_FRAGMENT_SHADER,
+  PHONG_FRAGMENT_SHADER, BASIC_VERTEX_SHADER
 } from "../types/webgl-type.ts";
 import { Node } from "src/core/node.ts";
 import { Mesh } from "src/core/mesh.ts";
@@ -148,7 +148,7 @@ export class WebGLRenderer {
         const colorBufferAttribute = new BufferAttribute(
           new Float32Array(verticesColor.flat()),
           Color.size(),
-          COMMON_ATTRIBUTE.ATTRIBUTE_COLOR
+          BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR
         );
         colorBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
@@ -182,32 +182,75 @@ export class WebGLRenderer {
 
 
         // Diffuse
-        const diffuseColor = WebGLUtils.createTextureColor(this.gl, diffuse);
-        const diffuseTexture = WebGLUtils.createTextureImage(this.gl, diffuse);
-
-        this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
-        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseColor); // bind the texture to texture unit 0
+        // Set diffuse color
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
           PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_COLOR,
+          diffuse.color.getComponents(true),
+          this.gl.FLOAT_VEC4
+        );
+
+        // Set diffuse texture
+        const diffuseTexture = WebGLUtils.createTextureImage(this.gl, diffuse);
+        this.gl.activeTexture(this.gl.TEXTURE0); // activate texture unit 0
+        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseTexture); // bind the texture to texture unit 0
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_MAP,
           0,
           this.gl.SAMPLER_2D
         ); // 0 is the texture unit
 
-        this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
-        this.gl.bindTexture(this.gl.TEXTURE_2D, diffuseTexture); // bind the texture to texture unit 1
+
+        // Specular
+        // Set specular color
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          PHONG_FRAGMENT_SHADER.UNIFORM_DIFFUSE_TEXTURE,
+          PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_COLOR,
+          specular.color.getComponents(),
+          this.gl.FLOAT_VEC4
+        );
+
+        // Set specular texture
+        const specularTexture = WebGLUtils.createTextureImage(this.gl, specular);
+        this.gl.activeTexture(this.gl.TEXTURE1); // activate texture unit 1
+        this.gl.bindTexture(this.gl.TEXTURE_2D, specularTexture); // bind the texture to texture unit 1
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_SPECULAR_MAP,
           1,
           this.gl.SAMPLER_2D
         ); // 1 is the texture unit
 
 
+        // Normal Mapping
+        // does use normal map?
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
+          normal ? 1 : 0,
+          this.gl.BOOL
+        );
 
-        // Normal
+        // Set normal texture
+        const normalTexture = WebGLUtils.createTextureImage(this.gl, normal);
+        this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
+        this.gl.bindTexture(this.gl.TEXTURE_2D, normalTexture); // bind the texture to texture unit 2
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_NORMAL_MAP,
+          2,
+          this.gl.SAMPLER_2D
+        ); // 2 is the texture unit
+
+
+        // Normal Direction
         const normalBufferAttribute = node.geometry.getAttribute(BufferAttributeName.NORMAL);
         normalBufferAttribute.buffer = WebGLUtils.createBufferFromTypedArray(
           this.gl,
@@ -219,29 +262,32 @@ export class WebGLRenderer {
           normalBufferAttribute
         );
 
+        // Light Direction
         WebGLUtils.createUniformSetter(
           this.gl,
           this.glProgram,
-          PHONG_VERTEX_SHADER.UNIFORM_WORLD_INVERSE_TRANSPOSE,
-          node.worldMatrix.inverse().transpose().toArray(),
-          this.gl.FLOAT_MAT4
-        )
-
-        WebGLUtils.createUniformSetter(
-          this.gl,
-          this.glProgram,
-          PHONG_FRAGMENT_SHADER.UNIFORM_REVERSE_LIGHT_DIRECTION,
+          PHONG_VERTEX_SHADER.UNIFORM_LIGHT_DIRECTION,
           this._directionalLightDirection.toArray(),
           this.gl.FLOAT_VEC3
         );
+
+        // Shininess
+        WebGLUtils.createUniformSetter(
+          this.gl,
+          this.glProgram,
+          PHONG_FRAGMENT_SHADER.UNIFORM_SHININESS,
+          node.material.shininess,
+          this.gl.FLOAT
+        );
       }
 
+      // Ambient Color
       WebGLUtils.createUniformSetter(
         this.gl,
         this.glProgram,
-        BASIC_FRAGMENT_SHADER.UNIFORM_AMBIENT_COLOR,
-        this.ambientLightColor.getRGBComponents(),
-        this.gl.FLOAT_VEC3
+        COMMON_UNIFORM.UNIFORM_AMBIENT_COLOR,
+        this.ambientLightColor.getComponents(),
+        this.gl.FLOAT_VEC4
       );
 
       WebGLUtils.createUniformSetter(

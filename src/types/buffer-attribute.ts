@@ -4,4 +4,6 @@ export enum BufferAttributeName {
   NORMAL = "normal",
   TEXCOORD = "texcoord",
   COLOR = "color",
+  TANGENT = "tangent",
+  BITANGENT = "bitangent",
 }

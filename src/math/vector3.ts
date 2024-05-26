@@ -47,6 +47,20 @@ export class Vector3 {
     this._z = z;
   }
 
+  set (array: number[]) {
+    this._x = array[0];
+    this._y = array[1];
+    this._z = array[2];
+    return this;
+  }
+
+  public multiplyScalar(scalar: number) {
+    this._x *= scalar;
+    this._y *= scalar;
+    this._z *= scalar;
+    return this;
+  }
+
   public static zero() {
     return new Vector3(0, 0, 0);
   }

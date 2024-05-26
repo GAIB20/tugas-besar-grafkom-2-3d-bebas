@@ -10,7 +10,6 @@ export class BoxGeometry extends BufferGeometry {
     height: number;
     depth: number;
 
-    // TODO: need to check
     constructor(width=1, height=1, depth=1) {
       super();
       this._type = GEOMETRY_TYPE.BOX;
@@ -20,17 +19,17 @@ export class BoxGeometry extends BufferGeometry {
       const hw = width/2, hh = height/2, hd = depth/2;
 
       const indices = new Uint16Array([
-        0, 1, 2, 0, 2, 3,
+        0, 1, 3, 3, 1, 2,
 
-        4, 5, 6, 7, 5, 4,
+        6, 4, 5, 5, 4, 7,
 
-        4, 0, 3, 7, 4, 3,
+        7, 4, 3, 3, 4, 0,
 
-        6, 5, 2, 1, 6, 2,
+        6, 5, 1, 1, 5, 2,
 
-        5, 3, 2, 5, 7, 3,
+        5, 7, 2, 2, 7, 3,
 
-        6, 0, 4, 6, 1, 0,
+        4, 6, 0, 0, 6, 1,
       ]);
       const vertices = new Float32Array([
         -hw, hh, hd,
@@ -44,47 +43,47 @@ export class BoxGeometry extends BufferGeometry {
       ]);
 
       const texCoords = new Float32Array([
-        0, 1,
         0, 0,
         1, 0,
+        0, 1,
         0, 1,
         1, 0,
         1, 1,
 
-        0, 1,
-        1, 0,
-        1, 1,
         0, 0,
         1, 0,
         0, 1,
-
-        1, 0,
-        1, 1,
         0, 1,
-        0, 0,
         1, 0,
-        0, 1,
-
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
-        0, 0,
         1, 1,
 
         0, 0,
-        1, 1,
+        1, 0,
         0, 1,
-        0, 0,
+        0, 1,
         1, 0,
         1, 1,
 
-        1, 0,
-        0, 1,
         0, 0,
         1, 0,
-        1, 1,
         0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
+
+        0, 0,
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
+
+        0, 0,
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
       ]);
 
       const normals = new Float32Array([
@@ -137,9 +136,9 @@ export class BoxGeometry extends BufferGeometry {
         -1, 0, 0,
       ]);
 
-      this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
+      this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION,));
       this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
-      this.setAttribute(BufferAttributeName.TEXCOORD, new BufferAttribute(texCoords, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD));
+      this.setAttribute(BufferAttributeName.TEXCOORD, new BufferAttribute(texCoords, 2, PHONG_VERTEX_SHADER.ATTRIBUTE_TEX_COORD, ));
       this.setAttribute(BufferAttributeName.NORMAL, new BufferAttribute(normals, 3, PHONG_VERTEX_SHADER.ATTRIBUTE_NORMAL));
       this.calculateNormals();
     }
