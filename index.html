@@ -229,75 +229,46 @@
             />
           </div>
 
-
+          <div class="slider-container">
+            <label name="diffuse-mapping" for="diffuse-mapping-checkbox">
+              Diffuse Mapping
+            </label>
+            <input type="checkbox" id="diffuse-mapping-checkbox" />
+          </div>
+          
           <div class="slider-container">
             <label name="diffuse-color" for="diffuse-color-picker" class="color-picker">
               Diffuse Color
             </label>
-            <input
-              id="diffuse-color-picker"
-              type="color"
-              step="0.1"
-            />
+            <input id="diffuse-color-picker" type="color" step="0.1" />
           </div>
 
           <div class="slider-container">
-            <label name="diffuse-texture" for="diffuse-texture-dropdown">
-              Diffuse Texture
+            <label name="specular-mapping" for="specular-mapping-checkbox">
+              Specular Mapping
             </label>
-            <select name="diffuse-texture" id="diffuse-texture-dropdown">
-              <option value="none" selected>None</option>
-              <option value="texture-1">Texture 1</option>
-              <option value="texture-2">Texture 2</option>
-              <option value="texture-3">Texture 3</option>
-            </select>
+            <input type="checkbox" id="specular-mapping-checkbox" />
           </div>
-
+          
           <div class="slider-container">
             <label name="specular-color" for="specular-color-picker" class="color-picker">
               Specular Color
             </label>
-            <input
-              id="specular-color-picker"
-              type="color"
-              step="0.1"
-            />
+            <input id="specular-color-picker" type="color" step="0.1" />
           </div>
 
           <div class="slider-container">
-            <label name="specular-texture" for="specular-texture-dropdown">
-              Specular Texture
+            <label name="displacement-mapping" for="displacement-mapping-checkbox">
+              Displacement Mapping
             </label>
-            <select name="specular-texture" id="specular-texture-dropdown">
-              <option value="none" selected>None</option>
-              <option value="texture-1">Texture 1</option>
-              <option value="texture-2">Texture 2</option>
-              <option value="texture-3">Texture 3</option>
-            </select>
+            <input type="checkbox" id="displacement-mapping-checkbox" />
           </div>
 
           <div class="slider-container">
-            <label name="displacement-texture" for="displacement-texture-dropdown">
-              Disp. Texture
+            <label name="normal-mapping" for="normal-mapping-checkbox">
+              Normal Mapping
             </label>
-            <select name="displacement-texture" id="displacement-texture-dropdown">
-              <option value="none" selected>None</option>
-              <option value="texture-1">Texture 1</option>
-              <option value="texture-2">Texture 2</option>
-              <option value="texture-3">Texture 3</option>
-            </select>
-          </div>
-
-          <div class="slider-container">
-            <label name="normal-texture" for="normal-texture-dropdown">
-              Normal Texture
-            </label>
-            <select name="normal-texture" id="normal-texture-dropdown">
-              <option value="none" selected>None</option>
-              <option value="texture-1">Texture 1</option>
-              <option value="texture-2">Texture 2</option>
-              <option value="texture-3">Texture 3</option>
-            </select>
+            <input type="checkbox" id="normal-mapping-checkbox" />
           </div>
 
           <div class="slider-container">
@@ -314,7 +285,7 @@
               class="slider"
             />
           </div>
-
+          
           <div class="slider-container">
             <label name="displacement-bias-label" for="displacement-bias-slider" class="label-slider">
               Disp. Bias
