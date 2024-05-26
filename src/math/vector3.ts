@@ -58,6 +58,7 @@ export class Vector3 {
     this._x *= scalar;
     this._y *= scalar;
     this._z *= scalar;
+
     return this;
   }
 
@@ -77,15 +78,6 @@ export class Vector3 {
     return new Vector3(x, y, z);
   }
 
-  public static subtractToArray(v1: Vector3, v2: Vector3) {
-    const result: number[] = new Array(3);
-    result[0] = v1.x - v2.x;
-    result[1] = v1.y - v2.y;
-    result[2] = v1.z - v2.z;
-
-    return result;
-  }
-
   public static add(v1: Vector3, v2: Vector3) {
     return new Vector3(v1._x + v2._x, v1._y + v2._y, v1._z + v2._z);
   }
@@ -100,6 +92,13 @@ export class Vector3 {
       v1._z * v2._x - v1._x * v2._z,
       v1._x * v2._y - v1._y * v2._x
     );
+  }
+
+  public static angle(v1: Vector3, v2: Vector3) {
+    const v1Normalized = v1.clone().normalize();
+    const v2Normalized = v2.clone().normalize();
+
+    return Math.acos(Vector3.dot(v1Normalized, v2Normalized));
   }
 
   public normalize() {
