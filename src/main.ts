@@ -31,6 +31,7 @@ import {
   specularMappingCheckbox,
   displacementMappingCheckbox,
   normalMappingCheckbox,
+  phongCheckbox,
   displacementFactorInput,
   displacementBiasInput,
   textureSelection,
@@ -225,6 +226,8 @@ const main = async () => {
       });
 
       updateSceneGraph(mainScene, sceneGraphTree);
+
+      phongCheckbox.checked = false;
     }
   });
   saveInput.addEventListener("click", () =>
@@ -362,6 +365,51 @@ const main = async () => {
     normalMappingCheckbox.addEventListener("change", () => {
       // No changes for now (?)
       // TODO
+    });
+
+    phongCheckbox.addEventListener("change", () => {
+      const isPhongChecked = phongCheckbox.checked;
+      // Menonaktifkan atau mengaktifkan input lainnya berdasarkan status phongCheckbox
+      displacementMappingCheckbox.disabled = !isPhongChecked;
+      specularMappingCheckbox.disabled = !isPhongChecked;
+      diffuseMappingCheckbox.disabled = !isPhongChecked;
+      textureSelection.disabled = !isPhongChecked;
+      normalMappingCheckbox.disabled = !isPhongChecked;
+
+      displacementFactorInput.disabled = !isPhongChecked || !displacementMappingCheckbox.checked;
+      displacementBiasInput.disabled = !isPhongChecked || !displacementMappingCheckbox.checked;
+      specularColorInput.disabled = !isPhongChecked || !specularMappingCheckbox.checked;
+      diffuseColorInput.disabled = !isPhongChecked || !diffuseMappingCheckbox.checked;
+      
+      if(phongCheckbox.checked){
+        (mainScene.children[0] as Mesh).material = new PhongMaterial(
+          new Texture(
+            diffuseImageElements[0],
+          ),
+          new Texture(
+            specularImageElements[0],
+          ),
+          new Texture(
+            normalImageElements[0],
+          ),
+          new Displacement(
+            displacementImageElements[0],
+          )
+        );
+        renderer.init({
+          vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+          fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+        });
+      }
+      else{
+        (mainScene.children[0] as Mesh).material = new BasicMaterial();
+
+        renderer.init({
+          vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+          fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
+        });
+      }
+    
     });
 
   // Animation
