@@ -414,7 +414,14 @@ const main = async () => {
       frameIndex = 0;
       animationFrameData.classList.remove("hidden-element");
       animationFrameData.innerText = "Frame Index: " + frameIndex;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
     } else {
       animationFrameData.classList.add("hidden-element");
     }
@@ -430,7 +437,14 @@ const main = async () => {
       if (frameIndex >= mainScene.children[0].animation.frames.length)
         frameIndex = 0;
       animationFrameData.innerText = "Frame Index: " + frameIndex;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
     }
   });
   animTogglePrevFrame.addEventListener("click", () => {
@@ -439,27 +453,55 @@ const main = async () => {
       if (frameIndex < 0)
         frameIndex = mainScene.children[0].animation.frames.length - 1;
       animationFrameData.innerText = "Frame Index: " + frameIndex;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
     }
   });
   animToggleStartFrame.addEventListener("click", () => {
     if (animationToggleFrameNav.checked && mainScene.children[0].animation) {
       frameIndex = 0;
       animationFrameData.innerText = "Frame Index: " + frameIndex;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
     }
   });
   animToggleEndFrame.addEventListener("click", () => {
     if (animationToggleFrameNav.checked && mainScene.children[0].animation) {
       frameIndex = mainScene.children[0].animation.frames.length - 1;
       animationFrameData.innerText = "Frame Index: " + frameIndex;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
     }
   });
   animControllerInsertFrame.addEventListener("click", () => {
     if (animationToggleFrameNav.checked) {
       mainScene.children[0].insertFrameToAnimClip(frameIndex);
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
       animationFrameData.innerText = "Frame Index: " + frameIndex;
     }
   });
@@ -469,7 +511,14 @@ const main = async () => {
       frameIndex--;
       if (frameIndex < 0)
         frameIndex = mainScene.children[0].animation.frames.length - 1;
-      mainScene.children[0].applyFrameAnimation(frameIndex);
+      mainScene.children[0].applyFrameAnimation(
+        frameIndex,
+        undefined,
+        "linear",
+        0,
+        false,
+        true
+      );
       animationFrameData.innerText = "Frame Index: " + frameIndex;
     }
   });

@@ -289,7 +289,8 @@ export class Node {
     keyframe?: AnimationTRS,
     easingType: string = "linear",
     tweenProgress: number = 0,
-    isChildren?: boolean
+    isChildren?: boolean,
+    instant?: boolean
   ) {
     if (
       frameIndex < 0 ||
@@ -315,29 +316,35 @@ export class Node {
     let scale = this._transform.scale.toArray();
 
     if (nextKeyframe) {
-      if (nextKeyframe.translation) {
-        translation = interpolateArray(
-          translation,
-          nextKeyframe.translation,
-          tweenProgress,
-          easingFunction
-        );
-      }
-      if (nextKeyframe.rotation) {
-        rotation = interpolateArray(
-          rotation,
-          nextKeyframe.rotation,
-          tweenProgress,
-          easingFunction
-        );
-      }
-      if (nextKeyframe.scale) {
-        scale = interpolateArray(
-          scale,
-          nextKeyframe.scale,
-          tweenProgress,
-          easingFunction
-        );
+      if (!instant) {
+        if (nextKeyframe.translation) {
+          translation = interpolateArray(
+            translation,
+            nextKeyframe.translation,
+            tweenProgress,
+            easingFunction
+          );
+        }
+        if (nextKeyframe.rotation) {
+          rotation = interpolateArray(
+            rotation,
+            nextKeyframe.rotation,
+            tweenProgress,
+            easingFunction
+          );
+        }
+        if (nextKeyframe.scale) {
+          scale = interpolateArray(
+            scale,
+            nextKeyframe.scale,
+            tweenProgress,
+            easingFunction
+          );
+        }
+      } else {
+        translation = nextKeyframe.translation ?? [];
+        rotation = nextKeyframe.rotation ?? [];
+        scale = nextKeyframe.scale ?? [];
       }
     }
 
@@ -362,7 +369,8 @@ export class Node {
             childFrame.keyframe,
             easingType,
             tweenProgress,
-            true
+            true,
+            instant
           );
         }
       }
