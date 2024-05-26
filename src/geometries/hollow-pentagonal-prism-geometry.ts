@@ -1,13 +1,15 @@
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
-import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
+import { BASIC_VERTEX_SHADER, COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
+import { IBufferGeometry } from "src/types/deserializer.ts";
+import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 
 export class HollowGeometry5 extends BufferGeometry {
 
-  // TODO: need to check
   constructor() {
     super();
+    this._type = GEOMETRY_TYPE.HOLLOW_PENTA_PRISM;
 
     const indices = new Uint16Array([
       0, 1, 2, 1, 3, 2,
@@ -60,7 +62,7 @@ export class HollowGeometry5 extends BufferGeometry {
 
       2, 19, 9, 15, 19, 2,
     ]);
-    const vertices = new Float32Array([
+    let vertices = new Float32Array([
       50, 0, 0,
       15.45, 47.55, 0,
       50, 0, 100,
@@ -83,8 +85,205 @@ export class HollowGeometry5 extends BufferGeometry {
       7.725, -23.775, 100,
     ]);
 
+    const colors = new Float32Array([
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+    ]);
+
     this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
-    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
+    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, 6, ""));
+    this.setAttribute(BufferAttributeName.COLOR, new BufferAttribute(colors, 4, BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR));
     this.calculateNormals();
+  }
+
+  public toJSON() {
+    const attributes = super.toJSON();
+    return {
+      ...attributes,
+    };
+  }
+
+  public static fromJSON(
+    json: IBufferGeometry,
+    geometry?: HollowGeometry5
+  ) {
+    if (!geometry) geometry = new HollowGeometry5();
+    super.fromJSON(json, geometry);
+
+    return geometry;
   }
 }
