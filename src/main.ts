@@ -72,8 +72,8 @@ const main = async () => {
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
   renderer.init({
-    vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
-    fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
+    vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
   });
 
   // Init scene
@@ -116,26 +116,22 @@ const main = async () => {
 
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
-  // new BasicMaterial(
-  //   basicFragmentScript,
-  //   basicVertexScript,
-  //   new Color(1, 0, 0, 1),
-  // ),
+    new BasicMaterial(),
 
-    new PhongMaterial(
-      new Texture(
-        diffuseImageElements[0],
-      ),
-      new Texture(
-        specularImageElements[0],
-      ),
-      new Texture(
-        normalImageElements[0],
-      ),
-      new Texture(
-        displacementImageElements[0],
-      ),
-    )
+    // new PhongMaterial(
+    //   new Texture(
+    //     diffuseImageElements[0],
+    //   ),
+    //   new Texture(
+    //     specularImageElements[0],
+    //   ),
+    //   new Texture(
+    //     normalImageElements[0],
+    //   ),
+    //   new Texture(
+    //     displacementImageElements[0],
+    //   ),
+    // )
   );
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);

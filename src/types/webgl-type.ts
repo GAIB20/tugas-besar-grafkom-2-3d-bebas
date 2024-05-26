@@ -8,7 +8,6 @@ export enum SHADER_TYPE {
 export enum COMMON_ATTRIBUTE {
   ATTRIBUTE_POSITION = "a_position",
   ATTRIBUTE_NORMAL = "a_normal",
-  ATTRIBUTE_COLOR = "a_color",
   ATTRIBUTE_TEX_COORD = "a_texCoord",
 }
 
@@ -18,7 +17,7 @@ export enum COMMON_UNIFORM {
 }
 
 export enum BASIC_VERTEX_SHADER {
-  UNIFORM_COLOR = "u_color",
+  ATTRIBUTE_COLOR = "a_color",
 }
 
 export enum BASIC_FRAGMENT_SHADER {
