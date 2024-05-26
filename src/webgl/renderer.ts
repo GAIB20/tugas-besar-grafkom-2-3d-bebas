@@ -305,27 +305,38 @@ export class WebGLRenderer {
         }
 
         // Normal Mapping
-        // if (this.isNormalMap) {
-        WebGLUtils.createUniformSetter(
-          this.gl,
-          this.glProgram,
-          PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
-          normal ? 1 : 0, // TODO
-          this.gl.BOOL
-        );
+        if (this.isNormalMap) {
+          WebGLUtils.createUniformSetter(
+            this.gl,
+            this.glProgram,
+            PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
+            1,
+            this.gl.BOOL
+          );
 
-        // Set normal texture
-        const normalTexture = WebGLUtils.createTextureImage(this.gl, normal);
-        this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
-        this.gl.bindTexture(this.gl.TEXTURE_2D, normalTexture); // bind the texture to texture unit 2
-        WebGLUtils.createUniformSetter(
-          this.gl,
-          this.glProgram,
-          PHONG_FRAGMENT_SHADER.UNIFORM_NORMAL_MAP,
-          2,
-          this.gl.SAMPLER_2D
-        ); // 2 is the texture unit
-        // }
+          // Set normal texture
+          const normalTexture = WebGLUtils.createTextureImage(this.gl, normal);
+          this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
+          this.gl.bindTexture(this.gl.TEXTURE_2D, normalTexture); // bind the texture to texture unit 2
+          WebGLUtils.createUniformSetter(
+            this.gl,
+            this.glProgram,
+            PHONG_FRAGMENT_SHADER.UNIFORM_NORMAL_MAP,
+            2,
+            this.gl.SAMPLER_2D
+          ); // 2 is the texture unit
+        } else {
+          WebGLUtils.createUniformSetter(
+            this.gl,
+            this.glProgram,
+            PHONG_FRAGMENT_SHADER.UNIFORM_USE_NORMAL_MAP,
+            0,
+            this.gl.BOOL
+          );
+
+          this.gl.activeTexture(this.gl.TEXTURE2); // activate texture unit 2
+          this.gl.bindTexture(this.gl.TEXTURE_2D, null); // unbind texture
+        }
 
         // Displacement
         if (this._isDisplacement) {

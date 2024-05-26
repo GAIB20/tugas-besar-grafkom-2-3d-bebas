@@ -341,8 +341,7 @@ const main = async () => {
   });
 
   normalMappingCheckbox.addEventListener("change", () => {
-    // No changes for now (?)
-    // TODO
+    renderer.isNormalMap = normalMappingCheckbox.checked;
   });
 
   phongCheckbox.addEventListener("change", () => {
