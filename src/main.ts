@@ -115,9 +115,6 @@ const main = async () => {
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
   // new BasicMaterial(
-  //   basicFragmentScript,
-  //   basicVertexScript,
-  //   new Color(1, 0, 0, 1),
   // ),
 
     new PhongMaterial(
