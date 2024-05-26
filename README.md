@@ -11,7 +11,7 @@
 
 ### Panduan Penggunaan
 
-1. Model default yang ditampilkan adalah `tower.json` yang juga terdapat pada folder `test` di project ini. Jika ingin mengganti model, klik button `Load` pada menu bagian kiri di section 1 (lihat gambar).
+1. Model default yang ditampilkan adalah `Box Geometry` yang juga terdapat pada folder `test` di project ini. Jika ingin mengganti model, klik button `Load` pada menu bagian kiri di section 1 (lihat gambar).
 
 <img src="public/guide_1.png" width=350>
 
