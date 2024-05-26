@@ -3,15 +3,15 @@ import { Color } from "src/types/color.ts";
 
 export class Texture{
   private _color: Color;
-  private _buffer?: WebGLBuffer;
-  private _imageElement: HTMLImageElement;
-  private _wrapS: number; // horizontal
-  private _wrapT: number; // vertical
-  private _magFilter: number;
-  private _minFilter: number;
-  private _format: number;
-  private _dtype: WEB_GL_DATA_TYPE;
-  private _generateMipmap: boolean;
+  protected _buffer?: WebGLBuffer;
+  protected _imageElement: HTMLImageElement;
+  protected _wrapS: number; // horizontal
+  protected _wrapT: number; // vertical
+  protected  _magFilter: number;
+  protected  _minFilter: number;
+  protected  _format: number;
+  protected  _dtype: WEB_GL_DATA_TYPE;
+  protected  _generateMipmap: boolean;
 
   /* constructor */
   constructor(

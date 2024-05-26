@@ -55,12 +55,10 @@ import { useOrbit } from "./composables/useOrbit";
 // Stylesheet imports
 import "src/css/global.css";
 import { EASING_FUNCTION } from "./math/extra";
-import { BasicMaterial } from "src/material/basic-material";
 import { BoxGeometry } from "src/geometries/box-geometry.ts";
 import { Texture } from "src/material/texture.ts";
 import { PhongMaterial } from "src/material/phong-material.ts";
-import { FGeometry } from "src/geometries/f-geometry.ts";
-import { WebGLUtils } from "src/webgl/util.ts";
+import { Displacement } from "src/material/displacement.ts";
 
 /**
  * Main Script
@@ -72,8 +70,8 @@ const main = async () => {
   // TODO: render script dynamically
   // renderer.init({ vertexShader: basicVertexScript, fragmentShader: basicFragmentScript });
   renderer.init({
-    vertexShader: SHADER_SCRIPTS.BASIC_VERTEX_SHADER_SCRIPT,
-    fragmentShader: SHADER_SCRIPTS.BASIC_FRAGMENT_SHADER_SCRIPT,
+    vertexShader: SHADER_SCRIPTS.PHONG_VERTEX_SHADER_SCRIPT,
+    fragmentShader: SHADER_SCRIPTS.PHONG_FRAGMENT_SHADER_SCRIPT,
   });
 
   // Init scene
@@ -116,22 +114,23 @@ const main = async () => {
 
   const testMesh = new Mesh(
     new BoxGeometry(50, 50, 50),
-    new BasicMaterial(),
+  // new BasicMaterial(
+  // ),
 
-    // new PhongMaterial(
-    //   new Texture(
-    //     diffuseImageElements[0],
-    //   ),
-    //   new Texture(
-    //     specularImageElements[0],
-    //   ),
-    //   new Texture(
-    //     normalImageElements[0],
-    //   ),
-    //   new Texture(
-    //     displacementImageElements[0],
-    //   ),
-    // )
+    new PhongMaterial(
+      new Texture(
+        diffuseImageElements[0],
+      ),
+      new Texture(
+        specularImageElements[0],
+      ),
+      new Texture(
+        normalImageElements[0],
+      ),
+      new Displacement(
+        displacementImageElements[0],
+      ),
+    )
   );
   mainScene.addChild(testMesh);
   updateSceneGraph(mainScene, sceneGraphTree);
@@ -296,22 +295,33 @@ const main = async () => {
     renderer.ambientLightColor = Color.fromHex(ambientLightColorInput.value);
   });
 
+  shininessInput.addEventListener("input", () => {
+    const tempMesh = mainScene.children[0] as Mesh;
+    if (tempMesh.material instanceof PhongMaterial) {
+      tempMesh.material.shininess = parseFloat(shininessInput.value);
+    }
+  })
+
   // Phong Mapping
     diffuseMappingCheckbox.addEventListener("change", () => {
       diffuseColorInput.disabled = !diffuseMappingCheckbox.checked;
+      // TODO
     });
 
     specularMappingCheckbox.addEventListener("change", () => {
       specularColorInput.disabled = !specularMappingCheckbox.checked;
+      // TODO
     });
 
     displacementMappingCheckbox.addEventListener("change", () => {
       displacementFactorInput.disabled = !displacementMappingCheckbox.checked;
       displacementBiasInput.disabled = !displacementMappingCheckbox.checked;
+      // TODO
     });
 
     normalMappingCheckbox.addEventListener("change", () => {
       // No changes for now (?)
+      // TODO
     });
 
   // Animation

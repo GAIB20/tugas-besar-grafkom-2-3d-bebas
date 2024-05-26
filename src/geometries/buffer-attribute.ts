@@ -140,13 +140,9 @@ export class BufferAttribute {
     }
   }
 
-  // TODO: check this function
-  get(index: number, size?: number) {
-    index *= this._size;
+    get(index: number, size?: number) {
     if (!size) size = this._size;
     const data: number[] = [];
-    // Ambil elemen[index] ke data (data.length == size)
-    // Jangan lupa untuk menyesuaikan dengan offset dan stride.
     const offset = this._offset + index * this._stride;
     for (let i = 0; i < size; i++) {
       data[i] = this._data[offset + i];

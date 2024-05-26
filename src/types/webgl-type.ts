@@ -7,13 +7,12 @@ export enum SHADER_TYPE {
 
 export enum COMMON_ATTRIBUTE {
   ATTRIBUTE_POSITION = "a_position",
-  ATTRIBUTE_NORMAL = "a_normal",
-  ATTRIBUTE_TEX_COORD = "a_texCoord",
 }
 
 export enum COMMON_UNIFORM {
-  UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
-  UNIFORM_WORLD_MATRIX = "u_WorldMat",
+  UNIFORM_VIEW_PROJ_MATRIX = "u_viewProjectionMatrix",
+  UNIFORM_WORLD_MATRIX = "u_worldMatrix",
+  UNIFORM_AMBIENT_COLOR = "u_ambientColor"
 }
 
 export enum BASIC_VERTEX_SHADER {
@@ -21,38 +20,28 @@ export enum BASIC_VERTEX_SHADER {
 }
 
 export enum BASIC_FRAGMENT_SHADER {
-  UNIFORM_AMBIENT_COLOR = "u_ambientColor"
 }
 
 export enum PHONG_VERTEX_SHADER {
-  ATTRIBUTE_TEX_COORD = "a_texCoord",
+  ATTRIBUTE_TEX_COORD = "a_texcoord",
   ATTRIBUTE_NORMAL = "a_normal",
-  UNIFORM_WORLD_INVERSE_TRANSPOSE = "u_worldInverseTranspose",
-
-
-
-  // TODO
-  // UNIFORM_WORLD_MATRIX = "u_WorldMat",
-  // UNIFORM_VIEW_PROJ_MATRIX = "u_ViewProjMat",
-  // UNIFORM_RESOLUTION = "u_resolution",
-  // UNIFORM_USE_VERTEX_COLOR = "u_useVertexColor",
+  ATTRIBUTE_TANGENT = "a_tangent",
+  ATTRIBUTE_BITANGENT = "a_bitangent",
+  UNIFORM_LIGHT_DIRECTION = "u_lightDirection",
+  UNIFORM_NORMAL_MATRIX= "u_normalMatrix",
+  UNIFORM_CAMERA_POSITION = "u_cameraPosition",
+  UNIFORM_DISPLACEMENT_MAP = "u_displacementMap",
+  UNIFORM_DISPLACEMENT_FACTOR = "u_displacementFactor",
 }
 
 export enum PHONG_FRAGMENT_SHADER {
   UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
-  UNIFORM_DIFFUSE_TEXTURE = "u_diffuseTexture",
-  UNIFORM_AMBIENT_LIGHT_COLOR = "u_ambientLightColor",
-  UNIFORM_DIRECTIONAL_LIGHT_DIRECTIONS = "u_directionalLightDirections[1]",
-  UNIFORM_DIRECTIONAL_LIGHT_COLORS = "u_directionalLightColors[1]",
-  UNIFORM_REVERSE_LIGHT_DIRECTION = "u_reverseLightDirection",
-
-  // TODO
-  // UNIFORM_SHININESS = "u_shininess",
-  // UNIFORM_LIGHT_POSITION = "u_lightPosition",
-  // UNIFORM_CAMERA_POSITION = "u_cameraPosition",
-  // UNIFORM_AMBIENT_COLOR = "u_ambientColor",
-  // UNIFORM_DIFFUSE_COLOR = "u_diffuseColor",
-  // UNIFORM_SPECULAR_COLOR = "u_specularColor",
+  UNIFORM_DIFFUSE_MAP = "u_diffuseMap",
+  UNIFORM_SPECULAR_COLOR = "u_specularColor",
+  UNIFORM_SPECULAR_MAP = "u_specularMap",
+  UNIFORM_NORMAL_MAP = "u_normalMap",
+  UNIFORM_USE_NORMAL_MAP = "u_useNormalMap",
+  UNIFORM_SHININESS = "u_shininess",
 }
 
 export enum WEB_GL_DATA_TYPE {

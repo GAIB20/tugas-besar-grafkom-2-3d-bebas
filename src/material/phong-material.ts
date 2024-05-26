@@ -1,12 +1,13 @@
 import { ShaderMaterial } from "src/material/shader-material.ts";
 import { Texture } from "src/material/texture.ts";
 import { SHADER_SCRIPTS } from "src/shaders";
+import { Displacement } from "src/material/displacement.ts";
 
 export class PhongMaterial extends ShaderMaterial {
   private _diffuse: Texture;
   private _specular: Texture;
   private _normal: Texture;
-  private _displacement: Texture;
+  private _displacement: Displacement;
   private _shininess: number;
   // private _lightPosition: Float32Array;
 
@@ -15,7 +16,7 @@ export class PhongMaterial extends ShaderMaterial {
     diffuse: Texture,
     specular: Texture,
     normal: Texture,
-    displacement: Texture,
+    displacement: Displacement,
     shininess?: number,
     /* lightPosition: Float32Array, */) {
     super(
@@ -59,11 +60,11 @@ export class PhongMaterial extends ShaderMaterial {
     return this._normal;
   }
 
-  public set displacement(displacement: Texture) {
+  public set displacement(displacement: Displacement) {
     this._displacement = displacement;
   }
 
-  public get displacement():Texture {
+  public get displacement(): Displacement {
     return this._displacement;
   }
 

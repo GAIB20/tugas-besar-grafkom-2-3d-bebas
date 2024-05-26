@@ -20,71 +20,71 @@ export class BoxGeometry extends BufferGeometry {
       const hw = width/2, hh = height/2, hd = depth/2;
 
       const indices = new Uint16Array([
-        0, 1, 2, 0, 2, 3,
+        0, 1, 3, 3, 1, 2,
 
-        4, 5, 6, 7, 5, 4,
+        6, 4, 5, 5, 4, 7,
 
-        4, 0, 3, 7, 4, 3,
+        7, 4, 3, 3, 4, 0,
 
-        6, 5, 2, 1, 6, 2,
+        6, 5, 1, 1, 5, 2,
 
-        5, 3, 2, 5, 7, 3,
+        5, 7, 2, 2, 7, 3,
 
-        6, 0, 4, 6, 1, 0,
+        4, 6, 0, 0, 6, 1,
       ]);
       const vertices = new Float32Array([
-        -hw, hh, hd,
-        -hw, -hh, hd,
-        hw, -hh, hd,
-        hw, hh, hd,
-        -hw, hh, -hd,
-        hw, -hh, -hd,
-        -hw, -hh, -hd,
-        hw, hh, -hd,
+        -hw, hh, hd, // 0
+        -hw, -hh, hd, // 1
+        hw, -hh, hd, // 2
+        hw, hh, hd, // 3
+        -hw, hh, -hd,  // 4
+        hw, -hh, -hd, // 5
+        -hw, -hh, -hd, // 6
+        hw, hh, -hd, // 7
       ]);
 
       const texCoords = new Float32Array([
-        0, 1,
         0, 0,
         1, 0,
+        0, 1,
         0, 1,
         1, 0,
         1, 1,
 
-        0, 1,
-        1, 0,
-        1, 1,
         0, 0,
         1, 0,
         0, 1,
-
-        1, 0,
-        1, 1,
         0, 1,
-        0, 0,
         1, 0,
-        0, 1,
-
-        0, 0,
-        1, 0,
-        1, 1,
-        0, 1,
-        0, 0,
         1, 1,
 
         0, 0,
-        1, 1,
+        1, 0,
         0, 1,
-        0, 0,
+        0, 1,
         1, 0,
         1, 1,
 
-        1, 0,
-        0, 1,
         0, 0,
         1, 0,
-        1, 1,
         0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
+
+        0, 0,
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
+
+        0, 0,
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
       ]);
 
       const normals = new Float32Array([

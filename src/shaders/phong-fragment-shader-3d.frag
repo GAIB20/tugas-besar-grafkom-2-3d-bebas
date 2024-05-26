@@ -1,38 +1,49 @@
-precision mediump float;
-
-// The texture
-uniform sampler2D u_diffuseColor;
-uniform sampler2D u_diffuseTexture;
-uniform sampler2D u_specularColor;
-uniform sampler2D u_specularTexture;
+precision highp float;
 
 
-// Light Model
-uniform vec3 u_ambientColor;
-uniform vec3 u_reverseLightDirection;
+uniform sampler2D u_normalMap;
+uniform bool u_useNormalMap;
+uniform vec4 u_ambientColor;
+uniform sampler2D u_diffuseMap;
+uniform vec4 u_diffuseColor;
+uniform sampler2D u_specularMap;
+uniform vec4 u_specularColor;
+uniform float u_shininess;
 
 
-// Pass-through vertex shader
-varying vec2 v_texCoord;
+varying vec3 v_lightDirection;
+varying vec3 v_cameraPosition;
+varying vec3 v_vertexPosition;
+varying vec2 v_texcoord;
 varying vec3 v_normal;
 
-void main(void) {
 
-    vec4 diffuseColor = texture2D(u_diffuseColor, v_texCoord);
-    vec4 diffuseTexture = texture2D(u_diffuseTexture, v_texCoord);
-    vec4 diffuseFinal = diffuseColor * diffuseTexture;
-
-
-    // TODO: temporary
-//        vec4 diffuseFinal = diffuseColor;
+void main() {
+    vec3 L = normalize(v_lightDirection);
+    vec3 V = normalize(v_cameraPosition - v_vertexPosition);
+    vec3 H = normalize(L + V);
+    vec3 N;
 
 
-    // Combine the diffuse result with the ambient light color
-    vec3 finalColor = u_ambientColor * diffuseFinal.rgb;
+    if (u_useNormalMap) {
+        N = texture2D(u_normalMap, v_texcoord).rgb;
+        N = normalize(N * 2.0 - 1.0);
+    } else {
+        N = normalize(v_normal);
+    }
 
-    float light = dot(v_normal, u_reverseLightDirection);
 
-    // Set the final fragment color, including ambient light
-    gl_FragColor = vec4(finalColor, diffuseFinal.a);
-    gl_FragColor.rgb *= light;
+    vec4 ambient = u_ambientColor * 0.3;
+    vec4 diffuse =
+    u_diffuseColor *
+    max(dot(L, N), 0.0) *
+    texture2D(u_diffuseMap, v_texcoord);
+    vec4 specular =
+    u_specularColor *
+    pow(max(dot(N, H), 0.0), u_shininess) *
+    texture2D(u_specularMap, v_texcoord);
+
+
+    float attenuation = 1.0;
+    gl_FragColor = attenuation * (diffuse + specular) + ambient;
 }

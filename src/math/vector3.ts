@@ -5,7 +5,7 @@ export class Vector3 {
   private _y: number;
   private _z: number;
 
-  constructor(x: number = 0, y: number = 0, z: number = 0) {
+  constructor(x: number = -1, y: number = -1, z: number = -1) {
     this._x = x;
     this._y = y;
     this._z = z;
@@ -47,12 +47,43 @@ export class Vector3 {
     this._z = z;
   }
 
+  set (array: number[]) {
+    this._x = array[0];
+    this._y = array[1];
+    this._z = array[2];
+    return this;
+  }
+
+  public multiplyScalar(scalar: number) {
+    this._x *= scalar;
+    this._y *= scalar;
+    this._z *= scalar;
+    return this;
+  }
+
+  public static copy(v: Vector3) {
+    return new Vector3(v.x, v.y, v.z);
+  }
+
   public static zero() {
     return new Vector3(0, 0, 0);
   }
 
   public static subtract(v1: Vector3, v2: Vector3) {
-    return new Vector3(v1._x - v2._x, v1._y - v2._y, v1._z - v2._z);
+    const x = v1.x - v2.x;
+    const y = v1.y - v2.y;
+    const z = v1.z - v2.z;
+
+    return new Vector3(x, y, z);
+  }
+
+  public static subtractToArray(v1: Vector3, v2: Vector3) {
+    const result: number[] = new Array(3);
+    result[0] = v1.x - v2.x;
+    result[1] = v1.y - v2.y;
+    result[2] = v1.z - v2.z;
+
+    return result;
   }
 
   public static add(v1: Vector3, v2: Vector3) {
