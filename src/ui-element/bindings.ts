@@ -13,9 +13,6 @@ const camSelectInput = getElement("projection-type") as HTMLSelectElement;
 const resetCamBtn = getElement("reset-cam") as HTMLButtonElement;
 const camDistanceInput = getElement("cam-distance") as HTMLInputElement;
 
-// Texture
-const textureSelectInput = getElement("mapping-type") as HTMLSelectElement;
-
 // Translation
 const xTranslationInput = getElement("x-translation") as HTMLInputElement;
 const yTranslationInput = getElement("y-translation") as HTMLInputElement;
