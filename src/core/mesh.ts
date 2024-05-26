@@ -2,8 +2,7 @@ import { Node } from "src/core/node.ts";
 import { BufferGeometry } from "src/geometries/buffer-geometry.ts";
 import { BasicMaterial } from "src/material/basic-material";
 import { ShaderMaterial } from "src/material/shader-material.ts";
-import { Color } from "src/types/color";
-import { IBasicMaterial, IMesh } from "src/types/deserializer";
+import { IMesh } from "src/types/deserializer";
 import { MATERIAL_TYPE, NODE_TYPE } from "src/types/serializer";
 import { DeserializeGeometry } from "src/utils/deserializer";
 
@@ -55,21 +54,14 @@ export class Mesh extends Node {
       let material;
       switch (json.material.type) {
         case MATERIAL_TYPE.BASIC:
-          const materialJSON = json.material as IBasicMaterial;
-          const color = materialJSON.color;
-          material = new BasicMaterial(
-            // TODO: remove this, use vertex color
-            new Color(color[0], color[1], color[2], color[3])
-          );
+          material = new BasicMaterial();
           break;
         // TODO: phong material
         // case MATERIAL_TYPE.PHONG:
         //   break;
 
         default:
-          material = new BasicMaterial(
-            new Color(1, 0, 0, 1)
-          );
+          material = new BasicMaterial();
           break;
       }
 

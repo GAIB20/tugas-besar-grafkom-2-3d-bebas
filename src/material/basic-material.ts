@@ -20,7 +20,6 @@ export class BasicMaterial extends ShaderMaterial {
   public toJSON() {
     return {
       ...super.toJSON(),
-      color: this._color.getComponents(),
       type: this._type,
     };
   }

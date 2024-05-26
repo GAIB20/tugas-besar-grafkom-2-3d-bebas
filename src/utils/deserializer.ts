@@ -14,6 +14,8 @@ import { BoxGeometry } from "src/geometries/box-geometry";
 import { HollowBoxGeometry } from "src/geometries/hollow-box-geometry";
 import { HollowGeometry6 } from "src/geometries/hollow-hexagonal-prism-geometry";
 import { BufferGeometry } from "src/geometries/buffer-geometry";
+import { HollowGeometry5 } from "src/geometries/hollow-pentagonal-prism-geometry";
+import { HollowGeometry3 } from "src/geometries/hollow-triangular-prism-geometry";
 
 export const DeserializeNode = (json: INode) => {
   switch (json.object_type) {
@@ -34,6 +36,10 @@ export const DeserializeGeometry = (json: IBufferGeometry) => {
       return HollowBoxGeometry.fromJSON(json as IHollowBoxGeometry);
     case GEOMETRY_TYPE.HOLLOW_HEXAGONAL_PRISM:
       return HollowGeometry6.fromJSON(json);
+    case GEOMETRY_TYPE.HOLLOW_PENTA_PRISM:
+      return HollowGeometry5.fromJSON(json);
+    case GEOMETRY_TYPE.HOLLOW_TRIANGULAR_PRISM:
+      return HollowGeometry3.fromJSON(json);
     default:
       return BufferGeometry.fromJSON(json);
   }

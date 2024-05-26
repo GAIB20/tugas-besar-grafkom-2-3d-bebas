@@ -1,7 +1,7 @@
 import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
-import { COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
+import { BASIC_VERTEX_SHADER, COMMON_ATTRIBUTE } from "src/types/webgl-type.ts";
 import { IHollowBoxGeometry } from "src/types/deserializer.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
@@ -67,8 +67,125 @@ export class HollowBoxGeometry extends BufferGeometry {
     ]);
 
     vertices = vertices.map(el => el * this.size);
+
+    const colors = new Float32Array([
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+    ]);
+
     this.setAttribute(BufferAttributeName.POSITION, new BufferAttribute(vertices, 3, COMMON_ATTRIBUTE.ATTRIBUTE_POSITION));
-    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, -1, ""));
+    this.setAttribute(BufferAttributeName.INDICES, new BufferAttribute(indices, 6, ""));
+    this.setAttribute(BufferAttributeName.COLOR, new BufferAttribute(colors, 4, BASIC_VERTEX_SHADER.ATTRIBUTE_COLOR));
     this.calculateNormals();
   }
 
