@@ -364,6 +364,7 @@ const main = async () => {
     diffuseMappingCheckbox.disabled = !isPhongChecked;
     textureSelection.disabled = !isPhongChecked;
     normalMappingCheckbox.disabled = !isPhongChecked;
+    shininessInput.disabled = !isPhongChecked;
 
     displacementFactorInput.disabled =
       !isPhongChecked || !displacementMappingCheckbox.checked;
