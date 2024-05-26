@@ -1,7 +1,7 @@
 import { GEOMETRY_TYPE } from "src/types/serializer.ts";
 import { BufferAttribute } from "./buffer-attribute.ts";
 import { BufferGeometry } from "./buffer-geometry.ts";
-import { COMMON_ATTRIBUTE, PHONG_VERTEX_SHADER } from "src/types/webgl-type.ts";
+import { BASIC_VERTEX_SHADER, COMMON_ATTRIBUTE, PHONG_VERTEX_SHADER } from "src/types/webgl-type.ts";
 import { IBoxGeometry } from "src/types/deserializer.ts";
 import { BufferAttributeName } from "src/types/buffer-attribute.ts";
 
